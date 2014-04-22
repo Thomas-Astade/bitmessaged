@@ -43,6 +43,11 @@ rebuild:	clean build
 run:	build
 	./$(TARGET) 
 
+doxygen:
+	doxygen
+
+jenkins: build doxygen
+
 $(TARGET):	.depend $(OBJS)
 	$(CXX) -o $@ $(OBJS) $(LDFLAGS)
 
