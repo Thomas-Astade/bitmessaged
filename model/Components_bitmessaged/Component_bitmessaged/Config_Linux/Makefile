@@ -9,12 +9,12 @@ TARGET ?= bitmessaged
 
 # compiler settings
 CXXFLAGS:= $(INCLUDE) -Wall
-LDFLAGS	:= -lpthread
+LDFLAGS	:= -lpthread -ldl
 
 ifdef DEBUG
-CXXFLAGS+= -g -o0
+CXXFLAGS+= -g
 else
-LDFLAGS	+= -Wl,-s -o2
+LDFLAGS	+= -Wl,-s
 endif
 
 # find sources and headers
@@ -41,7 +41,7 @@ clean:
 rebuild:	clean build
 
 run:	build
-	./$(TARGET) -i 127.0.0.1:8444
+	./$(TARGET) -p ../../Component_debug_plugin/Config_Linux/debug_plugin -p ../../Component_example_plugin/Config_Linux/example_plugin
 
 doxygen:
 	doxygen

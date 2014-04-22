@@ -12,9 +12,9 @@ CXXFLAGS:= $(INCLUDE) -Wall -fPIC
 LDFLAGS	:= 
 
 ifdef DEBUG
-CXXFLAGS+= -g -o0
+CXXFLAGS+= -g
 else
-LDFLAGS	+= -Wl,-s -o2
+LDFLAGS	+= -Wl,-s
 endif
 
 # find sources and headers

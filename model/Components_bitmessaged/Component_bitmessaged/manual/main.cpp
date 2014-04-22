@@ -1,5 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <dlfcn.h>
+#include <set>
+#include <string>
+#include <map>
 #include <getopt.h>
 #include "knowledge.h"
 
@@ -19,9 +23,36 @@ bool create_outgoing_connection(const char* arg)
     return true;
 }
 
-int main(int argc, char *argv[]) {
+std::set<std::string> plugins;
+std::map<std::string, void*> plugin_handles;
+data::knowledge database;
 
-    data::knowledge database;
+void start_plugin(std::string filename)
+{
+    printf("Loading plugin %s\n",filename.c_str());
+    void* handle = dlopen (filename.c_str(), RTLD_LAZY);
+    if (dlerror())
+    {
+        printf("ERROR: cannot find %s\n",filename.c_str());
+    }
+    else
+    {
+        plugin_handles[filename] = handle;
+        void(* func)(data::knowledge&) = (void(*)(data::knowledge&)) dlsym (handle, "init");
+        func(database);
+    }
+}
+
+void stop_plugin(std::string filename)
+{
+    if (plugin_handles.find(filename) == plugin_handles.end())
+        return;
+    printf("sutting down plugin %s\n",filename.c_str());
+    void(* func)() = (void(*)()) dlsym (plugin_handles[filename], "shutdown");
+    func();
+}
+
+int main(int argc, char *argv[]) {
 
     static struct option long_options[] = {
         {"help"       ,  no_argument,        0,  'h' },
@@ -33,8 +64,13 @@ int main(int argc, char *argv[]) {
     int long_index =0;
     int opt;
 
-    while ((opt = getopt_long(argc, argv, "p:i:", long_options, &long_index )) != -1) {
+    printf("hallo\n");
+    
+    while ((opt = getopt_long(argc, argv, "p:i:h", long_options, &long_index )) != -1) {
         switch (opt) {
+        case 'p':
+                plugins.insert(optarg);
+            break;
         case 'h':
             print_usage();
             exit(EXIT_SUCCESS);
@@ -49,6 +85,18 @@ int main(int argc, char *argv[]) {
         default:
             break;
         }
+    }
+    
+    for (std::set<std::string>::iterator it = plugins.begin(); it != plugins.end(); it++)
+    {
+        start_plugin(*it);
+    }
+    
+    sleep(3);
+    
+    for (std::set<std::string>::iterator it = plugins.begin(); it != plugins.end(); it++)
+    {
+        stop_plugin(*it);
     }
 
     return EXIT_SUCCESS;
