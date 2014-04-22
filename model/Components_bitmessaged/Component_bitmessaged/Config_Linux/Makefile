@@ -9,7 +9,7 @@ TARGET ?= bitmessaged
 
 # compiler settings
 CXXFLAGS:= $(INCLUDE) -Wall
-LDFLAGS	:= -lpthread -ldl
+LDFLAGS	:= -lpthread -ldl -Wl,--export-dynamic
 
 ifdef DEBUG
 CXXFLAGS+= -g

@@ -33,7 +33,7 @@ bool create_outgoing_connection(const char* arg)
 
 std::set<std::string> plugins;
 std::map<std::string, void*> plugin_handles;
-data::knowledge database;
+static data::knowledge database;
 
 void start_plugin(std::string filename)
 {
@@ -101,7 +101,10 @@ int main(int argc, char *argv[]) {
     signal (SIGINT, my_handler);
 
     while (keepRunning)
+    {
+        database.incHeartbeat();
         sleep(1);
+    }
     
     for (std::set<std::string>::iterator it = plugins.begin(); it != plugins.end(); it++)
     {

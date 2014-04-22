@@ -7,13 +7,15 @@
 static pthread_t thread1;
 static volatile bool keepRunning = true;
 static volatile bool isRunning = false;
+data::knowledge* database;
 
 void *aThread( void *ptr )
 {
     isRunning = true;
     while (keepRunning)
     {
-        printf("hallo\n");
+        printf("heartbeat %d\n",database->getHeartbeat());
+        //printf("heartbeat\n");
         usleep(100000);
     }
     isRunning = false;
@@ -23,6 +25,7 @@ void *aThread( void *ptr )
 extern "C" {
 void init(data::knowledge& data)
 {
+    database = &data;
     pthread_create( &thread1, NULL, aThread, 0);
     printf("debug plugin initialized\n");
 }
