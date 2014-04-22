@@ -8,13 +8,13 @@ INCLUDE	:= -I../manual -I../auto
 TARGET ?= bitmessaged
 
 # compiler settings
-CXXFLAGS:= $(INCLUDE) $(shell wx-config --cxxflags base) -Wall
-LDFLAGS	:= $(shell wx-config --libs base)
+CXXFLAGS:= $(INCLUDE) -Wall
+LDFLAGS	:= -lpthread
 
 ifdef DEBUG
-CXXFLAGS+= -g
+CXXFLAGS+= -g -o0
 else
-LDFLAGS	+= -Wl,-s
+LDFLAGS	+= -Wl,-s -o2
 endif
 
 # find sources and headers

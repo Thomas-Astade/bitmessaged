@@ -8,8 +8,8 @@ INCLUDE	:= -I../manual -I../auto -I../../Component_bitmessaged/auto
 TARGET ?= debug_plugin
 
 # compiler settings
-CXXFLAGS:= $(INCLUDE) $(shell wx-config --cxxflags base) -Wall
-LDFLAGS	:= $(shell wx-config --libs base)
+CXXFLAGS:= $(INCLUDE) -Wall -fPIC
+LDFLAGS	:= 
 
 ifdef DEBUG
 CXXFLAGS+= -g
