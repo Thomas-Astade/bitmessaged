@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <curses.h>
+#include <string.h>
 #include "knowledge.h"
 
 static pthread_t thread1;
@@ -12,12 +14,16 @@ data::knowledge* database;
 void *aThread( void *ptr )
 {
     isRunning = true;
+    initscr();
     while (keepRunning)
     {
-        printf("heartbeat %d\n",database->getHeartbeat());
-        //printf("heartbeat\n");
+        char Buffer[200];
+        sprintf(Buffer,"heartbeat %d",database->getHeartbeat());
+        mvaddnstr(2,2,Buffer,strlen(Buffer));
+        refresh();
         usleep(100000);
     }
+    endwin();
     isRunning = false;
     return 0;
 }
