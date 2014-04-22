@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
+#include "knowledge.h"
 
 void print_usage()
 {
@@ -19,6 +20,8 @@ bool create_outgoing_connection(const char* arg)
 }
 
 int main(int argc, char *argv[]) {
+
+    data::knowledge database;
 
     static struct option long_options[] = {
         {"help"       ,  no_argument,        0,  'h' },
