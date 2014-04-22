@@ -1,11 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <dlfcn.h>
+#include <signal.h>     /* signal, raise, sig_atomic_t */
 #include <set>
 #include <string>
 #include <map>
 #include <getopt.h>
 #include "knowledge.h"
+
+volatile bool keepRunning = true;
+
+void my_handler (int param)
+{
+  keepRunning = false;
+}
 
 void print_usage()
 {
@@ -64,8 +72,6 @@ int main(int argc, char *argv[]) {
     int long_index =0;
     int opt;
 
-    printf("hallo\n");
-    
     while ((opt = getopt_long(argc, argv, "p:i:h", long_options, &long_index )) != -1) {
         switch (opt) {
         case 'p':
@@ -91,8 +97,11 @@ int main(int argc, char *argv[]) {
     {
         start_plugin(*it);
     }
-    
-    sleep(3);
+
+    signal (SIGINT, my_handler);
+
+    while (keepRunning)
+        sleep(1);
     
     for (std::set<std::string>::iterator it = plugins.begin(); it != plugins.end(); it++)
     {
