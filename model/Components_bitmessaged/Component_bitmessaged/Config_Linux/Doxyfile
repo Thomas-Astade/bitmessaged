@@ -652,7 +652,7 @@ WARN_LOGFILE           =
 INPUT                  = ../manual \
                          ../auto \
                          ../docu \
-                         ../../Component_debug_plugin/manual
+                         ../../Component_debug_plugin/manual \
                          ../../Component_example_plugin/manual
 
 # This tag can be used to specify the character encoding of the source files 
