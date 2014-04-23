@@ -15,3 +15,7 @@ at the moment there are no plugins availabel. But there are planned plugins for:
 - bitmessge API
 - gateway to mobile appications
 
+Example for an plugin
+=====================
+
+\include main.cpp
