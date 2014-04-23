@@ -6,10 +6,12 @@
 #include <string>
 #include <map>
 #include <getopt.h>
+#include "string.h"
 #include "knowledge.h"
 #include "ACF.h"
-#include "socketHandler.h"
+#include "OutSocketHandler.h"
 #include "Trace2UML.h"
+#include <arpa/inet.h> 
 
 volatile bool keepRunning = true;
 
@@ -34,7 +36,14 @@ pthread_t socketThread;
 
 bool create_outgoing_connection(const char* arg)
 {
-    socketHandler* aHandler = new socketHandler(&soketContext);
+    struct sockaddr_in serv_addr;
+    memset(&serv_addr, '0', sizeof(serv_addr)); 
+
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_port = htons(8444);
+    inet_pton(AF_INET, "10.49.68.83", &serv_addr.sin_addr);
+    
+    OutSocketHandler* aHandler = new OutSocketHandler(&soketContext, serv_addr);
     aHandler->Initialize(0);
     return true;
 }
