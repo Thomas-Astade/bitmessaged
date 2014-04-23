@@ -18,11 +18,15 @@ LDFLAGS	+= -Wl,-s
 endif
 
 # find sources and headers
-SOURCES	:= $(wildcard ../auto/*.cpp ../manual/*.cpp)
+SOURCES	:= $(wildcard ../auto/*.c ../auto/*.cpp ../manual/*.cpp)
 HEADERS	:= $(wildcard ../auto/*.h ../manual/*.h)
 
 # objects go into current directory
-OBJS	:= $(notdir $(SOURCES:.cpp=.o))
+OBJSTMP	:= $(notdir $(SOURCES:.cpp=.o))
+OBJS	:= $(notdir $(OBJSTMP:.c=.o))
+
+%.o:	../auto/%.c
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
 
 %.o:	../auto/%.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
