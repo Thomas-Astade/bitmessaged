@@ -3,13 +3,13 @@
 prefix	?= ~
 
 # include path
-INCLUDE	:= -I../manual -I../auto
+INCLUDE	:= -I../manual -I../auto 
 
 TARGET ?= bitmessaged
 
 # compiler settings
 CXXFLAGS:= $(INCLUDE) -Wall
-LDFLAGS	:= -lpthread -ldl -Wl,--export-dynamic
+LDFLAGS	:= -lpthread -ldl -lssl -lcrypto -Wl,--export-dynamic
 
 TRACE_LIST :=$(addsuffix .o,$(TRACECLASSES))
 

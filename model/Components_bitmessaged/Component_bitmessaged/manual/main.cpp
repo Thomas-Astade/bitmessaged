@@ -44,7 +44,7 @@ bool create_outgoing_connection(const char* arg)
 
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(8444);
-    inet_pton(AF_INET, "10.49.68.83", &serv_addr.sin_addr);
+    inet_pton(AF_INET, "10.49.69.83", &serv_addr.sin_addr);
     
     OutSocketHandler* aHandler = new OutSocketHandler(&soketContext, serv_addr, database);
     aHandler->Initialize(0);
