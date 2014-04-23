@@ -11,6 +11,8 @@ TARGET ?= bitmessaged
 CXXFLAGS:= $(INCLUDE) -Wall
 LDFLAGS	:= -lpthread -ldl -Wl,--export-dynamic
 
+TRACE_LIST :=$(addsuffix .o,$(TRACECLASSES))
+
 ifdef DEBUG
 CXXFLAGS+= -g
 else
@@ -26,13 +28,13 @@ OBJSTMP	:= $(notdir $(SOURCES:.cpp=.o))
 OBJS	:= $(notdir $(OBJSTMP:.c=.o))
 
 %.o:	../auto/%.c
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(if $(findstring $(notdir $@),$(TRACE_LIST)),-D_TRACE_ -include Trace2UML.h,) -c -o $@ $<
 
 %.o:	../auto/%.cpp
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(if $(findstring $(notdir $@),$(TRACE_LIST)),-D_TRACE_ -include Trace2UML.h,) -c -o $@ $<
 
 %.o:	../manual/%.cpp
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(if $(findstring $(notdir $@),$(TRACE_LIST)),-D_TRACE_ -include Trace2UML.h,) -c -o $@ $<
 
 build:	$(TARGET)
 
@@ -45,7 +47,7 @@ clean:
 rebuild:	clean build
 
 run:	build
-	./$(TARGET) -p ../../Component_debug_plugin/Config_Linux/debug_plugin -p ../../Component_example_plugin/Config_Linux/example_plugin
+	./$(TARGET) -i jgh
 
 doxygen:
 	doxygen

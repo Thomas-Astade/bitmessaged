@@ -7,6 +7,9 @@
 #include <map>
 #include <getopt.h>
 #include "knowledge.h"
+#include "ACF.h"
+#include "socketHandler.h"
+#include "Trace2UML.h"
 
 volatile bool keepRunning = true;
 
@@ -26,8 +29,13 @@ void print_usage()
     printf("                    (you may have multiple addresses).\n");
 }
 
+ACF soketContext;
+pthread_t socketThread;
+
 bool create_outgoing_connection(const char* arg)
 {
+    socketHandler* aHandler = new socketHandler(&soketContext);
+    aHandler->Initialize(0);
     return true;
 }
 
@@ -62,6 +70,7 @@ void stop_plugin(std::string filename)
 
 int main(int argc, char *argv[]) {
 
+    Trace2UML::ms_ofile.open("Trace2UML.seq");
     static struct option long_options[] = {
         {"help"       ,  no_argument,        0,  'h' },
         {"plugin"     ,  optional_argument,  0,  'p' },
@@ -99,7 +108,9 @@ int main(int argc, char *argv[]) {
     }
 
     signal (SIGINT, my_handler);
-
+    
+    pthread_create(&socketThread,0,&ACF::staticExec,&soketContext);
+    
     while (keepRunning)
     {
         database.incHeartbeat();
