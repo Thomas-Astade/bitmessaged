@@ -9,4 +9,14 @@ if (ret == 0)
     ret = write(socketfd,&len,sizeof(len));
 }
 
+if (ret == 0)
+{
+     ret = write(socketfd,&checksum,sizeof(checksum));
+}
+
+if (ret == 0)
+{
+     ret = write(socketfd,&(*myPayload)[0],(*myPayload).size());
+}
+
 RETURN(ret);
