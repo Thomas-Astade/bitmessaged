@@ -1,0 +1,2 @@
+//~~ ~OutSocketHandler() [OutSocketHandler] ~~
+theKnowledge.decOutgoingCount();

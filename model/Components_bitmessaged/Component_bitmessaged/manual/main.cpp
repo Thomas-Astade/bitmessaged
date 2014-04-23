@@ -33,6 +33,9 @@ void print_usage()
 
 ACF soketContext;
 pthread_t socketThread;
+std::set<std::string> plugins;
+std::map<std::string, void*> plugin_handles;
+static data::knowledge database;
 
 bool create_outgoing_connection(const char* arg)
 {
@@ -43,14 +46,10 @@ bool create_outgoing_connection(const char* arg)
     serv_addr.sin_port = htons(8444);
     inet_pton(AF_INET, "10.49.68.83", &serv_addr.sin_addr);
     
-    OutSocketHandler* aHandler = new OutSocketHandler(&soketContext, serv_addr);
+    OutSocketHandler* aHandler = new OutSocketHandler(&soketContext, serv_addr, database);
     aHandler->Initialize(0);
     return true;
 }
-
-std::set<std::string> plugins;
-std::map<std::string, void*> plugin_handles;
-static data::knowledge database;
 
 void start_plugin(std::string filename)
 {
