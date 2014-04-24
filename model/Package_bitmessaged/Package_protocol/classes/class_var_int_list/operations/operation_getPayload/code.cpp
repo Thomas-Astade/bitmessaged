@@ -1,8 +1,8 @@
-//~~ protocol::Payload getPayload() [var_str] ~~
+//~~ protocol::Payload getPayload() [var_int_list] ~~
 Payload ret;
 
 ret.push_back(var_int(size()));
 for (unsigned int i = 0; i < size(); i++)
-    ret.push_back(operator[](i));
+    ret.push_back(var_int(operator[](i)));
 
 RETURN(ret);

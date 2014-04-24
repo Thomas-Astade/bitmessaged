@@ -1,0 +1,1 @@
+//~~ var_str(const std::string& orig) [var_str] ~~
