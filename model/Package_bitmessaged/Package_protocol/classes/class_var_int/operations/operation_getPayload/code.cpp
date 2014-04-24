@@ -20,4 +20,4 @@ else
     ret.push_back((uint64_t)value);
 }
 
-RETURN(ret);
+return ret;

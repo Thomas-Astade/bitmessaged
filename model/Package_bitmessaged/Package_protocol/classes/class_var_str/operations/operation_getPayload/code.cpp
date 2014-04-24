@@ -5,4 +5,4 @@ ret.push_back(var_int(size()));
 for (unsigned int i = 0; i < size(); i++)
     ret.push_back(operator[](i));
 
-RETURN(ret);
+return ret;
