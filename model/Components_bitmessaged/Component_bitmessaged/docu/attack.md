@@ -41,10 +41,44 @@ Hungry node              {#attack_hungry_node}
 
 A "Hungry node" attacks your bandwidth. It will request all objects you offer to it. When it get all of them it will eventually asks them again. As all the other spoofing nodes, it will send you node addresses from other spoofing nodes only.
 The "Hungry node" is difficult to defeat, because it's behaviour is identically to a node which connects to the network the first time.
-But luckily it is less dangerous than the others, because it can only slow things down, not lock everthing.
+But luckily it is less dangerous than the others, because it can only slow things down, not lock everything.
 
 How to defeat:
 - Limit the bandwidth you spend for one single node
 - store that node as a potential spoofer in your list of spoofing nodes
 - keep enough information on that node in your list of spoofing nodes that you can make the decision if it is spoofing or not during the next times you are connected 
+
+Slow node                {#attack_slow_node}
+============================================
+
+The "Slow node" is in effect similar to a "Dead node", it traps your connections. The funny thing is, that a "Slow node" does not make any protocol errors at all, it is simply very VERY slow.
+
+I can immediately create 1000 "Slow nodes" by simply start the PyBitmessage client 1000 times on my computer (different ports).
+This 1000 Nodes will send connection request to the outside world an will "catch" 8000 connections, or even more, if I allow incoming connections. But because of my slow Internet connection shared by 1000 clients, the data throughput is nearly zero.
+
+You can attack the network with "Slow nodes" the same way as you can do with "Dead nodes" but you need different methods to detect them. Because "Slow nodes" don't do protocol errors.
+
+How to defeat:
+- measure the time, your partner node needs for responses. How long it takes for the version exchange, how long does the node list take and so on. For each detail you measure the time. If it takes longer than a certain threshold, mark this node to be a "Slow node"
+- don't propagate "Slow nodes"
+
+Egoistic node             {#attack_egoistic_node}
+=================================================
+
+The "Egoistic node" is not intentionally designed to harm the network but it effect it does.
+It will start with the possibility to limit the bandwidth of the client, to have enough bandwidth free for other purposes. All in a sudden somebody will notice, that it saves bandwidth, when his client only collects objects but not offer them for download (or only very slow). The "Egoistic node" behaves correct in every other manner. And, at the beginning, it does not harm the network.
+But if there are more and more "Egoistic nodes" outside, the network will loose it's performance.
+
+Actually the "Egotistic node" behaves similar to a "Hungry node"
+
+How to defeat:
+- measure the upload/download ration of you partners. Give new nodes a "credit" of some objects (1000?). But if a node after a certain time has an upload/download ratio less that a certain limit, you are talking to an egoistic node.
+- keep this statistic eventually over multiple connections to that node
+- disconnect from "Egoistic nodes"
+- don't propagate "Egoistic nodes"
+
+
+
+
+
 
