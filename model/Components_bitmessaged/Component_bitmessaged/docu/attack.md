@@ -20,6 +20,7 @@ How to defeat:
 - Do not connect to nodes, you got offered by a “Dead node”
 - Do not propagate the address of a “Dead node” nor addresses you got there.
 - Do not limit the number of connections in your node too much.
+- maintain a list of spoofing nodes
 
 False node provider      {#attack_false_node_provider}
 ======================================================
@@ -33,3 +34,17 @@ How to defeat:
 - Limit the number of new node addresses you accept by one single other client
 - Don't propagate node addresses you did not test yourself.
 - Don't throw away "self tested" node addresses, no matter how perfect the new provided ones look.
+- maintain a list of spoofing nodes
+
+Hungry node              {#attack_hungry_node}
+==============================================
+
+A "Hungry node" attacks your bandwidth. It will request all objects you offer to it. When it get all of them it will eventually asks them again. As all the other spoofing nodes, it will send you node addresses from other spoofing nodes only.
+The "Hungry node" is difficult to defeat, because it's behaviour is identically to a node which connects to the network the first time.
+But luckily it is less dangerous than the others, because it can only slow things down, not lock everthing.
+
+How to defeat:
+- Limit the bandwidth you spend for one single node
+- store that node as a potential spoofer in your list of spoofing nodes
+- keep enough information on that node in your list of spoofing nodes that you can make the decision if it is spoofing or not during the next times you are connected 
+
