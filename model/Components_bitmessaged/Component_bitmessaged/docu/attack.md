@@ -19,5 +19,17 @@ How to defeat:
 - Don't trust nodes, that do not offer objects, at least, if the do not offer objects after you have been connected for some time (you can compare with the number of new objects you get from other nodes).
 - Do not connect to nodes, you got offered by a “Dead node”
 - Do not propagate the address of a “Dead node” nor addresses you got there.
+- Do not limit the number of connections in your node too much.
 
+False node provider      {#attack_false_node_provider}
+======================================================
 
+The false node provider attacks your "list of nodes". It sends you thousands of randomly generated node addresses all with a very actual time. If your node list strategy is not aware of that, you will have mainly malfunctioning node addresses in your node list.
+It takes time (timeout) to figure out, a node address is not responding. So if things run bad, you cannot get connection any more, because the good addresses get lost under a flood of false addresses.
+
+Especially, because the "False node Provider" may mix some working addresses (to other "False node providers") into the false node list.
+
+How to defeat:
+- Limit the number of new node addresses you accept by one single other client
+- Don't propagate node addresses you did not test yourself.
+- Don't throw away "self tested" node addresses, no matter how perfect the new provided ones look.
