@@ -1,6 +1,6 @@
 
-Possible attacks for Bitmessage networks
-========================================
+Possible attacks for Bitmessage networks {#spoofing_nodes}
+==========================================================
 
 I want to talk about certain possible attacks of a Bitmessage network. This is to be aware of this attack types, give them names, so we can talk about them, and for implementing mechanisms, this attacks where detected.
 
