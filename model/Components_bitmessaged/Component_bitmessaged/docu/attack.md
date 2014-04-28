@@ -77,8 +77,28 @@ How to defeat:
 - disconnect from "Egoistic nodes"
 - don't propagate "Egoistic nodes"
 
+Duplicate offer node       {#attack_duplicate_offer}
+====================================================
 
+The "duplicate offer node" attacks my bandwidth by offering the same objects again and again.
+is not intentionally designed to harm the network but it effect it does.
 
+How to defeat:
+- store the offers you get from one node. If you do not have enough memory to store them all, store only a random subset.
+- when a node offers the same object a second time (during the same connection) it's a "Duplicate offer node"
+- disconnect from "Duplicate offer nodes"
+- don't propagate "Duplicate offer nodes"
+
+Spam node       {#attack_spam}
+==============================
+
+The most obvious one at the end. Spam nodes try to flood the network with tons of objects. As each object in bitmessage contains the [POW][https://bitmessage.org/wiki/Proof_of_work] this is taken to reduce Spam. A node can only Spam by sending objects with false POW or old objects. Its to CPU consumptive to effectively Spam with correct generated objects.
+
+How to defeat:
+- Check the time of every received object. If it is older than 2 days + (some small time which comes from time difference) it's a "Spam node".
+- Check the [POW][https://bitmessage.org/wiki/Proof_of_work] of each object. If the POW is wrong do not advertise this object, but through it away. Nedes that offer objects with wrong POW are "Spam nodes"
+- disconnect from "Spam nodes"
+- don't propagate "Spam nodes"
 
 
 
