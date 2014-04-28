@@ -37,8 +37,8 @@ the error and the faulty node may turn into a reliable one, after some time.
 
 So we maintain a list of faulty nodes and don't talk to them for some time (1 hour). After that time we give them a second chance.
 
-[spoofing nodes](@ref spoofing_nodes)
-=====================================
+spoofing nodes
+==============
 
 Spoofing nodes have errors by intention to foul the Bitmessage network. We do not talk to that nodes nor do we advertise them.
 Unfortunately do they try to hide. The implement a behavior, that is destructive, but is not easy to notice.
@@ -53,8 +53,20 @@ Connected nodes are the nodes where we are currently connected to. They are impo
 
 
 
+Checks necessary to detect spoofing nodes {#necessary_checks}
+=============================================================
 
+Spoofing nodes are not so easy to detect, because in the first glance the behave correct. Only if we add some control statistic to each node connection, we are able to detect them. The following statistic seems suitable:
 
+- store a list of all objects you got offered by a connected node, so you can detect [Duplicate offer nodes](@ref attack_duplicate_offer)
+- store a list of all objects offered to a connected node, so you are not in danger to offer them twice.
+- store a list of all objects a node requested from you, so you can detect when it asks the same object twice. Because than you are talking to a [Hungry node](@ref attack_hungry_node)
+- store the time, when you connected to this node (you will need it for the [Dead node](@ref attack_dead_node) detection)
+- make a counter to count the number of objects you download from that node, which are newer than the time you connected to the node. If this number stays zero, for a long period of time, you are talking to a  [Dead node](@ref attack_dead_node) or an [Egoistic node](@ref attack_egoistic_node)
+- Try to balance you get requests. Nodes with the dead node counter shows zero should get a better chance to deliver objects, to prove they are reliable.
+- Accept only up to 20 _new_ nodes from one node so you got not trapped by a [False node provider](@ref attack_false_node_provider)
+- measure the time the node needs for a response (answer time) and the time for transmitting a package of data (transmission time) both values for both directions, giving you 4 statistic values to decide, when you are talking to a [Slow node](@ref attack_slow_node)
+- do check the POW (https://bitmessage.org/wiki/Proof_of_work) and the time of each object. So you easily find [Spam nodes](@ref atttack_spam)
 
 
 
