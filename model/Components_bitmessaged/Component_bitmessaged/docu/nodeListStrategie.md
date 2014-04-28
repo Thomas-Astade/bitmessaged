@@ -74,7 +74,7 @@ Connection strategy
 
 - Try to connect to up to 8 nodes
 - Try to connect to 2 [reliable nodes](@ref reliable_node) (if you have that much). Always try "oldest first" so you keep your list up to date.
-- If a reliable node refuses to accept the connection block its use for 30 minutes. If it gets older than 2 days, throw it away.
+- If a reliable node refuses to accept the connection block its use for 30 minutes (if you have alternatives. Otherwise you may retry after 1 minute). If it gets older than 2 days, throw it away. We store up to 1000 reliable nodes, but we will certainly never reach that number, because we normally can only connect (and therfore keep updated) to 8x24x2=384 nodes in 2 days.
 - Fill the other 6 connections up with [unchecked nodes](@ref unchecked_node) (random choice) to get them checked. If you have a connection to an unchecked node for 30 Minutes without having detected any spoofing or protocol error, move it to the [reliable nodes](@ref reliable_node). It's reliable now. Unchecked nodes which grow older than 2 days are thrown away.
 - If an unchecked node refuses to connect, ether throw it away or block its use for 30 minutes. This depends on the number of unchecked nodes we have. If our stock on unchecked nodes is 15000 or bigger it's save to throw away.
 - Accept another 32 incoming connections (if our bandwidth allows that much)
