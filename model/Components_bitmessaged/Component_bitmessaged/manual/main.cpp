@@ -38,20 +38,6 @@ std::set<std::string> plugins;
 std::map<std::string, void*> plugin_handles;
 static data::knowledge database;
 
-bool create_outgoing_connection(const char* arg)
-{
-    struct sockaddr_in serv_addr;
-    memset(&serv_addr, '0', sizeof(serv_addr)); 
-
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(8444);
-    inet_pton(AF_INET, "10.49.69.83", &serv_addr.sin_addr);
-    
-    OutSocketHandler* aHandler = new OutSocketHandler(&soketContext, serv_addr, database);
-    aHandler->Initialize(0);
-    return true;
-}
-
 void start_plugin(std::string filename)
 {
     printf("Loading plugin %s\n",filename.c_str());
@@ -120,7 +106,7 @@ int main(int argc, char *argv[]) {
     
     pthread_create(&socketThread,0,&ACF::staticExec,&soketContext);
 
-    OutConnectionHandler aHandler(&soketContext);
+    OutConnectionHandler aHandler(&soketContext, database);
     aHandler.Initialize(0);
     
     while (keepRunning)
