@@ -99,7 +99,7 @@ int main(int argc, char *argv[]) {
             exit(EXIT_SUCCESS);
             break;
         case 'i':
-            if (!create_outgoing_connection(optarg))
+            if (!database.addNode(optarg))
             {
                 printf("ERROR: -i <addr>:<port> e.g.: -i 127.0.0.1:8444\n");
                 exit (EXIT_FAILURE);
@@ -115,7 +115,7 @@ int main(int argc, char *argv[]) {
         start_plugin(*it);
     }
 
-    signal (SIGINT, my_handler);
+    signal (SIGINT, my_handler); // install a signal handler
     
     pthread_create(&socketThread,0,&ACF::staticExec,&soketContext);
     

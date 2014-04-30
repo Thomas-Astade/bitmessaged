@@ -2,7 +2,7 @@ bitmessaged
 ===========
 
 bitmessaged is a bitmessage daemon (node) with an open plugin interface written in C++
-it is stii in development, so you should not try to use it at this stage.
+it is still in development, so you should not try to use it at this stage.
 
 But if you are interested in the project you can look into the sources.
 

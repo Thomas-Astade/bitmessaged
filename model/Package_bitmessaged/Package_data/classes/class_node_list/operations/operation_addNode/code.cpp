@@ -18,15 +18,6 @@ if (inet_pton(AF_INET, addr.substr(0,pos).c_str(), &serv_addr.sin_addr)==0)
     RETURN(false);
 }
 
-char buffer[100];
-if (inet_ntop(AF_INET, &serv_addr, buffer, sizeof(buffer)) && serv_addr.sin_port)
-{
-    char buffer2[100];
-    sprintf(buffer2,"%s:%d",buffer,port);
-    known_nodes[buffer2] = node_info(serv_addr);
-    RETURN(true);
-}
-else
-{
-    RETURN(false);
-}
+node_info newnode(serv_addr);
+known_nodes[newnode.getID()] = newnode;
+RETURN(true);
