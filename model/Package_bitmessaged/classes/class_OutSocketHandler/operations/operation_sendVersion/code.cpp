@@ -12,7 +12,7 @@ if (theKnowledge.getDebug())
 {
     printf("Message type Version:\n");
     dumpSend();
-    aMessage.getPayload().dump();
+    aMessage.dump();
 }
 
 aMessage.writeTo(socketfd);
