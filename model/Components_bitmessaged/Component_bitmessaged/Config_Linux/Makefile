@@ -47,7 +47,7 @@ clean:
 rebuild:	clean build
 
 run:	build
-	./$(TARGET) -i 127.0.0.1:8444
+	./$(TARGET) -d -i 127.0.0.1:8444
 
 doxygen:
 	doxygen

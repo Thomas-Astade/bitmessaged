@@ -8,5 +8,11 @@ protocol::version aVersion(theKnowledge.getTime(),
 
 protocol::message aMessage(aVersion);
 
-aMessage.getPayload().dump();
+if (theKnowledge.getDebug())
+{
+    printf("Message type Version:\n");
+    dumpSend();
+    aMessage.getPayload().dump();
+}
+
 aMessage.writeTo(socketfd);
