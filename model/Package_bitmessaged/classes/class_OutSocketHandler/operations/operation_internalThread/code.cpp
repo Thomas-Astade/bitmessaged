@@ -4,6 +4,7 @@ socketfd = socket(AF_INET, SOCK_STREAM, 0);
 if (socketfd < 0)
 {
     ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_error,0);
+    ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_disconnected,0);
     return;
 }
 
@@ -18,6 +19,7 @@ socklen_t len = sizeof(sourceAddr);
 if (getsockname(socketfd, (struct sockaddr *) &sourceAddr, &len) < 0)
 {
     ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_error,0);
+    ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_disconnected,0);
     return;
 }
 
@@ -38,6 +40,7 @@ while (1)
     if (ret < 20)
     {
         ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_error,0);
+        ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_disconnected,0);
         return;
     }
     
@@ -74,6 +77,7 @@ while (1)
         
         if (read < 0)
         {
+            ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_disconnected,0);
             ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_error,0);
             return;
         }
@@ -87,6 +91,4 @@ while (1)
         printf("Received Message:\n");
         aPayload.dump();
     }
-    
-    sleep(1);
 }
