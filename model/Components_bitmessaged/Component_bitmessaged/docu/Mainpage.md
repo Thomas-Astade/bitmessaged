@@ -7,10 +7,9 @@ the daemon itself holds the connection to other nodes and collects and distibute
 
 To use the objects or to generate them you must use a plugin.
 
-an example for a plugin you find in
+At the moment there are no plugins availabel. But there are planned plugins for:
 
-at the moment there are no plugins availabel. But there are planned plugins for:
-
+- debugging
 - SMTP bridging
 - bitmessge API
 - gateway to mobile appications
