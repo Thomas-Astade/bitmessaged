@@ -5,13 +5,14 @@
 #include <set>
 #include <string>
 #include <map>
+#include <arpa/inet.h> 
 #include <getopt.h>
 #include "string.h"
 #include "knowledge.h"
 #include "ACF.h"
 #include "OutSocketHandler.h"
+#include "OutConnectionHandler.h"
 #include "Trace2UML.h"
-#include <arpa/inet.h> 
 
 volatile bool keepRunning = true;
 
@@ -118,6 +119,9 @@ int main(int argc, char *argv[]) {
     signal (SIGINT, my_handler); // install a signal handler
     
     pthread_create(&socketThread,0,&ACF::staticExec,&soketContext);
+
+    OutConnectionHandler aHandler(&soketContext);
+    aHandler.Initialize(0);
     
     while (keepRunning)
     {
