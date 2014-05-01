@@ -49,12 +49,14 @@ while (1)
     for (unsigned int search = protocol::message::version;
         search < protocol::message::unknown; search++)
     {
-        if (memcmp(buffer, comand_defines[search], 20) == 0)
+        if (memcmp(buffer, comand_defines[search], 16) == 0)
         {
             messageType = (protocol::message::command_t)search;
             break;
         }
     }
+    
+    printf("detected message type %d\n",messageType);
     
     uint32_t messageLen = htonl(*((uint32_t*)&buffer[16]));
     
@@ -100,7 +102,16 @@ while (1)
         messageLen -= haveRead;
     }
     
-    
+    switch (messageType) {
+        case protocol::message::verack:
+            ACF_sendMessage(MessageReceiver(),toLogic,ev_verack,0);
+            break;
+        case protocol::message::version:
+            ACF_sendMessage(MessageReceiver(),toLogic,ev_version,0);
+            break;
+        default:
+            break;
+    }
     
     if (*((uint32_t*)&buffer[20]) != aPayload.getChecksum())
     {
