@@ -29,7 +29,7 @@ while (1)
 {
     uint8_t buffer[20];
 
-    int ret = recv(socketfd, &buffer, sizeof(buffer), MSG_PEEK);
+    int ret = recv(socketfd, &buffer, sizeof(buffer), MSG_WAITALL);
 
     if (ret == 0)
     {
@@ -37,14 +37,14 @@ while (1)
         return;
     }
     
-    if (ret < 20)
+    if (ret < (int)sizeof(buffer))
     {
         ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_error,0);
         ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_disconnected,0);
         return;
     }
     
-    uint32_t messageLen = 24 + htonl(*((uint32_t*)&buffer[16]));
+    uint32_t messageLen = 4+htonl(*((uint32_t*)&buffer[16]));
     
     if (messageLen > (200 * 1024 * 1024)) // we do not accapt messages longer than 200 MByte
     {
@@ -54,7 +54,7 @@ while (1)
 
     if (theKnowledge.getDebug())
     {
-        printf("expect a message of size: %d\n",messageLen);
+        printf("expect a message of size: %d\n",messageLen+20);
     }
     
     uint8_t rcvbuffer[2000]; //just some buffer
@@ -89,6 +89,9 @@ while (1)
     if (theKnowledge.getDebug())
     {
         printf("Received Message:\n");
-        aPayload.dump();
+        protocol::Payload dumpPayload;
+        dumpPayload.push_back(buffer,sizeof(buffer));
+        dumpPayload.push_back(aPayload);
+        dumpPayload.dump();
     }
 }
