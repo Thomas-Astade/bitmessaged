@@ -27,7 +27,7 @@ ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_connected,0);
 
 while (1)
 {
-    uint8_t buffer[20];
+    uint8_t buffer[24];
 
     int ret = recv(socketfd, &buffer, sizeof(buffer), MSG_WAITALL);
 
@@ -44,11 +44,25 @@ while (1)
         return;
     }
     
-    uint32_t messageLen = 4+htonl(*((uint32_t*)&buffer[16]));
+    protocol::message::command_t messageType = protocol::message::unknown;
+    
+    for (unsigned int search = protocol::message::version;
+        search < protocol::message::unknown; search++)
+    {
+        if (memcmp(buffer, comand_defines[search], 20) == 0)
+        {
+            messageType = (protocol::message::command_t)search;
+            break;
+        }
+    }
+    
+    uint32_t messageLen = htonl(*((uint32_t*)&buffer[16]));
     
     if (messageLen > (200 * 1024 * 1024)) // we do not accapt messages longer than 200 MByte
     {
         ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_error,0);
+        ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_disconnected,0);
+        close(socketfd);
         return;
     }
 
@@ -77,13 +91,23 @@ while (1)
         
         if (read < 0)
         {
-            ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_disconnected,0);
             ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_error,0);
+            ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_disconnected,0);
             return;
         }
         
         aPayload.push_back(rcvbuffer, haveRead);
         messageLen -= haveRead;
+    }
+    
+    
+    
+    if (*((uint32_t*)&buffer[20]) != aPayload.getChecksum())
+    {
+        ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_error,0);
+        ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_disconnected,0);
+        close(socketfd);
+        return;
     }
     
     if (theKnowledge.getDebug())
