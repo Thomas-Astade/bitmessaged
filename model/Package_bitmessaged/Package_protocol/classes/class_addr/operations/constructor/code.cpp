@@ -8,4 +8,5 @@ if (addrcount > 1000) // an addr with mote than 1000 addesses is invalid
 while (addrcount--)
 {
     net_addr anAddr(data,index);
+    myAddresses.push_back(anAddr);
 }
