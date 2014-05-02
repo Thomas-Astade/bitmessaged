@@ -56,8 +56,6 @@ while (1)
         }
     }
     
-    printf("detected message type %d\n",messageType);
-    
     uint32_t messageLen = htonl(*((uint32_t*)&buffer[16]));
     
     if (messageLen > (200 * 1024 * 1024)) // we do not accapt messages longer than 200 MByte
@@ -70,6 +68,7 @@ while (1)
 
     if (theKnowledge.getDebug())
     {
+        printf("detected message type %d\n",messageType);
         printf("expect a message of size: %d\n",messageLen+20);
     }
     
@@ -109,10 +108,17 @@ while (1)
         case protocol::message::version:
             ACF_sendMessage(MessageReceiver(),toLogic,ev_version,0);
             break;
+        case protocol::message::addr:
+            ACF_sendMessage(MessageReceiver(),toLogic,ev_addr,new protocol::Payload(aPayload));
+            break;
+        case protocol::message::inv:
+            ACF_sendMessage(MessageReceiver(),toLogic,ev_inv,new protocol::Payload(aPayload));
+            break;
         default:
             break;
     }
     
+    // check the checksum
     if (*((uint32_t*)&buffer[20]) != aPayload.getChecksum())
     {
         ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_error,0);
