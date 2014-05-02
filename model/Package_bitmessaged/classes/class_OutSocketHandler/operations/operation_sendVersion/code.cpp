@@ -6,7 +6,7 @@ protocol::version aVersion(theKnowledge.getTime(),
     (uint16_t)destAddr.sin_port
 );
 
-protocol::message aMessage(aVersion);
+protocol::message aMessage(protocol::message::version, aVersion.getPayload());
 
 if (theKnowledge.getDebug())
 {
