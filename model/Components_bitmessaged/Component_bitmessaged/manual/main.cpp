@@ -31,6 +31,9 @@ void print_usage()
     printf("-p, --plugin        plugin to load.\n");
     printf("-i, --initial       ip:port of the initial client connection.\n");
     printf("                    (you may have multiple addresses).\n");
+
+    printf("\nTuning parapeters:\n");
+    printf("-o, --outgoing      number of outgoing connections (default 8).\n");
 }
 
 ACF soketContext;
@@ -71,6 +74,7 @@ int main(int argc, char *argv[]) {
         {"help"       ,  no_argument,        0,  'h' },
         {"debug"      ,  no_argument,        0,  'd' },
         {"plugin"     ,  optional_argument,  0,  'p' },
+        {"outgoing"   ,  optional_argument,  0,  'o' },
         {"initial"    ,  required_argument,  0,  'i' },
         {0,          0,                      0,   0  }
     };
@@ -78,8 +82,11 @@ int main(int argc, char *argv[]) {
     int long_index =0;
     int opt;
 
-    while ((opt = getopt_long(argc, argv, "p:i:hd", long_options, &long_index )) != -1) {
+    while ((opt = getopt_long(argc, argv, "o:p:i:hd", long_options, &long_index )) != -1) {
         switch (opt) {
+        case 'o':
+                OutConnectionHandler::setOutputCount(atoi(optarg));
+            break;
         case 'd':
                 database.setDebug();
             break;
