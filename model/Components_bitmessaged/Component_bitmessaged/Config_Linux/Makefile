@@ -13,6 +13,8 @@ LDFLAGS	:= -lpthread -ldl -lssl -lcrypto -Wl,--export-dynamic
 
 TRACE_LIST :=$(addsuffix .o,$(TRACECLASSES))
 
+DEBUG=1
+
 ifdef DEBUG
 CXXFLAGS+= -g
 else
