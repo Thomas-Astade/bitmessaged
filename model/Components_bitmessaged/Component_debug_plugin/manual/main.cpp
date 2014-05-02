@@ -20,11 +20,11 @@ void *aThread( void *ptr )
     while (keepRunning)
     {
         char Buffer[200];
-        sprintf(Buffer,"heartbeat %d",database->getHeartbeat());
+        sprintf(Buffer,"heartbeat %d   ",database->getHeartbeat());
         mvaddnstr(2,2,Buffer,strlen(Buffer));
-        sprintf(Buffer,"known nodes: %d",database->getNodeCount());
+        sprintf(Buffer,"known nodes: %d   ",database->getNodeCount());
         mvaddnstr(3,2,Buffer,strlen(Buffer));
-        sprintf(Buffer,"outgoin connections: %d",database->getOutgoingCount());
+        sprintf(Buffer,"outgoing connections: %d   ",database->getOutgoingCount());
         mvaddnstr(4,2,Buffer,strlen(Buffer));
         refresh();
         usleep(100000);

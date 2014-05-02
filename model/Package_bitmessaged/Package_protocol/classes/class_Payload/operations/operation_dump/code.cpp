@@ -1,8 +1,11 @@
-//~~ void dump() [CPayload] ~~
+//~~ void dump() [Payload] ~~
 const void* mem = operator*();
 unsigned int len = size();
 unsigned int i, j;
 const unsigned int columns = 16;
+
+if (len > 160)
+    len = 160;
 
 for(i = 0; i < len + ((len % columns) ? (columns - len % columns) : 0); i++)
 {
@@ -42,5 +45,10 @@ for(i = 0; i < len + ((len % columns) ? (columns - len % columns) : 0); i++)
         }
         putchar('\n');
     }
+}
+
+if (len < size())
+{
+    printf("... %d additional bytes ...\n",size()-len);
 }
 

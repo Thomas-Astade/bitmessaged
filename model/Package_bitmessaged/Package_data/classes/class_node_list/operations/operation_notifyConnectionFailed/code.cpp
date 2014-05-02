@@ -1,5 +1,4 @@
-//~~ void freeNode(uint64_t id) [node_list] ~~
-
+//~~ void notifyConnectionFailed(uint64_t id) [node_list] ~~
 #ifdef _TRACE_
     char buffer[50];
     sprintf(buffer,"%ld",id);
@@ -10,5 +9,5 @@ if (known_nodes.find(id) == known_nodes.end())
     return;
 
 node_info node = known_nodes[id];
-node.decUse();
+node.ConnectionFailed();
 known_nodes[id] = node;

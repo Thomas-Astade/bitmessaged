@@ -71,6 +71,7 @@ while (1)
         theKnowledge.dumpLock();
         printf("detected message type %d\n",messageType);
         printf("expect a message of size: %d\n",messageLen+20);
+        theKnowledge.dumpUnlock();
     }
     
     uint8_t rcvbuffer[2000]; //just some buffer
@@ -91,7 +92,7 @@ while (1)
             return;
         }
         
-        if (read < 0)
+        if (haveRead < 0)
         {
             ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_error,0);
             ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_disconnected,0);
@@ -130,6 +131,7 @@ while (1)
     
     if (theKnowledge.getDebug())
     {
+        theKnowledge.dumpLock();
         printf("Received Message:\n");
         protocol::Payload dumpPayload;
         dumpPayload.push_back(buffer,sizeof(buffer));
