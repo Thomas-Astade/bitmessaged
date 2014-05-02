@@ -50,7 +50,7 @@ void start_plugin(std::string filename)
     else
     {
         plugin_handles[filename] = handle;
-        void(* func)(data::knowledge&) = (void(*)(data::knowledge&)) dlsym (handle, "init");
+        void(* func)(data::knowledge&) = (void(*)(data::knowledge&)) dlsym (handle, "init_plugin");
         func(database);
     }
 }
@@ -60,7 +60,7 @@ void stop_plugin(std::string filename)
     if (plugin_handles.find(filename) == plugin_handles.end())
         return;
     printf("sutting down plugin %s\n",filename.c_str());
-    void(* func)() = (void(*)()) dlsym (plugin_handles[filename], "shutdown");
+    void(* func)() = (void(*)()) dlsym (plugin_handles[filename], "shutdown_plugin");
     func();
 }
 

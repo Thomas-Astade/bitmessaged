@@ -19,5 +19,8 @@ if (inet_pton(AF_INET, addr.substr(0,pos).c_str(), &serv_addr.sin_addr)==0)
 }
 
 node_info newnode(serv_addr);
-known_nodes[newnode.getID()] = newnode;
+
+if (known_nodes.find(newnode.getID()) == known_nodes.end())
+    known_nodes[newnode.getID()] = newnode;
+
 RETURN(true);

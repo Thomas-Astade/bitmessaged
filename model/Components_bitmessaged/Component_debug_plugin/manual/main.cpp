@@ -22,6 +22,10 @@ void *aThread( void *ptr )
         char Buffer[200];
         sprintf(Buffer,"heartbeat %d",database->getHeartbeat());
         mvaddnstr(2,2,Buffer,strlen(Buffer));
+        sprintf(Buffer,"known nodes: %d",database->getNodeCount());
+        mvaddnstr(3,2,Buffer,strlen(Buffer));
+        sprintf(Buffer,"outgoin connections: %d",database->getOutgoingCount());
+        mvaddnstr(4,2,Buffer,strlen(Buffer));
         refresh();
         usleep(100000);
     }
@@ -31,14 +35,14 @@ void *aThread( void *ptr )
 }
 
 extern "C" {
-void init(data::knowledge& data)
+void init_plugin(data::knowledge& data)
 {
     database = &data;
     pthread_create( &thread1, NULL, aThread, 0);
     printf("debug plugin initialized\n");
 }
 
-void shutdown()
+void shutdown_plugin()
 {
     keepRunning = false;
     while (isRunning)
