@@ -68,6 +68,7 @@ while (1)
 
     if (theKnowledge.getDebug())
     {
+        theKnowledge.dumpLock();
         printf("detected message type %d\n",messageType);
         printf("expect a message of size: %d\n",messageLen+20);
     }
@@ -134,5 +135,6 @@ while (1)
         dumpPayload.push_back(buffer,sizeof(buffer));
         dumpPayload.push_back(aPayload);
         dumpPayload.dump();
+        theKnowledge.dumpUnlock();
     }
 }

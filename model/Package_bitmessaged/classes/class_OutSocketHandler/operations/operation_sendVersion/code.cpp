@@ -10,9 +10,11 @@ protocol::message aMessage(protocol::message::version, aVersion.getPayload());
 
 if (theKnowledge.getDebug())
 {
+    theKnowledge.dumpLock();
     printf("Message type Version:\n");
     dumpSend();
     aMessage.dump();
+    theKnowledge.dumpUnlock();
 }
 
 aMessage.writeTo(socketfd);
