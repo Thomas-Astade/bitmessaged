@@ -9,7 +9,7 @@ TARGET ?= bitmessaged
 
 # compiler settings
 CXXFLAGS:= $(INCLUDE) -Wall
-LDFLAGS	:= -lpthread -ldl -lssl -lcrypto -Wl,--export-dynamic
+LDFLAGS	:= -ljson_spirit -lpthread -ldl -lssl -lcrypto -Wl,--export-dynamic
 
 TRACE_LIST :=$(addsuffix .o,$(TRACECLASSES))
 

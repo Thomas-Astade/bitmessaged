@@ -109,6 +109,8 @@ int main(int argc, char *argv[]) {
         }
     }
     
+    database.load();
+    
     for (std::set<std::string>::iterator it = plugins.begin(); it != plugins.end(); it++)
     {
         start_plugin(*it);
@@ -132,5 +134,7 @@ int main(int argc, char *argv[]) {
         stop_plugin(*it);
     }
 
+    database.save();
+    
     return EXIT_SUCCESS;
 }
