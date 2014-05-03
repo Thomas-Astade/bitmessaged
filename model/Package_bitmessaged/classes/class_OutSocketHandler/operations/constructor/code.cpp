@@ -11,4 +11,9 @@ myLogic->toSocket = MessageReceiver();
 toLogic = myLogic->MessageReceiver();
 myLogic->Initialize(0);
 
-pthread_create(&myThread,0,&ThreadEntry,this);
+
+pthread_attr_t attr;
+pthread_attr_init(&attr);
+pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+
+pthread_create(&myThread,&attr,&ThreadEntry,this);

@@ -1,2 +1,3 @@
-//~~ void successfulConnectionEnd() [node_info] ~~
-lastConnectedTime = std::time(0);
+//~~ void ConnectionFailed() [node_info] ~~
+lastFailedTime = std::time(0);
+unsucessfulcount++;
