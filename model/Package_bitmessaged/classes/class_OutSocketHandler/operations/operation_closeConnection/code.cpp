@@ -1,2 +1,6 @@
 //~~ void closeConnection(ACF_Message* event) [OutSocketHandler] ~~
-close(socketfd);
+if (socketfd)
+{
+    close(socketfd);
+    socketfd = 0;
+}

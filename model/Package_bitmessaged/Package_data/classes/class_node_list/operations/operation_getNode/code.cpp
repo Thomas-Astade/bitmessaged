@@ -46,7 +46,7 @@ nodelist.clear();
 for (std::map<int64_t, node_info>::iterator it = known_nodes.begin(); it != known_nodes.end(); it++)
 {
     data::node_info res = (*it).second;
-    if ((!res.isInUse()) && (res.getFailedCount() >= 16))
+    if ((!res.isInUse()) && (res.getFailedCount() >= 96))
         nodelist.push_back(res.getID());
 }
 
