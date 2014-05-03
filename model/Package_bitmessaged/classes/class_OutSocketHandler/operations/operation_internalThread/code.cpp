@@ -108,7 +108,16 @@ while (1)
             ACF_sendMessage(MessageReceiver(),toLogic,ev_verack,0);
             break;
         case protocol::message::version:
-            ACF_sendMessage(MessageReceiver(),toLogic,ev_version,0);
+            {
+                protocol::version aVersion(aPayload,0);
+                if (aVersion.getVersion() != 2) // at the moment we support only version 2
+                {
+                    ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_disconnected,0);
+                    return;
+                }
+                
+                ACF_sendMessage(MessageReceiver(),toLogic,ev_version,new protocol::Payload(aPayload));
+            }
             break;
         case protocol::message::addr:
             ACF_sendMessage(MessageReceiver(),toLogic,ev_addr,new protocol::Payload(aPayload));

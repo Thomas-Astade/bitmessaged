@@ -6,10 +6,16 @@ obj["port"] = (uint64_t)htons(myAddr.sin_port);
 
 if (currentlyInUse > 0)
     obj["last_connected"] = (uint64_t)std::time(0);
-else
+else if (lastConnectedTime)
     obj["last_connected"] = lastConnectedTime;
 
-obj["last_failed"] = lastFailedTime;
-obj["unsuccessful_count"] = (uint64_t)unsucessfulcount;
+if (lastFailedTime)
+    obj["last_failed"] = lastFailedTime;
+    
+if (unsucessfulcount)
+    obj["unsuccessful_count"] = (uint64_t)unsucessfulcount;
+
+if (!m_Agent.empty())
+    obj["user_agent"] = m_Agent;
 
 return obj;

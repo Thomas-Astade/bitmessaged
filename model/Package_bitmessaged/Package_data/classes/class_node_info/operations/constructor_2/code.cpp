@@ -25,3 +25,8 @@ if (data["unsuccessful_count"].type() == json_spirit::int_type)
 {
     unsucessfulcount = data["unsuccessful_count"].get_int();
 }
+
+if (data["user_agent"].type() == json_spirit::str_type)
+{
+    m_Agent = data["user_agent"].get_str();
+}
