@@ -2,7 +2,7 @@
 json_spirit::mObject obj;
 
 obj["ip"] = inet_ntoa(myAddr.sin_addr);
-obj["port"] = (uint64_t)myAddr.sin_port;
+obj["port"] = (uint64_t)htons(myAddr.sin_port);
 
 if (currentlyInUse > 0)
     obj["last_connected"] = (uint64_t)std::time(0);

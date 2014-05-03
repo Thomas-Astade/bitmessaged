@@ -42,7 +42,7 @@ known_nodes[res.getID()] = res;
 
 nodelist.clear();
 
-// try to find not working nodes and throw then away
+// try to find not working nodes and throw them away
 for (std::map<int64_t, node_info>::iterator it = known_nodes.begin(); it != known_nodes.end(); it++)
 {
     data::node_info res = (*it).second;
