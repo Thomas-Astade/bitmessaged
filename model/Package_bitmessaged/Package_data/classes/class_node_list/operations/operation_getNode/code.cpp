@@ -40,19 +40,19 @@ known_nodes[res.getID()] = res;
     Trace2UML::notify_log(5,this,"node_list",buffer);
 #endif
 
-nodelist.clear();
-
-// try to find not working nodes and throw them away
-for (std::map<int64_t, node_info>::iterator it = known_nodes.begin(); it != known_nodes.end(); it++)
+if (known_nodes.size() > 20100) // List is to big, lets delete some
 {
-    data::node_info res = (*it).second;
-    if ((!res.isInUse()) && (res.getFailedCount() >= 96))
-        nodelist.push_back(res.getID());
-}
-
-for (std::vector<uint64_t>::iterator it = nodelist.begin(); it != nodelist.end(); it++)
-{
-    known_nodes.erase(*it);
+    std::multiset<node_info> sorted; 
+    for (std::map<int64_t, node_info>::iterator it = known_nodes.begin(); it != known_nodes.end(); it++)
+    {
+        sorted.insert((*it).second);
+    }
+    for (std::multiset<node_info>::iterator it = sorted.begin(); it != sorted.end(); it++)
+    {
+        known_nodes.erase((*it).getID());
+        if (known_nodes.size() <= 20000)
+            RETURN(true);
+    }
 }
 
 RETURN(true);
