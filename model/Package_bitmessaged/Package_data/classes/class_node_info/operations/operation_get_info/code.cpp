@@ -16,6 +16,9 @@ if (lastFailedTime)
 if (unsucessfulcount)
     obj["unsuccessful_count"] = (uint64_t)unsucessfulcount;
 
+if (m_Services)
+    obj["services"] = m_Services;
+
 if (!m_Agent.empty())
     obj["user_agent"] = m_Agent;
 
