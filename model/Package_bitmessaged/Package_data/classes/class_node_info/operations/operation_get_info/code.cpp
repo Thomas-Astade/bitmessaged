@@ -13,6 +13,12 @@ else if (lastConnectedTime)
 if (lastFailedTime)
     obj["last_failed"] = lastFailedTime;
     
+if (m_offerCount)
+    obj["offered_objects"] = (uint64_t)m_offerCount;
+    
+if (m_duplicateOfferCount)
+    obj["dublicate_offered_objects"] = (uint64_t)m_duplicateOfferCount;
+    
 if (unsucessfulcount)
     obj["unsuccessful_count"] = (uint64_t)unsucessfulcount;
 

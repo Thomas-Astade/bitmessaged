@@ -11,6 +11,16 @@ if (data["port"].type() == json_spirit::int_type)
     myAddr.sin_port = htons(data["port"].get_int());
 }
 
+if (data["offered_objects"].type() == json_spirit::int_type)
+{
+    m_offerCount = data["offered_objects"].get_int();
+}
+
+if (data["dublicate_offered_objects"].type() == json_spirit::int_type)
+{
+    m_duplicateOfferCount = data["dublicate_offered_objects"].get_int();
+}
+
 if (data["last_connected"].type() == json_spirit::int_type)
 {
     lastConnectedTime = data["last_connected"].get_uint64();
