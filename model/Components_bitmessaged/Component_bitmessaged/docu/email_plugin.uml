@@ -1,0 +1,181 @@
+Filetype=Saved file from Astade graphic library (http://astade.tigris.org)
+SaveFileVersion=2
+[Window]
+XSize=1086
+YSize=613
+[Nodes]
+[Nodes/Node001]
+xPos=999
+yPos=514
+ID=1
+Label=a graphical configuration tool for the key database. It can generate bitmessage keys and assign them to email addresses
+ClassName=note
+Attach001=2
+[Nodes/Node002]
+xPos=835
+yPos=371
+ID=2
+Label=config tool
+ClassName=component
+ComponentUse001=13
+[Nodes/Node003]
+xPos=875
+yPos=43
+ID=3
+Label=setup for company networks
+ClassName=note
+Attach001=5
+Attach002=6
+Attach003=14
+[Nodes/Node004]
+xPos=289
+yPos=59
+ID=4
+Label=setup for small solutions like home office
+ClassName=note
+Attach001=14
+Attach002=7
+[Nodes/Node005]
+xPos=985
+yPos=186
+ID=5
+Label=email client
+ClassName=component
+InterfaceUse001=19
+[Nodes/Node006]
+xPos=782
+yPos=184
+ID=6
+Label=Email server (Dovecot, Postfix, Sendmail ..)
+ClassName=component
+InterfaceUse001=20
+InterfaceProvide001=19
+[Nodes/Node007]
+xPos=540
+yPos=45
+ID=7
+Label=Email client
+ClassName=component
+InterfaceUse001=22
+InterfaceUse002=21
+[Nodes/Node008]
+xPos=89
+yPos=543
+ID=8
+Label=other bitmessage clients found in the internet
+ClassName=note
+Attach001=15
+Attach002=16
+[Nodes/Node009]
+xPos=99
+yPos=163
+ID=9
+Label=contains the bitmessage objects (messages, public keys, ...)
+ClassName=note
+Attach001=10
+[Nodes/Node010]
+xPos=330
+yPos=272
+ID=10
+Label=object database
+ClassName=component
+[Nodes/Node011]
+xPos=558
+yPos=531
+ID=11
+Label=bitmessaged is a daemon that implements bitmessage protocol. It has a plugin interface to have access to the object database
+ClassName=note
+Attach001=18
+[Nodes/Node012]
+xPos=782
+yPos=529
+ID=12
+Label=In this database (a textfile?) you configure the known email addresses and their corresponding bitmessage addresses and keys
+ClassName=note
+Attach001=13
+[Nodes/Node013]
+xPos=687
+yPos=303
+ID=13
+Label=bitmessage private key database
+ClassName=component
+[Nodes/Node014]
+xPos=549
+yPos=198
+ID=14
+Label=Email Plugin
+ClassName=component
+InterfaceUse001=23
+ComponentUse001=13
+InterfaceProvide001=22
+InterfaceProvide002=20
+InterfaceProvide003=21
+[Nodes/Node015]
+xPos=174
+yPos=385
+ID=15
+Label=bitmessage client
+ClassName=component
+ComponentUse001=17
+[Nodes/Node016]
+xPos=285
+yPos=549
+ID=16
+Label=bitmessage client
+ClassName=component
+ComponentUse001=17
+[Nodes/Node017]
+xPos=326
+yPos=448
+ID=17
+Label=Internet
+ClassName=component
+[Nodes/Node018]
+xPos=472
+yPos=358
+ID=18
+Label=bitmessaged
+ClassName=component
+InterfaceProvide001=23
+ComponentUse001=17
+ComponentUse002=10
+[Nodes/Node019]
+xPos=886
+yPos=187
+ID=19
+Label=IMAP
+ClassName=interface
+LabelPosX=-9
+LabelPosY=21
+[Nodes/Node020]
+xPos=671
+yPos=193
+ID=20
+Label=LMTP
+ClassName=interface
+LabelPosX=10
+LabelPosY=21
+[Nodes/Node021]
+xPos=523
+yPos=119
+ID=21
+Label=POP3
+ClassName=interface
+LabelPosX=-27
+LabelPosY=10
+[Nodes/Node022]
+xPos=563
+yPos=115
+ID=22
+Label=SMTP
+ClassName=interface
+LabelPosX=29
+LabelPosY=9
+[Nodes/Node023]
+xPos=507
+yPos=280
+ID=23
+Label=plugin
+ClassName=interface
+LabelPosX=-32
+LabelPosY=6
