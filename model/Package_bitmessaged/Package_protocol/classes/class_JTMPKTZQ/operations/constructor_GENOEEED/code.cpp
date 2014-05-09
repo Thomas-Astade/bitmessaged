@@ -7,5 +7,9 @@ if (vectorcount > 50000) // an inv  with mrte than 50000 objects is invalid
 
 while (vectorcount--)
 {
-    inventory_vectors.insert(inventory_vector(data,index));
+    inventory_vector aVector(data,index);
+    if (find(aVector) == end())
+        insert(aVector);
+    else
+        duplicateCount++;
 }
