@@ -16,9 +16,9 @@ if (data["offered_objects"].type() == json_spirit::int_type)
     m_offerCount = data["offered_objects"].get_int();
 }
 
-if (data["dublicate_offered_objects"].type() == json_spirit::int_type)
+if (data["duplicate_offered_objects"].type() == json_spirit::int_type)
 {
-    m_duplicateOfferCount = data["dublicate_offered_objects"].get_int();
+    m_duplicateOfferCount = data["duplicate_offered_objects"].get_int();
 }
 
 if (data["last_connected"].type() == json_spirit::int_type)
@@ -34,6 +34,11 @@ if (data["last_failed"].type() == json_spirit::int_type)
 if (data["unsuccessful_count"].type() == json_spirit::int_type)
 {
     unsucessfulcount = data["unsuccessful_count"].get_int();
+}
+
+if (data["successful_count"].type() == json_spirit::int_type)
+{
+    sucessfulcount = data["successful_count"].get_int();
 }
 
 if (data["services"].type() == json_spirit::int_type)

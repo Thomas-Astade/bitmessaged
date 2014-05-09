@@ -9,6 +9,8 @@ for (std::set<protocol::inventory_vector>::iterator it = aInv.begin();
     if (offeredVectors.find(*it) == offeredVectors.end())
     {
         offeredVectors.insert(*it);
+        if (theKnowledge.doWeNeed(*it))
+            VectorsToRequest.insert(*it);
         theKnowledge.incNodeOfferCount(nodeID,1);
     }
     else
