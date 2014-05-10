@@ -1,7 +1,7 @@
 //~~ protocol::Payload getPayload() [inv] ~~
 Payload ret;
 
-ret.push_back(size());
+ret.push_back(var_int(size()));
 
 for (std::set<inventory_vector>::iterator it = begin(); it != end(); it++)
 {

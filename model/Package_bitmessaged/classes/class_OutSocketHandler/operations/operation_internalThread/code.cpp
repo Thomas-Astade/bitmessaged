@@ -103,6 +103,21 @@ while (1)
         messageLen -= haveRead;
     }
     
+    // check the checksum
+    if (*((uint32_t*)&buffer[20]) != aPayload.getChecksum())
+    {
+        ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_error,0);
+        ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_disconnected,0);
+        close(socketfd);
+        if (theKnowledge.getDebug())
+        {
+            theKnowledge.dumpLock();
+            printf("WRONG CHECKSUM!\n");
+            theKnowledge.dumpUnlock();
+        }
+        return;
+    }
+
     switch (messageType) {
         case protocol::message::verack:
             ACF_sendMessage(MessageReceiver(),toLogic,ev_verack,0);
@@ -127,15 +142,6 @@ while (1)
             break;
         default:
             break;
-    }
-    
-    // check the checksum
-    if (*((uint32_t*)&buffer[20]) != aPayload.getChecksum())
-    {
-        ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_error,0);
-        ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_disconnected,0);
-        close(socketfd);
-        return;
     }
     
     if (theKnowledge.getDebug())
