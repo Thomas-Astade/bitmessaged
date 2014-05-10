@@ -140,6 +140,12 @@ while (1)
         case protocol::message::inv:
             ACF_sendMessage(MessageReceiver(),toLogic,ev_inv,new protocol::Payload(aPayload));
             break;
+        case protocol::message::getpubkey:
+        case protocol::message::pubkey:
+        case protocol::message::broadcast:
+        case protocol::message::msg:
+            ACF_sendMessage(MessageReceiver(),toLogic,ev_object,new protocol::object(messageType,aPayload));
+            break;
         default:
             break;
     }

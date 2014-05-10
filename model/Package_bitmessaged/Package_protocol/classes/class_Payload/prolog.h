@@ -4,4 +4,5 @@
 namespace protocol{
     class var_int;
     class var_str;
+    class inventory_vector;
 }
