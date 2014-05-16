@@ -1,2 +1,2 @@
 //~~ const uint8_t* operator*() [Payload] ~~
-return &m_Data->at(0);
+return &m_Data->operator[](0);
