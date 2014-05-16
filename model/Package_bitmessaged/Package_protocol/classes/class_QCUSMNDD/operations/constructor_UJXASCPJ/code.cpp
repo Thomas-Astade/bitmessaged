@@ -1,0 +1,1 @@
+//~~ wPayload(const protocol::wPayload& orig) [wPayload] ~~

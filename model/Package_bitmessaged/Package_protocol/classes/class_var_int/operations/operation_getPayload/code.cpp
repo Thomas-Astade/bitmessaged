@@ -1,5 +1,5 @@
 //~~ protocol::Payload getPayload() [var_int] ~~
-Payload ret;
+wPayload ret;
 if (value < 0xfd)
 {
     ret.push_back((uint8_t)value);

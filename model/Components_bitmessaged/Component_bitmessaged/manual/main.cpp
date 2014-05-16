@@ -69,6 +69,8 @@ void stop_plugin(std::string filename)
 
 int main(int argc, char *argv[]) {
 
+    protocol::Payload::initSemaphore();
+
     Trace2UML::ms_ofile.open("Trace2UML.seq");
     static struct option long_options[] = {
         {"help"       ,  no_argument,        0,  'h' },

@@ -1,4 +1,4 @@
-#include <tr1/memory>
+#include <semaphore.h>
 #include <vector>
 #include <stdint.h>
 namespace protocol{

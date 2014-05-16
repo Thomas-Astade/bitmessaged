@@ -2,7 +2,7 @@
 uint32_t ret;
 
 unsigned char hash[SHA512_DIGEST_LENGTH];
-SHA512(&VECTOR[0], VECTOR.size(), hash);
+SHA512(&m_Data->at(0), m_Data->size(), hash);
 memcpy(&ret,hash,sizeof(ret));
 
 RETURN(ret);

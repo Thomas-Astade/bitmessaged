@@ -1,5 +1,5 @@
 //~~ protocol::Payload getPayload() [addr] ~~
-Payload ret;
+wPayload ret;
 
 ret.push_back(var_int(myAddresses.size()));
 

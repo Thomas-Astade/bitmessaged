@@ -75,7 +75,7 @@ while (1)
     }
     
     uint8_t rcvbuffer[2000]; //just some buffer
-    protocol::Payload aPayload;
+    protocol::wPayload aPayload;
     
     while (messageLen)
     {
@@ -154,7 +154,7 @@ while (1)
     {
         theKnowledge.dumpLock();
         printf("Received Message:\n");
-        protocol::Payload dumpPayload;
+        protocol::wPayload dumpPayload;
         dumpPayload.push_back(buffer,sizeof(buffer));
         dumpPayload.push_back(aPayload);
         dumpPayload.dump();

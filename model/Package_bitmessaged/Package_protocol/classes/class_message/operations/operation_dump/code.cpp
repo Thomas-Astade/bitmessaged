@@ -1,5 +1,5 @@
 //~~ void dump() [message] ~~
-Payload aPayload;
+wPayload aPayload;
 
 aPayload.push_back(&comand_defines[myType],sizeof(comand_defines[myType]));
 

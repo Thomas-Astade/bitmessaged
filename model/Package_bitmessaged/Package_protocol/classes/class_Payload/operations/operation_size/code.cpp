@@ -1,2 +1,2 @@
 //~~ unsigned int size() [CPayload] ~~
-return VECTOR.size();
+return m_Data->size();

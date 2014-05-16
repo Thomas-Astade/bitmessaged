@@ -1,2 +1,4 @@
 //~~ version(const Payload& data, unsigned int& index) [version] ~~
-myPayload.push_back(&(*data)[index], data.size() - index);
+wPayload aPayload;
+aPayload.push_back(&(*data)[index], data.size() - index);
+myPayload = aPayload;

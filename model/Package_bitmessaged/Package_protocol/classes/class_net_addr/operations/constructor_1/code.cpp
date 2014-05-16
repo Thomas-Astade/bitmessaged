@@ -1,6 +1,10 @@
 //~~ net_addr(const data::node_info& node) [net_addr] ~~
-myPayload.push_back(node.getLastConnectedTime());
-myPayload.push_back(node.getStreamNo());
-myPayload.push_back(node.getServices());
-myPayload.push_back(node.getIP());
-myPayload.push_back(node.getPort());
+wPayload aPayload;
+
+aPayload.push_back(node.getLastConnectedTime());
+aPayload.push_back(node.getStreamNo());
+aPayload.push_back(node.getServices());
+aPayload.push_back(node.getIP());
+aPayload.push_back(node.getPort());
+
+myPayload = aPayload;
