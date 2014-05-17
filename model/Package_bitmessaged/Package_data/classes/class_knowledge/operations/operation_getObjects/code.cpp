@@ -1,4 +1,4 @@
-//~~ std::set<protocol::inventory::vector> getObjects(uint64_t minTime, uint64_t maxTime) [knowledge] ~~
+//~~ std::set<protocol::inventory_vector> getObjects(uint64_t minTime, uint64_t maxTime) [knowledge] ~~
 std::set<protocol::inventory_vector> ret;
 
 if (maxTime < minTime)
