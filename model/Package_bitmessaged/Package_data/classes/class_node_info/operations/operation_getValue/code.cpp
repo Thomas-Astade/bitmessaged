@@ -11,10 +11,13 @@ if (sucessfulcount) // a bonus, if we ever where connected to this node
         ret += 4;
 }
 
-unsigned int successfulBonus = sucessfulcount;
+unsigned int successfulBonus = sucessfulcount; 
 if (successfulBonus > 10)
     successfulBonus = 10;
-    
+
+if (m_oldObjectCount == 0) // a small bonus for nodes that have a correct clock
+    ret += 3;
+
 ret += successfulBonus; // this is for nodes which have proven to be reliable
 
 ret -= unsucessfulcount; // unsuccessful tries lower the value
