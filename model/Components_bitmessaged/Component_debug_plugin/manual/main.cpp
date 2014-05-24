@@ -26,8 +26,12 @@ void *aThread( void *ptr )
         mvaddnstr(3,2,Buffer,strlen(Buffer));
         sprintf(Buffer,"outgoing connections: %d   ",database->getOutgoingCount());
         mvaddnstr(4,2,Buffer,strlen(Buffer));
-        sprintf(Buffer,"received objects: %d   ",database->getObjectCount());
+        sprintf(Buffer,"successful connections: %d   ",database->getSuccessfulCount());
         mvaddnstr(5,2,Buffer,strlen(Buffer));
+        sprintf(Buffer,"unsuccessful connections: %d   ",database->getUnsuccessfulCount());
+        mvaddnstr(6,2,Buffer,strlen(Buffer));
+        sprintf(Buffer,"received objects: %d   ",database->getObjectCount());
+        mvaddnstr(7,2,Buffer,strlen(Buffer));
         refresh();
         usleep(100000);
     }

@@ -3,5 +3,6 @@ while (sem_wait(&mySemaphore))
     ;
 
 known_node_list.notifySuccessfulConnection(id);
+countSuccessfulConnections++;
 
 sem_post(&mySemaphore);
