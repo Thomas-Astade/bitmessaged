@@ -7,7 +7,7 @@ if (collectedObjects.find(object.getVector()) == collectedObjects.end())
     uint64_t oTime = object.getTime();
     uint64_t now = getTime();
     bool oldObject = ((object.getType() == protocol::message::pubkey) && ((oTime + maximumKeyAcceptAge) < now)) ||
-                       (((oTime + maximumAcceptAge) < now))
+                       ((object.getType() != protocol::message::pubkey) && ((oTime + maximumAcceptAge) < now))
                       ;
 
     if (!oldObject)
