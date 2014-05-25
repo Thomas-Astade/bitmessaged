@@ -6,9 +6,9 @@ theKnowledge.incNodeDuplicateOfferCount(nodeID,aInv.duplicate());
 for (std::set<protocol::inventory_vector>::iterator it = aInv.begin();
         it != aInv.end(); it++)
 {
-    if (offeredVectors.find(*it) == offeredVectors.end())
+    if (VectorsWeGotOffered.find(*it) == VectorsWeGotOffered.end())
     {
-        offeredVectors.insert(*it);
+        VectorsWeGotOffered.insert(*it);
         if (theKnowledge.doWeNeed(*it))
             VectorsToRequest.insert(*it);
         theKnowledge.incNodeOfferCount(nodeID,1);
