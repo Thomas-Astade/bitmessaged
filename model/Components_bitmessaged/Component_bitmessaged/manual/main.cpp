@@ -123,6 +123,7 @@ int main(int argc, char *argv[]) {
     pthread_create(&socketThread,0,&ACF::staticExec,&soketContext);
 
     OutConnectionHandler aHandler(&soketContext, database);
+    database.toConnectionHandler = aHandler.MessageReceiver();
     aHandler.Initialize(0);
     
     while (keepRunning)
