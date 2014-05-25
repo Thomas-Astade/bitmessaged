@@ -1,31 +1,41 @@
-//~~ std::set<protocol::inventory_vector> getObjects(uint64_t minTime, uint64_t maxTime) [knowledge] ~~
+//~~ std::set<protocol::inventory_vector> getObjects() [knowledge] ~~
 std::set<protocol::inventory_vector> ret;
-
-if (maxTime < minTime)
-    return ret;
 
 while (sem_wait(&mySemaphore))
     ;
 
 std::set<protocol::inventory_vector> toDelete;
 
-for (std::list<std::pair<uint64_t, protocol::inventory_vector> >::iterator it = receivedTimes.begin();
-     it != receivedTimes.end(); it++)
+for (std::map<protocol::inventory_vector,protocol::object>::iterator it = collectedObjects.begin();
+     it != collectedObjects.end(); it++)
 {
-    protocol::object anObject = collectedObjects[(*it).second];
-    
-    if ((getTime() - anObject.getTime()) > (2.5*24*60*60))
-        toDelete.insert((*it).second);
-    
-    if ((*it).first > maxTime)
-        break;
-
-    if ((getTime() - anObject.getTime()) < (2*24*60*60))
+    uint64_t oTime = (*it).second.getTime();
+    uint64_t now = getTime();
+    bool oldObject = (((*it).second.getType() == protocol::message::pubkey) && ((oTime + maximumKeyAdvertiseAge) < now)) ||
+                       (((*it).second.getType() != protocol::message::pubkey) && ((oTime + maximumAdvertiseAge) < now))
+                      ;
+                      
+    if (!oldObject)
     {
-        if ((*it).first >= minTime)
-            ret.insert((*it).second);
+        ret.insert((*it).first);
+    }
+
+    oldObject = (((*it).second.getType() == protocol::message::pubkey) && ((oTime + maximumKeyAcceptAge) < now)) ||
+                 (((*it).second.getType() != protocol::message::pubkey) && ((oTime + maximumAcceptAge) < now))
+                ;
+
+    if (oldObject)
+    {
+        toDelete.insert((*it).first);
     }
 }
+
+for (std::set<protocol::inventory_vector>::iterator it = toDelete.begin();
+     it != toDelete.end(); it++)
+{
+    collectedObjects.erase(*it);
+}
+
 
 sem_post(&mySemaphore);
 

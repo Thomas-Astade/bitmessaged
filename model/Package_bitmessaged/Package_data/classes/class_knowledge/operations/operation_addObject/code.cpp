@@ -9,12 +9,12 @@ if (collectedObjects.find(object.getVector()) == collectedObjects.end())
     bool oldObject = ((object.getType() == protocol::message::pubkey) && ((oTime + maximumKeyAcceptAge) < now)) ||
                        ((object.getType() != protocol::message::pubkey) && ((oTime + maximumAcceptAge) < now))
                       ;
+                      
+    bool futureObject = (oTime > now);
 
-    if (!oldObject)
+    if ((!oldObject) && (!futureObject))
     {
         collectedObjects[object.getVector()] = object;
-        std::pair<uint64_t, protocol::inventory_vector> aPair(getTime(), object.getVector());
-        receivedTimes.push_back(aPair);
     }
     else
     {
