@@ -11,4 +11,6 @@ if (it != collectedObjects.end())
 
 sem_post(&mySemaphore);
 
+countSentObjects++;
+
 return ret;

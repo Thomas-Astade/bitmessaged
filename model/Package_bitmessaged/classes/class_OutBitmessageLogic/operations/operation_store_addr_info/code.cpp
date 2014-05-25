@@ -9,3 +9,5 @@ for (std::vector<std::string>::iterator it = data.begin(); it != data.end(); it+
 {
     theKnowledge.addNode(*it);
 }
+
+VectorsWeCouldOffer = theKnowledge.getObjects();

@@ -32,6 +32,8 @@ void *aThread( void *ptr )
         mvaddnstr(6,2,Buffer,strlen(Buffer));
         sprintf(Buffer,"received objects: %d   ",database->getObjectCount());
         mvaddnstr(7,2,Buffer,strlen(Buffer));
+        sprintf(Buffer,"sent objects: %d   ",database->getSentObjectCount());
+        mvaddnstr(8,2,Buffer,strlen(Buffer));
         refresh();
         usleep(100000);
     }
