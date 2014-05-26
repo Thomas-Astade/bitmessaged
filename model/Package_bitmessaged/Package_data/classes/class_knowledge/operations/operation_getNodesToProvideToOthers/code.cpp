@@ -1,4 +1,4 @@
-//~~ std::vector<node_info> getNodesToProvideToOthers() [knowledge] ~~
+//~~ std::vector<data::node_info> getNodesToProvideToOthers() [knowledge] ~~
 while (sem_wait(&mySemaphore))
     ;
 

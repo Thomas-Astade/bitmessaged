@@ -15,18 +15,18 @@ if (VectorsToRequest.size() > 250)
     while (step--)
         it++;
         
-    aGet.insert(*it);
-    
     if ((!theKnowledge.doWeNeed(*it)) ||
         (VectorsWeRequested.find(*it) != VectorsWeRequested.end())
        )
     {
-        VectorsToRequest.erase(*it);
+        VectorsToRequest.erase(it);
         return;
     }
     
+    aGet.insert(*it);
+    
     VectorsWeRequested.insert(*it);
-    VectorsToRequest.erase(*it);
+    VectorsToRequest.erase(it);
 }
 else
 {

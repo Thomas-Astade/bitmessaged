@@ -1,4 +1,5 @@
-//~~ void sendObject(ACF_Message* event) [OutSocketHandler] ~~
+//~~ void sendObject(ACF_Message* event) [SocketHandler] ~~
+
 protocol::object* anObject = (protocol::object*)event->Data;
 
 protocol::message aMessage(anObject->getType(), anObject->getPayload());

@@ -1,4 +1,4 @@
-//~~ void addNodes(const json_spirit::mArray& addr) [node_list] ~~
+//~~ void addNodes(json_spirit::mArray& addr) [node_list] ~~
 for (json_spirit::mArray::iterator it = addr.begin(); it != addr.end(); it++)
 {
     if ((*it).type() == json_spirit::obj_type)
