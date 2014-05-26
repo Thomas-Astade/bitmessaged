@@ -12,6 +12,7 @@
 #include "ACF.h"
 #include "OutSocketHandler.h"
 #include "OutConnectionHandler.h"
+#include "InSocketHandler.h"
 #include "Trace2UML.h"
 
 volatile bool keepRunning = true;
@@ -123,6 +124,7 @@ int main(int argc, char *argv[]) {
     pthread_create(&socketThread,0,&ACF::staticExec,&soketContext);
 
     OutConnectionHandler aHandler(&soketContext, database);
+    
     database.toConnectionHandler = aHandler.MessageReceiver();
     aHandler.Initialize(0);
     
