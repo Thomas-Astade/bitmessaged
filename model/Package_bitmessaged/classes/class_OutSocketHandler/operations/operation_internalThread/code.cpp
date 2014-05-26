@@ -147,7 +147,8 @@ while (1)
         case protocol::message::pubkey:
         case protocol::message::broadcast:
         case protocol::message::msg:
-            ACF_sendMessage(MessageReceiver(),toLogic,ev_object,new protocol::object(messageType,aPayload));
+            if (aPayload.size() > 16)
+                ACF_sendMessage(MessageReceiver(),toLogic,ev_object,new protocol::object(messageType,aPayload));
             break;
         default:
             break;

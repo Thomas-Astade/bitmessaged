@@ -2,5 +2,5 @@
 if (socketfd)
 {
     close(socketfd);
-    socketfd = 0;
+    socketfd = -1;
 }

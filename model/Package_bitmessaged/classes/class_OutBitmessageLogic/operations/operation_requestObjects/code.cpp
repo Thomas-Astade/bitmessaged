@@ -22,7 +22,6 @@ if (VectorsToRequest.size() > 250)
        )
     {
         VectorsToRequest.erase(*it);
-        ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_request,0);
         return;
     }
     
@@ -36,7 +35,6 @@ else
     if (VectorsWeRequested.find(*VectorsToRequest.begin()) != VectorsWeRequested.end())
     {
         VectorsToRequest.erase(VectorsToRequest.begin());
-        ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_request,0);
         return;
     }
 
