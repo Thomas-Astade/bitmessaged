@@ -19,7 +19,10 @@ if (collectedObjects.find(object.getVector()) == collectedObjects.end())
     }
     else
     {
-        known_node_list.incOldOfferCount(NodeID,1);
+        if (oldObject)
+            known_node_list.incOldOfferCount(NodeID,1);
+        else
+            known_node_list.incFutureOfferCount(NodeID,1);
     }
 }
 

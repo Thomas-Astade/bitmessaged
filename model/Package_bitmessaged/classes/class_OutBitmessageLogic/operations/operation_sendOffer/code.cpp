@@ -1,6 +1,8 @@
 //~~ void sendOffer(ACF_Message* event) [OutBitmessageLogic] ~~
 protocol::inventory_vector* aVector = (protocol::inventory_vector*)event->Data;
 
+VectorsToRequest.erase(*aVector);
+
 protocol::inv anOffer;
 
 if (VectorsWeGotOffered.find(*aVector) != VectorsWeGotOffered.end())

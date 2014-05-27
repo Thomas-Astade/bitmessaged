@@ -17,6 +17,9 @@ if (m_offerCount)
 if (m_oldObjectCount)
     obj["old_objects"] = (uint64_t)m_oldObjectCount;
     
+if (m_futureObjectCount)
+    obj["future_objects"] = (uint64_t)m_futureObjectCount;
+    
 if (m_duplicateOfferCount)
     obj["duplicate_offered_objects"] = (uint64_t)m_duplicateOfferCount;
     
