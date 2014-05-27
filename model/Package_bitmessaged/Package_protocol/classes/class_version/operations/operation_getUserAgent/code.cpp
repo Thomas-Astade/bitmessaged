@@ -1,3 +1,4 @@
-//~~ std::string geUserAgent() [version] ~~
-var_str agent(myPayload,80);
+//~~ std::string getUserAgent() [version] ~~
+unsigned int index = 80;
+var_str agent(myPayload,index);
 RETURN(agent);

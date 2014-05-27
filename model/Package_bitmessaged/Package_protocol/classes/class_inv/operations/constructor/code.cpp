@@ -3,7 +3,7 @@ var_int count(data,index);
 uint64_t vectorcount = count.getValue();
 
 if (vectorcount > 50000) // an inv  with mrte than 50000 objects is invalid
-    return;
+    throw Malformated();
 
 while (vectorcount--)
 {
