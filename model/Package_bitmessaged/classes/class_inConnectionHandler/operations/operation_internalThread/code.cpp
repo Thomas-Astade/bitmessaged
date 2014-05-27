@@ -1,0 +1,4 @@
+//~~ void internalThread() [inConnectionHandler] ~~
+for (;;)
+{
+}
