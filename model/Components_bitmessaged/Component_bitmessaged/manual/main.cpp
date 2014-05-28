@@ -131,7 +131,7 @@ int main(int argc, char *argv[]) {
     
     while (keepRunning)
     {
-        database.incHeartbeat();
+        //database.incHeartbeat(); this is done in the mesage loop, now
         sleep(1);
     }
     
