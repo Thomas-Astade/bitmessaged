@@ -120,7 +120,8 @@ int main(int argc, char *argv[]) {
     }
 
     signal (SIGINT, my_handler); // install a signal handler
-    
+    signal(SIGPIPE, SIG_IGN); // ignore sigpipe
+     
     pthread_create(&socketThread,0,&ACF::staticExec,&soketContext);
 
     OutConnectionHandler aHandler(&soketContext, database);
