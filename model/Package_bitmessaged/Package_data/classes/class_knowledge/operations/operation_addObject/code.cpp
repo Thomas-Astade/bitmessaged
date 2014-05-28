@@ -10,7 +10,7 @@ if (collectedObjects.find(object.getVector()) == collectedObjects.end())
                        ((object.getType() != protocol::message::pubkey) && ((oTime + maximumAcceptAge) < now))
                       ;
                       
-    bool futureObject = (oTime > (now + jitterTime));
+    bool futureObject = (oTime > now);
 
     if ((!oldObject) && (!futureObject))
     {
