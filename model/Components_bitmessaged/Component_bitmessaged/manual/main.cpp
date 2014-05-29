@@ -12,6 +12,7 @@
 #include "ACF.h"
 #include "OutSocketHandler.h"
 #include "OutConnectionHandler.h"
+#include "InConnectionHandler.h"
 #include "InSocketHandler.h"
 #include "Trace2UML.h"
 
@@ -35,6 +36,7 @@ void print_usage()
 
     printf("\nTuning parapeters:\n");
     printf("-o, --outgoing      number of outgoing connections (default 8).\n");
+    printf("-a, --accept        number of incomming connections (default 16).\n");
 }
 
 ACF soketContext;
@@ -82,6 +84,7 @@ int main(int argc, char *argv[]) {
         {"debug"      ,  no_argument,        0,  'd' },
         {"plugin"     ,  optional_argument,  0,  'p' },
         {"outgoing"   ,  optional_argument,  0,  'o' },
+        {"accept"     ,  optional_argument,  0,  'a' },
         {"initial"    ,  required_argument,  0,  'i' },
         {0,          0,                      0,   0  }
     };
@@ -89,10 +92,13 @@ int main(int argc, char *argv[]) {
     int long_index =0;
     int opt;
 
-    while ((opt = getopt_long(argc, argv, "o:p:i:hd", long_options, &long_index )) != -1) {
+    while ((opt = getopt_long(argc, argv, "o:a:p:i:hd", long_options, &long_index )) != -1) {
         switch (opt) {
         case 'o':
                 OutConnectionHandler::setOutputCount(atoi(optarg));
+            break;
+        case 'a':
+                InConnectionHandler::setInputCount(atoi(optarg));
             break;
         case 'd':
                 database.setDebug();
