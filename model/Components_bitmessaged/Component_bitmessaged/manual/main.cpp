@@ -141,11 +141,13 @@ int main(int argc, char *argv[]) {
     pthread_create(&socketThread,0,&ACF::staticExec,&soketContext);
     pthread_create(&socketThread,0,&ACF::staticExec,&logicContext);
 
-    OutConnectionHandler aHandler(&logicContext, &soketContext, database);
-    InConnectionHandler anotherHandler((int)portnum);
+    OutConnectionHandler OutHandler(&logicContext, &soketContext, database);
+    InConnectionHandler InHandler((int)portnum, &logicContext, &soketContext, database);
     
-    database.toConnectionHandler = aHandler.MessageReceiver();
-    aHandler.Initialize(0);
+    database.toOutConnectionHandler = OutHandler.MessageReceiver();
+    database.toInConnectionHandler = InHandler.MessageReceiver();
+    OutHandler.Initialize(0);
+    InHandler.Initialize(0);
     
     while (keepRunning)
     {

@@ -15,7 +15,8 @@ if (collectedObjects.find(object.getVector()) == collectedObjects.end())
     if ((!oldObject) && (!futureObject))
     {
         collectedObjects[object.getVector()] = object;
-        ACF_sendMessage(0,toConnectionHandler,ev_newObject,new protocol::inventory_vector(object.getVector()));
+        ACF_sendMessage(0,toOutConnectionHandler,ev_newObject,new protocol::inventory_vector(object.getVector()));
+        ACF_sendMessage(0,toInConnectionHandler,ev_newObject,new protocol::inventory_vector(object.getVector()));
     }
     else
     {
