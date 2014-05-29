@@ -38,7 +38,11 @@ void print_usage()
 }
 
 ACF soketContext;
+ACF logicContext;
+
 pthread_t socketThread;
+pthread_t logicThread;
+
 std::set<std::string> plugins;
 std::map<std::string, void*> plugin_handles;
 static data::knowledge database;
@@ -123,8 +127,9 @@ int main(int argc, char *argv[]) {
     signal(SIGPIPE, SIG_IGN); // ignore sigpipe
      
     pthread_create(&socketThread,0,&ACF::staticExec,&soketContext);
+    pthread_create(&socketThread,0,&ACF::staticExec,&logicContext);
 
-    OutConnectionHandler aHandler(&soketContext, database);
+    OutConnectionHandler aHandler(&logicContext, &soketContext, database);
     
     database.toConnectionHandler = aHandler.MessageReceiver();
     aHandler.Initialize(0);

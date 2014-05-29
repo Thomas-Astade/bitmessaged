@@ -26,14 +26,16 @@ void *aThread( void *ptr )
         mvaddnstr(3,2,Buffer,strlen(Buffer));
         sprintf(Buffer,"outgoing connections: %d   ",database->getOutgoingCount());
         mvaddnstr(4,2,Buffer,strlen(Buffer));
-        sprintf(Buffer,"successful connections: %d   ",database->getSuccessfulCount());
+        sprintf(Buffer,"incomming connections: %d   ",database->getIncommingCount());
         mvaddnstr(5,2,Buffer,strlen(Buffer));
-        sprintf(Buffer,"unsuccessful connections: %d   ",database->getUnsuccessfulCount());
+        sprintf(Buffer,"successful connections: %d   ",database->getSuccessfulCount());
         mvaddnstr(6,2,Buffer,strlen(Buffer));
-        sprintf(Buffer,"received objects: %d   ",database->getObjectCount());
+        sprintf(Buffer,"unsuccessful connections: %d   ",database->getUnsuccessfulCount());
         mvaddnstr(7,2,Buffer,strlen(Buffer));
-        sprintf(Buffer,"sent objects: %d   ",database->getSentObjectCount());
+        sprintf(Buffer,"received objects: %d   ",database->getObjectCount());
         mvaddnstr(8,2,Buffer,strlen(Buffer));
+        sprintf(Buffer,"sent objects: %d   ",database->getSentObjectCount());
+        mvaddnstr(9,2,Buffer,strlen(Buffer));
         refresh();
         usleep(100000);
     }

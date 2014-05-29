@@ -7,7 +7,7 @@ for (unsigned int i = 0; i < OutSocketLimit; i++)
     if (theKnowledge.getNode(node))
     {
         OutSocketHandler* aHandler = 
-            new OutSocketHandler(MessageReceiver_base.myACF, node.getAddr(),
+            new OutSocketHandler(m_SocketContext, node.getAddr(),
             theKnowledge, MessageReceiver(), node.getID());
         myOutSocketHandler[aHandler->MessageReceiver()] = node.getID();
         aHandler->Initialize(0);

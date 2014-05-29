@@ -1,4 +1,4 @@
-//~~ void sendOffer(ACF_Message* event) [OutBitmessageLogic] ~~
+//~~ void sendOffer(ACF_Message* event) [BitmessageLogic] ~~
 protocol::inventory_vector* aVector = (protocol::inventory_vector*)event->Data;
 
 VectorsToRequest.erase(*aVector);
@@ -14,7 +14,7 @@ if (VectorsWeGotOffered.find(*aVector) != VectorsWeGotOffered.end())
     }
 }
 
-while ((anOffer.size() < 100) && (!VectorsWeCouldOffer.empty()))
+while ((anOffer.size() < 50) && (!VectorsWeCouldOffer.empty()))
 {
     if (VectorsWeHaveOffered.find(*VectorsWeCouldOffer.begin()) == VectorsWeHaveOffered.end())
     {
