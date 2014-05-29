@@ -32,6 +32,7 @@ void print_usage()
     printf("-d, --debug         the socket dialog is dumped to console.\n");
     printf("-p, --plugin        plugin to load.\n");
     printf("-i, --initial       ip:port of the initial client connection.\n");
+    printf("-n, --portnum       the port number for accepting connections (default 8444).\n");
     printf("                    (you may have multiple addresses).\n");
 
     printf("\nTuning parapeters:\n");
@@ -86,14 +87,19 @@ int main(int argc, char *argv[]) {
         {"outgoing"   ,  optional_argument,  0,  'o' },
         {"accept"     ,  optional_argument,  0,  'a' },
         {"initial"    ,  required_argument,  0,  'i' },
+        {"portnum"    ,  required_argument,  0,  'n' },
         {0,          0,                      0,   0  }
     };
 
     int long_index =0;
     int opt;
-
-    while ((opt = getopt_long(argc, argv, "o:a:p:i:hd", long_options, &long_index )) != -1) {
+    unsigned int portnum = 8444;
+    
+    while ((opt = getopt_long(argc, argv, "n:o:a:p:i:hd", long_options, &long_index )) != -1) {
         switch (opt) {
+        case 'n':
+                portnum = atoi(optarg);
+            break;
         case 'o':
                 OutConnectionHandler::setOutputCount(atoi(optarg));
             break;
@@ -136,6 +142,7 @@ int main(int argc, char *argv[]) {
     pthread_create(&socketThread,0,&ACF::staticExec,&logicContext);
 
     OutConnectionHandler aHandler(&logicContext, &soketContext, database);
+    InConnectionHandler anotherHandler((int)portnum);
     
     database.toConnectionHandler = aHandler.MessageReceiver();
     aHandler.Initialize(0);
