@@ -20,8 +20,8 @@ for (unsigned int i = 0; i < 10; i++)
     aPayload.push_back((uint8_t)0);
 for (unsigned int i = 0; i < 2; i++)
     aPayload.push_back((uint8_t)0xff);
-aPayload.push_back(sourceIP);
-aPayload.push_back(sourcePort);
+aPayload.push_back((uint32_t)0);
+aPayload.push_back(listenPort);
 
 aPayload.push_back(myOwnNonce);
 aPayload.push_back(user_agent.getPayload());

@@ -15,6 +15,7 @@
 #include "InConnectionHandler.h"
 #include "InSocketHandler.h"
 #include "Trace2UML.h"
+#include "version.h"
 
 volatile bool keepRunning = true;
 
@@ -128,6 +129,7 @@ int main(int argc, char *argv[]) {
         }
     }
     
+    protocol::version::setListenPort(portnum);
     database.load();
     
     for (std::set<std::string>::iterator it = plugins.begin(); it != plugins.end(); it++)

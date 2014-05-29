@@ -16,5 +16,13 @@ listen(sock, 5);
 for (;;)
 {
     client_fd = accept(sock, (struct sockaddr *) &cli_addr, &sin_len);
-    close(client_fd);
+    if (true)
+    {
+        InSocketHandler* aHandler = new InSocketHandler(m_SocketContext, cli_addr, 
+                        theKnowledge, MessageReceiver(), client_fd);
+        myInSocketHandler[aHandler->MessageReceiver()] = 0;
+        aHandler->Initialize(0);
+    }
+    else
+        close(client_fd);
 }

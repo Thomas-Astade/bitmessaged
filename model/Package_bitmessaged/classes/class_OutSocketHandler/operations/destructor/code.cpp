@@ -1,6 +1,6 @@
 //~~ ~OutSocketHandler() [OutSocketHandler] ~~
 theKnowledge.decOutgoingCount();
-if (socketfd)
+if (socketfd != -1)
 {
     close(socketfd);
     socketfd = -1;

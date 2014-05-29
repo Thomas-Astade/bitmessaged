@@ -1,2 +1,3 @@
-//~~ void notifyUnsuccessful(ACF_Message* event) [OutBitmessageLogic] ~~
-theKnowledge.notifyConnectionFailed(nodeID);
+//~~ void notifyUnsuccessful(ACF_Message* event) [BitmessageLogic] ~~
+if (nodeID)
+    theKnowledge.notifyConnectionFailed(nodeID);

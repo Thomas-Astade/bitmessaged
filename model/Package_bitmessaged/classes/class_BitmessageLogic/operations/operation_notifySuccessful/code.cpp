@@ -1,2 +1,3 @@
-//~~ void notifySuccessful(ACF_Message* event) [OutBitmessageLogic] ~~
-theKnowledge.notifySuccessfulConnection(nodeID);
+//~~ void notifySuccessful(ACF_Message* event) [BitmessageLogic] ~~
+if (nodeID)
+    theKnowledge.notifySuccessfulConnection(nodeID);

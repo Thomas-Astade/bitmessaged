@@ -14,15 +14,6 @@ if (connect(socketfd, (struct sockaddr *)&destAddr, sizeof(destAddr)) < 0)
     return;
 }
 
-socklen_t len = sizeof(sourceAddr);
-
-if (getsockname(socketfd, (struct sockaddr *) &sourceAddr, &len) < 0)
-{
-    ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_error,0);
-    ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_disconnected,0);
-    return;
-}
-
 struct timeval timeout;
 timeout.tv_sec = 1;
 timeout.tv_usec = 0;

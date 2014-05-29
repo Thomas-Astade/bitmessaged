@@ -1,7 +1,9 @@
-//~~ void storeVectors(ACF_Message* event) [OutBitmessageLogic] ~~
+//~~ void storeVectors(ACF_Message* event) [BitmessageLogic] ~~
 unsigned int index = 0;
 protocol::inv aInv(*((protocol::Payload*)event->Data),index);
-theKnowledge.incNodeDuplicateOfferCount(nodeID,aInv.duplicate());
+
+if (nodeID)
+    theKnowledge.incNodeDuplicateOfferCount(nodeID,aInv.duplicate());
 
 for (std::set<protocol::inventory_vector>::iterator it = aInv.begin();
         it != aInv.end(); it++)
@@ -11,8 +13,9 @@ for (std::set<protocol::inventory_vector>::iterator it = aInv.begin();
         VectorsWeGotOffered.insert(*it);
         if (theKnowledge.doWeNeed(*it))
             VectorsToRequest.insert(*it);
-        theKnowledge.incNodeOfferCount(nodeID,1);
+        if (nodeID)
+            theKnowledge.incNodeOfferCount(nodeID,1);
     }
-    else
+    else if (nodeID)
         theKnowledge.incNodeDuplicateOfferCount(nodeID,1);
 }
