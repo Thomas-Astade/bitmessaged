@@ -123,7 +123,13 @@ while (1)
             case protocol::message::broadcast:
             case protocol::message::msg:
                 if (aPayload.size() > 16)
-                    ACF_sendMessage(MessageReceiver(),toLogic,ev_object,new protocol::object(messageType,aPayload));
+                {
+                    protocol::object* anObject = new protocol::object(messageType,aPayload);
+                    if (anObject->PowOk())
+                        ACF_sendMessage(MessageReceiver(),toLogic,ev_object,anObject);
+                    else
+                        delete anObject;
+                }
                 break;
             default:
                 break;
