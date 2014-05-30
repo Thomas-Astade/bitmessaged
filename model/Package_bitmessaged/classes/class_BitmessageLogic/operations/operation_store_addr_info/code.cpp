@@ -1,4 +1,4 @@
-//~~ void store_addr_info(ACF_Message* event) [OutBitmessageLogic] ~~
+//~~ void store_addr_info(ACF_Message* event) [BitmessageLogic] ~~
 protocol::Payload* aPayload = (protocol::Payload*)event->Data;
 unsigned int index = 0;
 protocol::addr addrObject(*aPayload, index);

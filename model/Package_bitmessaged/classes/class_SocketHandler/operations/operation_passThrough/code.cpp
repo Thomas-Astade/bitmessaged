@@ -1,2 +1,2 @@
-//~~ void passThrough(ACF_Message* event) [OutSocketHandler] ~~
-ACF_sendMessage(MessageReceiver(),myLogic->MessageReceiver(),event->ID,event->Data);
+//~~ void passThrough(ACF_Message* event) [SocketHandler] ~~
+ACF_sendMessage(MessageReceiver(),toLogic,event->ID,event->Data);

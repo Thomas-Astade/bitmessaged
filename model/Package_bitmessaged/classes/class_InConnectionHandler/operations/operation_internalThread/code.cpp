@@ -16,11 +16,11 @@ listen(sock, 5);
 for (;;)
 {
     client_fd = accept(sock, (struct sockaddr *) &cli_addr, &sin_len);
-    if (true)
+    if (InSocketLimit > theKnowledge.getIncommingCount())
     {
         InSocketHandler* aHandler = new InSocketHandler(m_SocketContext, cli_addr, 
                         theKnowledge, MessageReceiver(), client_fd);
-        myInSocketHandler[aHandler->MessageReceiver()] = 0;
+        ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_register,aHandler->MessageReceiver());
         aHandler->Initialize(0);
     }
     else

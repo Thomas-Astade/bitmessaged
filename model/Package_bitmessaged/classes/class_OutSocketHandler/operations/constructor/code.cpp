@@ -2,10 +2,10 @@
 theKnowledge.incOutgoingCount();
 toConnectionHandler = handler;
 
-myLogic = new BitmessageLogic(anACF, database, theNodeID);
-myLogic->toSocket = MessageReceiver();
-toLogic = myLogic->MessageReceiver();
-myLogic->Initialize(0);
+BitmessageLogic* aLogic = new BitmessageLogic(anACF, database, theNodeID);
+aLogic->toSocket = MessageReceiver();
+toLogic = aLogic->MessageReceiver();
+aLogic->Initialize(0);
 
 pthread_attr_t attr;
 pthread_attr_init(&attr);
