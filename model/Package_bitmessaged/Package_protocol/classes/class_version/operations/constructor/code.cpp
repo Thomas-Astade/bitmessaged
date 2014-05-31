@@ -1,4 +1,4 @@
-//~~ version(uint64_t timestamp, uint32_t sourceIP, uint16_t sourcePort, uint32_t destIP, uint16_t destPort) [version] ~~
+//~~ version(uint64_t timestamp, uint32_t destIP, uint16_t destPort) [version] ~~
 wPayload aPayload;
 
 aPayload.push_back(current_version);

@@ -105,7 +105,11 @@ while (1)
                         ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_disconnected,0);
                         return;
                     }
-                    
+                    if (aVersion.itsMe()) // we are talking to ourself
+                    {
+                        ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_disconnected,0);
+                        return;
+                    }
                     ACF_sendMessage(MessageReceiver(),toLogic,ev_version,new protocol::Payload(aPayload));
                 }
                 break;

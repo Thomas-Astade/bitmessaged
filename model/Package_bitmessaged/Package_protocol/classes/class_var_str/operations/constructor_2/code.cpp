@@ -1,4 +1,4 @@
-//~~ var_str(const Payload& data, unsigned int index) [var_str] ~~
+//~~ var_str(const Payload& data, unsigned int& index) [var_str] ~~
 unsigned int len = var_int(data,index).getValue();
 
 if (index+len > data.size())
