@@ -151,10 +151,16 @@ int main(int argc, char *argv[]) {
     OutHandler.Initialize(0);
     InHandler.Initialize(0);
     
+    int count = 0;
     while (keepRunning)
     {
-        //database.incHeartbeat(); this is done in the mesage loop, now
         sleep(1);
+        count++;
+        if (count > 3600)
+        {
+            database.save();
+            count = 0;
+        }
     }
     
     for (std::set<std::string>::iterator it = plugins.begin(); it != plugins.end(); it++)
