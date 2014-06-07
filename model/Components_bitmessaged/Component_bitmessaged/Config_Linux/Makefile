@@ -9,7 +9,7 @@ TARGET ?= bitmessaged
 
 # compiler settings
 CXXFLAGS:= $(INCLUDE) -Wall
-LDFLAGS	:= -ljson_spirit -lpthread -ldl -lssl -lcrypto -Wl,--export-dynamic
+LDFLAGS	:= -ljson_spirit -lpthread -ldl -lssl -lcrypto /usr/local/lib/libfcgi.a -Wl,--export-dynamic
 
 TRACE_LIST :=$(addsuffix .o,$(TRACECLASSES))
 
@@ -22,12 +22,15 @@ LDFLAGS	+= -Wl,-s
 endif
 
 # find sources and headers
-SOURCES	:= $(wildcard ../auto/*.c ../auto/*.cpp ../manual/*.cpp)
+SOURCES	:= $(wildcard ../auto/*.c ../auto/*.cpp ../manual/*.cpp ../manual/*.c)
 HEADERS	:= $(wildcard ../auto/*.h ../manual/*.h)
 
 # objects go into current directory
 OBJSTMP	:= $(notdir $(SOURCES:.cpp=.o))
 OBJS	:= $(notdir $(OBJSTMP:.c=.o))
+
+%.o:	../manual/%.c
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(if $(findstring $(notdir $@),$(TRACE_LIST)),-D_TRACE_ -include Trace2UML.h,) -c -o $@ $<
 
 %.o:	../auto/%.c
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(if $(findstring $(notdir $@),$(TRACE_LIST)),-D_TRACE_ -include Trace2UML.h,) -c -o $@ $<

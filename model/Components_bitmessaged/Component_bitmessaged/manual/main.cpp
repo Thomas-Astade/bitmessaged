@@ -76,6 +76,8 @@ void stop_plugin(std::string filename)
     func();
 }
 
+extern void* do_fastcgi(void*);
+
 int main(int argc, char *argv[]) {
 
     protocol::Payload::initSemaphore();
@@ -141,7 +143,7 @@ int main(int argc, char *argv[]) {
     signal(SIGPIPE, SIG_IGN); // ignore sigpipe
      
     pthread_create(&socketThread,0,&ACF::staticExec,&soketContext);
-    pthread_create(&socketThread,0,&ACF::staticExec,&logicContext);
+    pthread_create(&logicThread,0,&ACF::staticExec,&logicContext);
 
     OutConnectionHandler OutHandler(&logicContext, &soketContext, database);
     InConnectionHandler InHandler((int)portnum, &logicContext, &soketContext, database);
@@ -150,6 +152,7 @@ int main(int argc, char *argv[]) {
     database.toInConnectionHandler = InHandler.MessageReceiver();
     OutHandler.Initialize(0);
     InHandler.Initialize(0);
+    
     
     int count = 0;
     while (keepRunning)
