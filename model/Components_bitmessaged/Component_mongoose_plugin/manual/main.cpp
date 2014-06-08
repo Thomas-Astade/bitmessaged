@@ -90,14 +90,17 @@ static void objects(struct mg_connection *conn) {
     mg_printf_data(conn,"<body>\n");
     
     mg_printf_data(conn,"<table border=\"1\">\n");
-    mg_printf_data(conn,"<tr><th>vector</th><th>type</th><th>size</th><th>time</th></tr>\n",database->getHeartbeat());
+    mg_printf_data(conn,"<tr><th></th><th>vector</th><th>type</th><th>size</th><th>time</th></tr>\n",database->getHeartbeat());
 
     std::set<protocol::inventory_vector> objects = database->getObjects();
+    
+    unsigned int number = 0;
     
     for (std::set<protocol::inventory_vector>::iterator it = objects.begin(); it != objects.end(); it++)
     {
         protocol::object anObject = database->getObject(*it);
-        mg_printf_data(conn,"<tr><td>%s</td><td>%s</td><td>%d</td><td>%lld</td></tr>\n",
+        mg_printf_data(conn,"<tr><td>%d</td><td>%s</td><td>%s</td><td>%d</td><td>%lld</td></tr>\n",
+            ++number,
             anObject.getVectorStr().c_str(),
             anObject.getTypeStr().c_str(),
             anObject.getSize(),
