@@ -58,17 +58,50 @@ static void nodes(struct mg_connection *conn) {
     mg_printf_data(conn,"<body>\n");
     
     mg_printf_data(conn,"<table border=\"1\">\n");
-    mg_printf_data(conn,"<tr><th>IP</th><th>port</th><th>stream</th><th>agent name</th></tr>\n",database->getHeartbeat());
+    mg_printf_data(conn,"<tr><th></th><th>IP</th><th>port</th><th>stream</th><th>agent name</th></tr>\n",database->getHeartbeat());
 
     std::vector<data::node_info> nodes = database->getNodesToProvideToOthers();
     
+    unsigned int number = 0;
+    
     for (std::vector<data::node_info>::iterator it = nodes.begin(); it != nodes.end(); it++)
     {
-        mg_printf_data(conn,"<tr><td>%s</td><td>%d</td><td>%d</td><td>%s</td></tr>\n",
+        mg_printf_data(conn,"<tr><td>%d</td><td>%s</td><td>%d</td><td>%d</td><td>%s</td></tr>\n",
+            ++number,
             (*it).getIPasString().c_str(),
             (*it).getPort(),
             (*it).getStreamNo(),
             (*it).getAgent().c_str()
+        );
+    }
+    
+    mg_printf_data(conn,"</table>\n");
+
+    mg_printf_data(conn,"</body>\n");
+    mg_printf_data(conn,"</html>\n");
+}
+
+static void objects(struct mg_connection *conn) {
+    mg_printf_data(conn,"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n");
+    mg_printf_data(conn,"<html>\n");
+    mg_printf_data(conn,"<head>\n");
+    mg_printf_data(conn,"<title>objects</title>\n");
+    mg_printf_data(conn,"</head>\n");
+    mg_printf_data(conn,"<body>\n");
+    
+    mg_printf_data(conn,"<table border=\"1\">\n");
+    mg_printf_data(conn,"<tr><th>vector</th><th>type</th><th>size</th><th>time</th></tr>\n",database->getHeartbeat());
+
+    std::set<protocol::inventory_vector> objects = database->getObjects();
+    
+    for (std::set<protocol::inventory_vector>::iterator it = objects.begin(); it != objects.end(); it++)
+    {
+        protocol::object anObject = database->getObject(*it);
+        mg_printf_data(conn,"<tr><td>%s</td><td>%s</td><td>%d</td><td>%lld</td></tr>\n",
+            anObject.getVectorStr().c_str(),
+            anObject.getTypeStr().c_str(),
+            anObject.getSize(),
+            anObject.getTime()
         );
     }
     
@@ -87,6 +120,9 @@ static int ev_handler(struct mg_connection *conn, enum mg_event ev) {
         result = MG_TRUE;
     } else if ((ev == MG_REQUEST) && (strcmp("/bitmessaged/nodes", conn->uri) == 0)) {
         nodes(conn);
+        result = MG_TRUE;
+    } else if ((ev == MG_REQUEST) && (strcmp("/bitmessaged/objects", conn->uri) == 0)) {
+        objects(conn);
         result = MG_TRUE;
     }
     else if (ev == MG_REQUEST) {

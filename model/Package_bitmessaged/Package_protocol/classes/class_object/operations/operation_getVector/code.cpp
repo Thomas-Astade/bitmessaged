@@ -1,2 +1,2 @@
-//~~ protocol::inventory_vector getVector() [object] ~~
+//~~ const protocol::inventory_vector& getVector() [object] ~~
 return myVector;
