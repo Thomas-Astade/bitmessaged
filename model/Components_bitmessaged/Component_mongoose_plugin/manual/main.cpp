@@ -18,7 +18,14 @@ static int ev_handler(struct mg_connection *conn, enum mg_event ev) {
   int result = MG_FALSE;
 
   if (ev == MG_REQUEST) {
-    mg_printf_data(conn, "Hello! Requested URI is [%s]", conn->uri);
+    mg_printf_data(conn,"heartbeat %d   \n",database->getHeartbeat());
+    mg_printf_data(conn,"known nodes: %d   \n",database->getNodeCount());
+    mg_printf_data(conn,"outgoing connections: %d   \n",database->getOutgoingCount());
+    mg_printf_data(conn,"incomming connections: %d   \n",database->getIncommingCount());
+    mg_printf_data(conn,"successful connections: %d   \n",database->getSuccessfulCount());
+    mg_printf_data(conn,"unsuccessful connections: %d   \n",database->getUnsuccessfulCount());
+    mg_printf_data(conn,"received objects: %d   \n",database->getObjectCount());
+    mg_printf_data(conn,"sent objects: %d   \n",database->getSentObjectCount());
     result = MG_TRUE;
   } else if (ev == MG_AUTH) {
     result = MG_TRUE;
