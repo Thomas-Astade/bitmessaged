@@ -1,0 +1,29 @@
+﻿.clearer {
+	clear:both;
+}
+
+body {
+	padding: 5px 10px;
+}
+
+header .logo {
+	float: left;
+}
+
+header h1 {
+	float: left;
+	margin-left: 20px;
+	padding-top: 20px; /* modify for alignment with logo */
+}
+
+.info {
+	margin-top: 30px;
+}
+
+.links {
+	margin-top: 30px;
+}
+
+footer {
+	margin-top: 75px;
+}
