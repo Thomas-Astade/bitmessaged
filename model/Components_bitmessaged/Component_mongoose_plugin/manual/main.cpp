@@ -118,13 +118,13 @@ static void objects(struct mg_connection *conn) {
 static int ev_handler(struct mg_connection *conn, enum mg_event ev) {
     int result = MG_FALSE;
 
-    if ((ev == MG_REQUEST) && (strcmp("/bitmessaged/overview", conn->uri) == 0)) {
+    if ((ev == MG_REQUEST) && (strcmp("/overview", conn->uri) == 0)) {
         overview(conn);
         result = MG_TRUE;
-    } else if ((ev == MG_REQUEST) && (strcmp("/bitmessaged/nodes", conn->uri) == 0)) {
+    } else if ((ev == MG_REQUEST) && (strcmp("/nodes", conn->uri) == 0)) {
         nodes(conn);
         result = MG_TRUE;
-    } else if ((ev == MG_REQUEST) && (strcmp("/bitmessaged/objects", conn->uri) == 0)) {
+    } else if ((ev == MG_REQUEST) && (strcmp("/objects", conn->uri) == 0)) {
         objects(conn);
         result = MG_TRUE;
     }
