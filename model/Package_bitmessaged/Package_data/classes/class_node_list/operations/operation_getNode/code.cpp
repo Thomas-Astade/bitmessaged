@@ -13,7 +13,7 @@ for (std::map<int64_t, node_info>::iterator it = known_nodes.begin(); it != know
         nodelist.push_back(res.getID());
 }
 
-// if we cannot find one we might exapt a resently used node again
+// if we cannot find one we might except a resently used node again
 if (nodelist.empty())
 {
     for (std::map<int64_t, node_info>::iterator it = known_nodes.begin(); it != known_nodes.end(); it++)
@@ -29,12 +29,10 @@ if (nodelist.empty())
 
 unsigned int searchsize = nodelist.size();
 
-if (searchsize > 1000)
-    searchsize = 1000;
-    
 unsigned int select = rand() % searchsize; // select a random node from the best 1000
 
 data::node_info res = known_nodes[nodelist[select]];
+
 res.incUse();
 info = res;
 known_nodes[res.getID()] = res;
