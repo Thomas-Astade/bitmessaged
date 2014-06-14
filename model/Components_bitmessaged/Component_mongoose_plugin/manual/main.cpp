@@ -15,6 +15,7 @@ data::knowledge* database;
 struct mg_server *server;
 
 static void unknown(struct mg_connection *conn) {
+    mg_send_header(conn, "Content-Type", "text/html");
     mg_printf_data(conn,"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n");
     mg_printf_data(conn,"<html>\n");
     mg_printf_data(conn,"<head>\n");
@@ -27,6 +28,7 @@ static void unknown(struct mg_connection *conn) {
 }
 
 static void overview(struct mg_connection *conn) {
+    mg_send_header(conn, "Content-Type", "text/html");
     mg_printf_data(conn,"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n");
     mg_printf_data(conn,"<html>\n");
     mg_printf_data(conn,"<head>\n");
@@ -50,6 +52,7 @@ static void overview(struct mg_connection *conn) {
 }
 
 static void nodes(struct mg_connection *conn) {
+    mg_send_header(conn, "Content-Type", "text/html");
     mg_printf_data(conn,"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n");
     mg_printf_data(conn,"<html>\n");
     mg_printf_data(conn,"<head>\n");
@@ -82,6 +85,7 @@ static void nodes(struct mg_connection *conn) {
 }
 
 static void objects(struct mg_connection *conn) {
+    mg_send_header(conn, "Content-Type", "text/html");
     mg_printf_data(conn,"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n");
     mg_printf_data(conn,"<html>\n");
     mg_printf_data(conn,"<head>\n");
@@ -127,20 +131,8 @@ static int ev_handler(struct mg_connection *conn, enum mg_event ev) {
     } else if ((ev == MG_REQUEST) && (strcmp("/objects", conn->uri) == 0)) {
         objects(conn);
         result = MG_TRUE;
-    }
-    else if (ev == MG_REQUEST) {
+    } else if (ev == MG_REQUEST) {
         unknown(conn);
-        result = MG_TRUE;
-    }
-    else if (ev == MG_REQUEST) {
-        mg_printf_data(conn,"heartbeat %d   \n",database->getHeartbeat());
-        mg_printf_data(conn,"known nodes: %d   \n",database->getNodeCount());
-        mg_printf_data(conn,"outgoing connections: %d   \n",database->getOutgoingCount());
-        mg_printf_data(conn,"incomming connections: %d   \n",database->getIncommingCount());
-        mg_printf_data(conn,"successful connections: %d   \n",database->getSuccessfulCount());
-        mg_printf_data(conn,"unsuccessful connections: %d   \n",database->getUnsuccessfulCount());
-        mg_printf_data(conn,"received objects: %d   \n",database->getObjectCount());
-        mg_printf_data(conn,"sent objects: %d   \n",database->getSentObjectCount());
         result = MG_TRUE;
     } else if (ev == MG_AUTH) {
         result = MG_TRUE;
