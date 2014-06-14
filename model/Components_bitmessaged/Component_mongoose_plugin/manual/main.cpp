@@ -118,6 +118,10 @@ static void objects(struct mg_connection *conn) {
     mg_printf_data(conn,"</html>\n");
 }
 
+static void object(struct mg_connection *conn) {
+    mg_send_header(conn, "Content-Type", "application/octet-stream");
+    mg_printf_data(conn,"fdgdfsygfdgfdsyg");
+}
 
 static int ev_handler(struct mg_connection *conn, enum mg_event ev) {
     int result = MG_FALSE;
@@ -130,6 +134,9 @@ static int ev_handler(struct mg_connection *conn, enum mg_event ev) {
         result = MG_TRUE;
     } else if ((ev == MG_REQUEST) && (strcmp("/objects", conn->uri) == 0)) {
         objects(conn);
+        result = MG_TRUE;
+    } else if ((ev == MG_REQUEST) && (strcmp("/object", conn->uri) == 0)) {
+        object(conn);
         result = MG_TRUE;
     } else if (ev == MG_REQUEST) {
         unknown(conn);
