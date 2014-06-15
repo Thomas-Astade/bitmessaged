@@ -4,7 +4,7 @@ if (lastConnectedTime == 0)
     
 uint64_t time = std::time(0);
 
-if ((time - lastConnectedTime) < (15*60))
+if ((time - lastConnectedTime) < (3*60*60))
     RETURN(true);
 
 RETURN(false);

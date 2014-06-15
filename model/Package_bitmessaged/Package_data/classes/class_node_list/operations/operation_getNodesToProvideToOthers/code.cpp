@@ -16,8 +16,7 @@ for (std::multiset<node_info>::reverse_iterator it = sorted.rbegin(); it != sort
     if ((*it).getValue() <= 0)
         return ret;
     if (((*it).getServices() > 0) && 
-        ((*it).getLastConnectedTime() > 0) &&
-        ((*it).getLastConnectedTime() > (std::time(0) - (60*60*47)))) // max 47 hours old
+        ((*it).getLastConnectedTime() > (*it).getLastFailedTime())) // last try was successful
        ret.push_back(*it); 
 }
 
