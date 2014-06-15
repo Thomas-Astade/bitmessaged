@@ -103,8 +103,9 @@ static void objects(struct mg_connection *conn) {
     for (std::set<protocol::inventory_vector>::iterator it = objects.begin(); it != objects.end(); it++)
     {
         protocol::object anObject = database->getObject(*it);
-        mg_printf_data(conn,"<tr><td>%d</td><td>%s</td><td>%s</td><td>%d</td><td>%lld</td></tr>\n",
+        mg_printf_data(conn,"<tr><td>%d</td><td><a href=\"/object/%s\">%s</a></td><td>%s</td><td>%d</td><td>%lld</td></tr>\n",
             ++number,
+            anObject.getVectorStr().c_str(),
             anObject.getVectorStr().c_str(),
             anObject.getTypeStr().c_str(),
             anObject.getSize(),
@@ -119,8 +120,30 @@ static void objects(struct mg_connection *conn) {
 }
 
 static void object(struct mg_connection *conn) {
-    mg_send_header(conn, "Content-Type", "application/octet-stream");
-    mg_printf_data(conn,"fdgdfsygfdgfdsyg");
+    protocol::inventory_vector v(std::string(conn->uri).substr(8));
+    protocol::object o = database->getObject(v);
+    
+    if (o.isValid())
+    {
+        mg_send_header(conn, "Content-Type", "application/octet-stream");
+        protocol::Payload p(o.getPayload());
+        mg_printf(conn,"Content-Length: %zu\r\n\r\n", p.size());
+        mg_write(conn, *p, p.size());
+        mg_write(conn, "\r\n", 2);
+    }
+    else
+    {
+        mg_send_header(conn, "Content-Type", "text/html");
+        mg_printf_data(conn,"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n");
+        mg_printf_data(conn,"<html>\n");
+        mg_printf_data(conn,"<head>\n");
+        mg_printf_data(conn,"<title>NOT FOUND</title>\n");
+        mg_printf_data(conn,"</head>\n");
+        mg_printf_data(conn,"<body>\n");
+        mg_printf_data(conn, "ERROR: a object with vector [%s] is not known", v.getAsStr().c_str());
+        mg_printf_data(conn,"</body>\n");
+        mg_printf_data(conn,"</html>\n");
+    }
 }
 
 static int ev_handler(struct mg_connection *conn, enum mg_event ev) {
@@ -135,7 +158,7 @@ static int ev_handler(struct mg_connection *conn, enum mg_event ev) {
     } else if ((ev == MG_REQUEST) && (strcmp("/objects", conn->uri) == 0)) {
         objects(conn);
         result = MG_TRUE;
-    } else if ((ev == MG_REQUEST) && (strcmp("/object", conn->uri) == 0)) {
+    } else if ((ev == MG_REQUEST) && (memcmp("/object/", conn->uri, 8) == 0)) {
         object(conn);
         result = MG_TRUE;
     } else if (ev == MG_REQUEST) {
