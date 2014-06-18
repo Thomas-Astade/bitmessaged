@@ -1,7 +1,13 @@
 //~~ void getVersionInfo(ACF_Message* event) [BitmessageLogic] ~~
-protocol::version aVersion(*((protocol::Payload*)event->Data),0);
-if (nodeID)
+try{
+    protocol::version aVersion(*((protocol::Payload*)event->Data),0);
+    if (nodeID)
+    {
+        theKnowledge.setNodeAgent(nodeID,aVersion.getUserAgent());
+        theKnowledge.setNodeServices(nodeID,aVersion.getServices());
+    }
+}
+catch (...) //we received a malformated message
 {
-    theKnowledge.setNodeAgent(nodeID,aVersion.getUserAgent());
-    theKnowledge.setNodeServices(nodeID,aVersion.getServices());
+    disconnect(event);
 }
