@@ -67,8 +67,8 @@ static void overview(struct mg_connection *conn) {
         }
     }
 
-    mg_printf_data(conn,"<tr><td>sent messages</td><td>%d (%d/h)</td></tr>\n",messagecount, messagecount/48);
-    mg_printf_data(conn,"<tr><td>sent broadcasts</td><td>%d (%d/h)</td></tr>\n",broadcastcount, broadcastcount/48);
+    mg_printf_data(conn,"<tr><td>sent messages</td><td>%d (%d/h)</td></tr>\n",messagecount, messagecount/60);
+    mg_printf_data(conn,"<tr><td>sent broadcasts</td><td>%d (%d/h)</td></tr>\n",broadcastcount, broadcastcount/60);
     mg_printf_data(conn,"<tr><td>active addresses (pubkeys)</td><td>%d</td></tr>\n",pubkeycount);
 
     mg_printf_data(conn,"</table>\n");
