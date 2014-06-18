@@ -71,7 +71,7 @@ void stop_plugin(std::string filename)
 {
     if (plugin_handles.find(filename) == plugin_handles.end())
         return;
-    printf("sutting down plugin %s\n",filename.c_str());
+    printf("shutting down plugin %s\n",filename.c_str());
     void(* func)() = (void(*)()) dlsym (plugin_handles[filename], "shutdown_plugin");
     func();
 }
