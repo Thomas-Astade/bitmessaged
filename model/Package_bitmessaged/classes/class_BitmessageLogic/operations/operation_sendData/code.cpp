@@ -8,7 +8,10 @@ try {
         protocol::object anObject = theKnowledge.getObject(*it);
         
         if (anObject.getType() != protocol::message::unknown)
+        {
             ACF_sendMessage(MessageReceiver(),toSocket,ev_object,new protocol::object(anObject));
+            theKnowledge.incSendCount();
+        }
     }
 }
 catch (...) //we received a malformated message
