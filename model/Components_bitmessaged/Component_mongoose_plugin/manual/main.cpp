@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <string.h>
 #include "knowledge.h"
+#include "message.h"
 #include "mongoose.h"
 
 static pthread_t thread1;
@@ -45,6 +46,31 @@ static void overview(struct mg_connection *conn) {
     mg_printf_data(conn,"<tr><td>unsuccessful connections</td><td>%d</td></tr>\n",database->getUnsuccessfulCount());
     mg_printf_data(conn,"<tr><td>received objects</td><td>%d</td></tr>\n",database->getObjectCount());
     mg_printf_data(conn,"<tr><td>sent objects</td><td>%d</td></tr>\n",database->getSentObjectCount());
+    
+    
+    std::set<protocol::inventory_vector> objects = database->getObjects();
+    
+    unsigned int messagecount = 0;
+    unsigned int broadcastcount = 0;
+    unsigned int pubkeycount = 0;
+    unsigned int getpubkeycount = 0;
+    
+    for (std::set<protocol::inventory_vector>::iterator it = objects.begin(); it != objects.end(); it++)
+    {
+        protocol::object anObject = database->getObject(*it);
+        switch (anObject.getType()) {
+            case protocol::message::getpubkey: getpubkeycount++;break;
+            case protocol::message::pubkey: pubkeycount++;break;
+            case protocol::message::msg: messagecount++;break;
+            case protocol::message::broadcast: broadcastcount++;break;
+            default:break;
+        }
+    }
+
+    mg_printf_data(conn,"<tr><td>sent messages</td><td>%d (%d/h)</td></tr>\n",messagecount, messagecount/48);
+    mg_printf_data(conn,"<tr><td>sent broadcasts</td><td>%d (%d/h)</td></tr>\n",broadcastcount, broadcastcount/48);
+    mg_printf_data(conn,"<tr><td>active addresses (pubkeys)</td><td>%d</td></tr>\n",pubkeycount);
+
     mg_printf_data(conn,"</table>\n");
 
     mg_printf_data(conn,"</body>\n");

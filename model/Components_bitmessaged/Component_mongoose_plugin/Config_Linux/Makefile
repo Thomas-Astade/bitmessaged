@@ -9,7 +9,7 @@ TARGET ?= debug_plugin
 
 # compiler settings
 CXXFLAGS:= $(INCLUDE) -Wall -fPIC
-LDFLAGS	:= -lcurses
+LDFLAGS	:= 
 
 ifdef DEBUG
 CXXFLAGS+= -g
