@@ -1,10 +1,10 @@
 bitmessaged
 ===========
 
-bitmessaged is a bitmessage daemon (node) with an open plugin interface written in C++
-it is still in development, so you should not try to use it at this stage.
+bitmessaged is a bitmessage daemon (node) with an open plugin interface written in C++.
+It is still in development, but it has reached a state, where you can already use it.
 
-But if you are interested in the project you can look into the sources.
+The website http://bitmessage.mobi is realized using this project.
 
 bitmessaged is written with Astade (http://astade.de) which is a C++ code generator. 
 If you clone this repository you need to install Astade to get the source files generated.
