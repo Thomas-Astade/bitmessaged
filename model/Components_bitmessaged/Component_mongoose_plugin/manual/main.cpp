@@ -39,7 +39,11 @@ static void overview(struct mg_connection *conn) {
     
     mg_printf_data(conn,"<table border=\"1\">\n");
     mg_printf_data(conn,"<tr><td>heartbeat</td><td>%d</td></tr>\n",database->getHeartbeat());
+
     mg_printf_data(conn,"<tr><td>known nodes</td><td>%d</td></tr>\n",database->getNodeCount());
+    std::vector<data::node_info> nodes = database->getNodesToProvideToOthers();
+    mg_printf_data(conn,"<tr><td>really responding nodes</td><td>%d</td></tr>\n",nodes.size());
+    
     mg_printf_data(conn,"<tr><td>outgoing connections</td><td>%d</td></tr>\n",database->getOutgoingCount());
     mg_printf_data(conn,"<tr><td>incomming connections</td><td>%d</td></tr>\n",database->getIncommingCount());
     mg_printf_data(conn,"<tr><td>successful connections</td><td>%d</td></tr>\n",database->getSuccessfulCount());
