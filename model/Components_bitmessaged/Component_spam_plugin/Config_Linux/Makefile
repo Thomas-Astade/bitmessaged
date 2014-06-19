@@ -8,7 +8,7 @@ INCLUDE	:= -I../manual -I../auto -I../../Component_bitmessaged/auto
 TARGET ?= spam_plugin
 
 # compiler settings
-CXXFLAGS:= $(INCLUDE) -Wall -fPIC
+CXXFLAGS:= $(INCLUDE) -Wall -fPIC -Ofast
 LDFLAGS	:=
 
 ifdef DEBUG

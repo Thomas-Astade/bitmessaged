@@ -37,17 +37,19 @@ void *aThread( void *ptr )
         uint64_t trialValue = (uint64_t)0xffffffffffffffff;
         uint64_t nonce = 0;
         
+        uint8_t resultHash1[SHA512_DIGEST_LENGTH];
+        uint8_t resultHash2[SHA512_DIGEST_LENGTH];
+        
         while (trialValue > target)
         {
             nonce++;
-            uint8_t resultHash1[SHA512_DIGEST_LENGTH];
-            uint8_t resultHash2[SHA512_DIGEST_LENGTH];
             memcpy(buffer, &nonce, 8);
             SHA512(buffer, SHA512_DIGEST_LENGTH + 8, resultHash1);
             SHA512(resultHash1, SHA512_DIGEST_LENGTH, resultHash2);
             memcpy(&trialValue, resultHash2, sizeof(trialValue));
             trialValue = protocol::Payload::htonll(trialValue);
         }
+        
         protocol::wPayload p2;
         p2.push_back(protocol::Payload::htonll(nonce));
         p2.push_back(p);
