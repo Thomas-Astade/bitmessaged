@@ -49,7 +49,6 @@ static void overview(struct mg_connection *conn) {
     mg_printf_data(conn,"<tr><td>successful connections</td><td>%d</td></tr>\n",database->getSuccessfulCount());
     mg_printf_data(conn,"<tr><td>unsuccessful connections</td><td>%d</td></tr>\n",database->getUnsuccessfulCount());
     mg_printf_data(conn,"<tr><td>received objects</td><td>%d</td></tr>\n",database->getObjectCount());
-    mg_printf_data(conn,"<tr><td>sent objects</td><td>%d</td></tr>\n",database->getSentObjectCount());
     
     
     std::set<protocol::inventory_vector> objects = database->getObjects();
@@ -59,9 +58,12 @@ static void overview(struct mg_connection *conn) {
     unsigned int pubkeycount = 0;
     unsigned int getpubkeycount = 0;
     
+    uint64_t memsize = 0;
+    
     for (std::set<protocol::inventory_vector>::iterator it = objects.begin(); it != objects.end(); it++)
     {
         protocol::object anObject = database->getObject(*it);
+        memsize += anObject.getPayload().size();
         switch (anObject.getType()) {
             case protocol::message::getpubkey: getpubkeycount++;break;
             case protocol::message::pubkey: pubkeycount++;break;
@@ -71,9 +73,11 @@ static void overview(struct mg_connection *conn) {
         }
     }
 
-    mg_printf_data(conn,"<tr><td>sent messages</td><td>%d (%d/h)</td></tr>\n",messagecount, messagecount/60);
-    mg_printf_data(conn,"<tr><td>sent broadcasts</td><td>%d (%d/h)</td></tr>\n",broadcastcount, broadcastcount/60);
+    mg_printf_data(conn,"<tr><td>received messages</td><td>%d (%d/h)</td></tr>\n",messagecount, messagecount/60);
+    mg_printf_data(conn,"<tr><td>used memory</td><td>%d MByte</td></tr>\n",memsize/(1024*1024));
+    mg_printf_data(conn,"<tr><td>received broadcasts</td><td>%d (%d/h)</td></tr>\n",broadcastcount, broadcastcount/60);
     mg_printf_data(conn,"<tr><td>active addresses (pubkeys)</td><td>%d</td></tr>\n",pubkeycount);
+    mg_printf_data(conn,"<tr><td>sent objects</td><td>%d</td></tr>\n",database->getSentObjectCount());
 
     mg_printf_data(conn,"</table>\n");
 

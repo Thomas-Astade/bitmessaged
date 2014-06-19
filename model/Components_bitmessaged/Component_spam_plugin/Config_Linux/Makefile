@@ -5,7 +5,7 @@ prefix	?= ~
 # include path
 INCLUDE	:= -I../manual -I../auto -I../../Component_bitmessaged/auto
 
-TARGET ?= debug_plugin
+TARGET ?= spam_plugin
 
 # compiler settings
 CXXFLAGS:= $(INCLUDE) -Wall -fPIC
