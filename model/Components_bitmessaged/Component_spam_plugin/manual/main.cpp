@@ -10,20 +10,20 @@
 #include "wPayload.h"
 #include "var_int.h"
 
-static pthread_t thread1;
+static pthread_t thread[4];
 static volatile bool keepRunning = true;
-static volatile bool isRunning = false;
+static volatile int isRunning = 0;
 data::knowledge* database;
 
 void *aThread( void *ptr )
 {
-    isRunning = true;
+    isRunning++;
     while (keepRunning)
     {
         protocol::wPayload p;
         p.push_back(database->getTime());
         p.push_back(protocol::var_int(1));
-        unsigned int len = rand() % 100 + 100;
+        unsigned int len = rand() % 100000 + 100000;
         for (unsigned int i = 0; i < len; i++)
             p.push_back((unsigned int)rand());
         
@@ -54,9 +54,11 @@ void *aThread( void *ptr )
         p2.push_back(protocol::Payload::htonll(nonce));
         p2.push_back(p);
         protocol::object o(protocol::message::msg,p2);
+        if (!o.PowOk())
+            printf("POW failed\n");
         database->addObject(0,o);
     }
-    isRunning = false;
+    isRunning--;
     return 0;
 }
 
@@ -64,7 +66,10 @@ extern "C" {
 void init_plugin(data::knowledge& data)
 {
     database = &data;
-    pthread_create( &thread1, NULL, aThread, 0);
+    pthread_create( &thread[0], NULL, aThread, 0);
+    pthread_create( &thread[1], NULL, aThread, 0);
+    pthread_create( &thread[2], NULL, aThread, 0);
+    pthread_create( &thread[3], NULL, aThread, 0);
     printf("spam plugin initialized\n");
 }
 
