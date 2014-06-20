@@ -23,7 +23,7 @@ void *aThread( void *ptr )
         protocol::wPayload p;
         p.push_back(database->getTime());
         p.push_back(protocol::var_int(1));
-        unsigned int len = rand() % 100000 + 100000;
+        unsigned int len = rand() % 100 + 100;
         for (unsigned int i = 0; i < len; i++)
             p.push_back((unsigned int)rand());
         
