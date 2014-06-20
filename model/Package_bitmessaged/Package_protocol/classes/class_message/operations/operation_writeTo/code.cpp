@@ -1,41 +1,48 @@
 //~~ int writeTo(int socketfd) [message] ~~
 int ret;
-int send;
 
-ret = write(socketfd,&comand_defines[myType],sizeof(comand_defines[myType]));
-
-if (ret < (int)sizeof(comand_defines[myType]))
+if (bytesWritten == 0)
 {
-    close(socketfd);
-    return ret;
+    ret = write(socketfd,&comand_defines[myType],sizeof(comand_defines[myType]));
+
+    if (ret < (int)sizeof(comand_defines[myType]))
+    {
+        close(socketfd);
+        RETURN(0);
+    }
+
+    uint32_t len = htonl(myPayload.size());
+    ret = write(socketfd,&len,sizeof(len));
+
+    if (ret < (int)sizeof(len))
+    {
+        close(socketfd);
+        RETURN(0);
+    }
+
+    uint32_t checksum = myPayload.getChecksum();
+    ret = write(socketfd,&checksum,sizeof(checksum));
+
+    if (ret < (int)sizeof(checksum))
+    {
+        close(socketfd);
+        RETURN(0);
+    }
 }
 
-uint32_t len = htonl(myPayload.size());
-send = write(socketfd,&len,sizeof(len));
-ret += send;
+unsigned int bytesToSend = myPayload.size() - bytesWritten;
 
-if (send < (int)sizeof(len))
+if (bytesToSend > 2000)
+    bytesToSend = 2000;
+
+ret = write(socketfd,&(*myPayload)[bytesWritten],bytesToSend);
+
+if (ret < (int)bytesToSend)
 {
     close(socketfd);
-    return ret;
+    RETURN(0);
 }
 
-uint32_t checksum = myPayload.getChecksum();
-send = write(socketfd,&checksum,sizeof(checksum));
-ret += send;
+bytesWritten += bytesToSend;
 
-if (send < (int)sizeof(checksum))
-{
-    close(socketfd);
-    return ret;
-}
-
-send = write(socketfd,&(*myPayload)[0],myPayload.size());
-ret += send;
-
-if (send < (int)myPayload.size())
-{
-    close(socketfd);
-}
-
-RETURN(ret);
+RETURN(myPayload.size() - bytesWritten);

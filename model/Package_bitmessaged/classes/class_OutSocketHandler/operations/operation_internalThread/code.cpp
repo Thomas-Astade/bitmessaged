@@ -15,7 +15,7 @@ if (connect(socketfd, (struct sockaddr *)&destAddr, sizeof(destAddr)) < 0)
 }
 
 struct timeval timeout;
-timeout.tv_sec = 1;
+timeout.tv_sec = 3;
 timeout.tv_usec = 0;
 
 if (setsockopt (socketfd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,sizeof(timeout)) < 0)

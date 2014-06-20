@@ -1,4 +1,4 @@
-//~~ void sendVerAck(ACF_Message* event) [OutSocketHandler] ~~
+//~~ void sendVerAck(ACF_Message* event) [SocketHandler] ~~
 protocol::message aMessage(protocol::message::verack,protocol::Payload());
 
 
@@ -11,4 +11,4 @@ if (theKnowledge.getDebug())
     theKnowledge.dumpUnlock();
 }
 
-aMessage.writeTo(socketfd);
+myMessageQueue.push_back(aMessage);

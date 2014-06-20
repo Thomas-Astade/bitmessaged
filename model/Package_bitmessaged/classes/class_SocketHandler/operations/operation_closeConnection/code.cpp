@@ -1,4 +1,4 @@
-//~~ void closeConnection(ACF_Message* event) [InSocketHandler] ~~
+//~~ void closeConnection(ACF_Message* event) [SocketHandler] ~~
 if (socketfd)
 {
     close(socketfd);

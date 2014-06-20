@@ -13,4 +13,4 @@ if (theKnowledge.getDebug())
     theKnowledge.dumpUnlock();
 }
 
-aMessage.writeTo(socketfd);
+myMessageQueue.push_back(aMessage);

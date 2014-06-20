@@ -1,4 +1,4 @@
-//~~ void sendAddr(ACF_Message* event) [OutSocketHandler] ~~
+//~~ void sendAddr(ACF_Message* event) [SocketHandler] ~~
 protocol::Payload* aPayload = (protocol::Payload*)event->Data;
 protocol::message aMessage(protocol::message::addr, *aPayload);
 
@@ -11,4 +11,4 @@ if (theKnowledge.getDebug())
     theKnowledge.dumpUnlock();
 }
 
-aMessage.writeTo(socketfd);
+myMessageQueue.push_back(aMessage);
