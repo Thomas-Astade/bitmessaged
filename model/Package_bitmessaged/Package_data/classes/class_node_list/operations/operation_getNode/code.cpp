@@ -43,7 +43,7 @@ known_nodes[res.getID()] = res;
     Trace2UML::notify_log(5,this,"node_list",buffer);
 #endif
 
-if (known_nodes.size() > 21000) // List is to big, lets delete some
+if (known_nodes.size() > 2100) // List is to big, lets delete some
 {
     std::multiset<node_info> sorted; 
     for (std::map<int64_t, node_info>::iterator it = known_nodes.begin(); it != known_nodes.end(); it++)
@@ -53,7 +53,7 @@ if (known_nodes.size() > 21000) // List is to big, lets delete some
     for (std::multiset<node_info>::iterator it = sorted.begin(); it != sorted.end(); it++)
     {
         known_nodes.erase((*it).getID());
-        if (known_nodes.size() <= 20000)
+        if (known_nodes.size() <= 2000)
             RETURN(true);
     }
 }
