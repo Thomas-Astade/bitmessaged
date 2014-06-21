@@ -119,7 +119,7 @@ static void nodes(struct mg_connection *conn) {
     mg_printf_data(conn,"</html>\n");
 }
 
-static void objects(struct mg_connection *conn) {
+static void objects(struct mg_connection *conn, protocol::message::command_t c) {
     mg_send_header(conn, "Content-Type", "text/html");
     mg_printf_data(conn,"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n");
     mg_printf_data(conn,"<html>\n");
@@ -138,6 +138,7 @@ static void objects(struct mg_connection *conn) {
     for (std::set<protocol::inventory_vector>::iterator it = objects.begin(); it != objects.end(); it++)
     {
         protocol::object anObject = database->getObject(*it);
+        if ((c == protocol::message::unknown) || (c == anObject.getType()))
         mg_printf_data(conn,"<tr><td>%d</td><td><a href=\"/object/%s\">%s</a></td><td>%s</td><td>%d</td><td>%lld</td></tr>\n",
             ++number,
             anObject.getVectorStr().c_str(),
@@ -191,7 +192,19 @@ static int ev_handler(struct mg_connection *conn, enum mg_event ev) {
         nodes(conn);
         result = MG_TRUE;
     } else if ((ev == MG_REQUEST) && (strcmp("/objects", conn->uri) == 0)) {
-        objects(conn);
+        objects(conn, protocol::message::unknown);
+        result = MG_TRUE;
+    } else if ((ev == MG_REQUEST) && (strcmp("/msgs", conn->uri) == 0)) {
+        objects(conn, protocol::message::msg);
+        result = MG_TRUE;
+    } else if ((ev == MG_REQUEST) && (strcmp("/getpubkeys", conn->uri) == 0)) {
+        objects(conn, protocol::message::getpubkey);
+        result = MG_TRUE;
+    } else if ((ev == MG_REQUEST) && (strcmp("/pubkeys", conn->uri) == 0)) {
+        objects(conn, protocol::message::pubkey);
+        result = MG_TRUE;
+    } else if ((ev == MG_REQUEST) && (strcmp("/broadcasts", conn->uri) == 0)) {
+        objects(conn, protocol::message::broadcast);
         result = MG_TRUE;
     } else if ((ev == MG_REQUEST) && (memcmp("/object/", conn->uri, 8) == 0)) {
         object(conn);
