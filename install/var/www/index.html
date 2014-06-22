@@ -21,7 +21,8 @@
 			<div class="info">
 				<p>This page is a free service. <br>
 				It is still in development, but will provide functions so mobile devices (smart phones) can share the bitmessage network.<br>
-				The service is implemented, using the opene source <a href="https://github.com/Thomas-Astade/bitmessaged"> bitmessage daemon </a>.
+				The service is implemented, using the opene source <a href="https://github.com/Thomas-Astade/bitmessaged"> bitmessage daemon </a>.<br>
+				If you want to implement a client software that uses this service, feel free to contakt me for support.
 				</p>
 			</div>
 			
@@ -36,19 +37,7 @@
 					<li><a href="/bitmessaged/pubkeys">current bitmessage pubkeys</a></li>
 					<li><a href="/bitmessaged/broadcasts">current bitmessage broadcasts</a></li>
 					<br>
-					<li>
-						post an object (this function is experimental, use only for tests!).
-						<form action="/bitmessaged/upload" method="post" enctype="multipart/form-data">
-							<select name="type" size="1">
-							      <option>msg</option>  
-							      <option>getpubkey</option>
-							      <option>pubkey</option>
-							      <option>broadcast</option>
-							</select>
-							<input type="submit" value="upload">
-							<input name="file" type="file" size="100">
-						</form>
-					</li>
+					<li><a href="/bitmessaged/upload_msg">post a msg object</a></li>v
 				</ul>
 			</div>
 		</div>

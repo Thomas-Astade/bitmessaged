@@ -8,6 +8,7 @@
 #include "knowledge.h"
 #include "message.h"
 #include "mongoose.h"
+#include "wPayload.h"
 
 static pthread_t thread1;
 static volatile bool keepRunning = true;
@@ -24,6 +25,60 @@ static void unknown(struct mg_connection *conn) {
     mg_printf_data(conn,"</head>\n");
     mg_printf_data(conn,"<body>\n");
     mg_printf_data(conn, "ERROR: not such file: [%s]", conn->uri);
+    mg_printf_data(conn,"</body>\n");
+    mg_printf_data(conn,"</html>\n");
+}
+
+static void upload(struct mg_connection *conn, protocol::message::command_t c, const char* t) {
+    mg_send_header(conn, "Content-Type", "text/html");
+    mg_printf_data(conn,"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n");
+    mg_printf_data(conn,"<html>\n");
+    mg_printf_data(conn,"<head>\n");
+    mg_printf_data(conn,"<title>upload_%s</title>\n",t);
+    mg_printf_data(conn,"</head>\n");
+    mg_printf_data(conn,"<body>\n");
+
+    mg_printf_data(conn,"<h1>upload a %s</h1>\n",t);
+
+    const char *data;
+    int data_len;
+    char var_name[1000], file_name[1000];
+    
+    if (mg_parse_multipart(conn->content, conn->content_len,
+                     var_name, sizeof(var_name),
+                     file_name, sizeof(file_name),
+                     &data, &data_len) > 0) {
+
+        mg_printf_data(conn, "You upload a file of size %d to add it as %s object<br>", data_len, t);
+        protocol::wPayload p;
+        for (int i = 0; i < data_len; i++)
+            p.push_back(data[i]);
+        
+        protocol::object o(c,p);
+        
+        if (!o.PowOk())
+        {
+            mg_printf_data(conn, "It is not accepted, because the POW is not correct!<br>");
+        } else {
+            mg_printf_data(conn, "The POW is correct!<br>");
+            uint64_t aTime = o.getTime();
+            if (aTime > database->getTime())
+                mg_printf_data(conn, "It is not accepted, because the time is in the future!<br>");
+            else if (aTime < (database->getTime()-data::knowledge::maximumAcceptAge))
+                mg_printf_data(conn, "It is not accepted, because its too old!<br>");
+            else {
+                mg_printf_data(conn, "It is accepted!<br>");
+                database->addObject(0,o);
+            }
+        }
+        
+    } else {
+        mg_printf_data(conn,"<form action=\"upload_%s\" method=\"post\" enctype=\"multipart/form-data\">\n",t);
+            mg_printf_data(conn,"<input type=\"submit\" value=\"upload_%s\">\n",t);
+            mg_printf_data(conn,"<input name=\"file\" type=\"file\" size=\"20\">\n");
+        mg_printf_data(conn,"</form>\n");
+    }
+
     mg_printf_data(conn,"</body>\n");
     mg_printf_data(conn,"</html>\n");
 }
@@ -189,6 +244,9 @@ static int ev_handler(struct mg_connection *conn, enum mg_event ev) {
 
     if ((ev == MG_REQUEST) && (strcmp("/overview", conn->uri) == 0)) {
         overview(conn);
+        result = MG_TRUE;
+    } else if ((ev == MG_REQUEST) && (strcmp("/upload_msg", conn->uri) == 0)) {
+        upload(conn, protocol::message::msg, "msg");
         result = MG_TRUE;
     } else if ((ev == MG_REQUEST) && (strcmp("/nodes", conn->uri) == 0)) {
         nodes(conn);
