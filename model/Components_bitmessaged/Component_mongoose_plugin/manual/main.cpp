@@ -38,7 +38,9 @@ static void overview(struct mg_connection *conn) {
     mg_printf_data(conn,"<body>\n");
     
     mg_printf_data(conn,"<table border=\"1\">\n");
-    mg_printf_data(conn,"<tr><td>heartbeat</td><td>%d</td></tr>\n",database->getHeartbeat());
+    unsigned int t = database->getHeartbeat();
+    mg_printf_data(conn,"<tr><td>uptime</td><td>%d days %d:%02d:%02d hours</td></tr>\n",
+        t/(24*60*60),t/(60*60) % (24*60*60),t/(60) % (60*60),t % 60);
 
     mg_printf_data(conn,"<tr><td>known nodes</td><td>%d</td></tr>\n",database->getNodeCount());
     std::vector<data::node_info> nodes = database->getNodesToProvideToOthers();
