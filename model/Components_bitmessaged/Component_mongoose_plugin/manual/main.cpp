@@ -248,6 +248,15 @@ static int ev_handler(struct mg_connection *conn, enum mg_event ev) {
     } else if ((ev == MG_REQUEST) && (strcmp("/upload_msg", conn->uri) == 0)) {
         upload(conn, protocol::message::msg, "msg");
         result = MG_TRUE;
+     } else if ((ev == MG_REQUEST) && (strcmp("/upload_broadcast", conn->uri) == 0)) {
+        upload(conn, protocol::message::broadcast, "broadcast");
+        result = MG_TRUE;
+     } else if ((ev == MG_REQUEST) && (strcmp("/upload_pubkey", conn->uri) == 0)) {
+        upload(conn, protocol::message::pubkey, "pubkey");
+        result = MG_TRUE;
+     } else if ((ev == MG_REQUEST) && (strcmp("/upload_getpubkey", conn->uri) == 0)) {
+        upload(conn, protocol::message::getpubkey, "getpubkey");
+        result = MG_TRUE;
     } else if ((ev == MG_REQUEST) && (strcmp("/nodes", conn->uri) == 0)) {
         nodes(conn);
         result = MG_TRUE;
