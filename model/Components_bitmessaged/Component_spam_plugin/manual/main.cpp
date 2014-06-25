@@ -23,7 +23,7 @@ void *aThread( void *ptr )
         protocol::wPayload p;
         p.push_back(database->getTime());
         p.push_back(protocol::var_int(1));
-        unsigned int len = 5000000;
+        unsigned int len = 20000000;
         for (unsigned int i = 0; i < len; i++)
             p.push_back((unsigned int)rand());
         
@@ -67,9 +67,9 @@ void init_plugin(data::knowledge& data)
 {
     database = &data;
     pthread_create( &thread[0], NULL, aThread, 0);
-    pthread_create( &thread[1], NULL, aThread, 0);
-    pthread_create( &thread[2], NULL, aThread, 0);
-    pthread_create( &thread[3], NULL, aThread, 0);
+    //pthread_create( &thread[1], NULL, aThread, 0);
+    //pthread_create( &thread[2], NULL, aThread, 0);
+    //pthread_create( &thread[3], NULL, aThread, 0);
     printf("spam plugin initialized\n");
 }
 
