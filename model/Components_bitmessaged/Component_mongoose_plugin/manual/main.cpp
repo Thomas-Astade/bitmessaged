@@ -116,6 +116,7 @@ static void overview(struct mg_connection *conn) {
     unsigned int getpubkeycount = 0;
     
     uint64_t memsize = 0;
+    uint64_t msgmemsize = 0;
     
     for (std::set<protocol::inventory_vector>::iterator it = objects.begin(); it != objects.end(); it++)
     {
@@ -124,7 +125,9 @@ static void overview(struct mg_connection *conn) {
         switch (anObject.getType()) {
             case protocol::message::getpubkey: getpubkeycount++;break;
             case protocol::message::pubkey: pubkeycount++;break;
-            case protocol::message::msg: messagecount++;break;
+            case protocol::message::msg: messagecount++;
+                msgmemsize += anObject.getPayload().size();
+            break;
             case protocol::message::broadcast: broadcastcount++;break;
             default:break;
         }
@@ -135,6 +138,8 @@ static void overview(struct mg_connection *conn) {
     mg_printf_data(conn,"<tr><td>received broadcasts</td><td>%d (%d/h)</td></tr>\n",broadcastcount, broadcastcount/60);
     mg_printf_data(conn,"<tr><td>active addresses (pubkeys)</td><td>%d</td></tr>\n",pubkeycount);
     mg_printf_data(conn,"<tr><td>used memory</td><td>%d MByte</td></tr>\n",memsize/(1024*1024));
+    if (messagecount)
+        mg_printf_data(conn,"<tr><td>memory for messages</td><td>%d MByte - %d Bytes average</td></tr>\n",msgmemsize/(1024*1024),msgmemsize/messagecount);
     mg_printf_data(conn,"<tr><td>sent objects</td><td>%d</td></tr>\n",database->getSentObjectCount());
 
     mg_printf_data(conn,"</table>\n");
