@@ -89,6 +89,26 @@ How to defeat:
 - disconnect from "Duplicate offer nodes"
 - don't propagate "Duplicate offer nodes"
 
+
+confusing node       {#attack_confusing}
+========================================
+
+It uses the fact, that object types can not be identified.
+There are 4 valid types for objects: "msg", "pubkey", "getpubkey" and "broadcast"
+Also they are all totally valid "objects" they are rather different. In the protocol there is no possibilty to detect, what type of object it is. You have to really on what you get told by the other node.
+This is used by the "confusing node".
+
+A confusing node propagates objects, but telling a wrong object type. When it gets a pubkey, it propagates the object but telling the others it is e.g. a "msg"
+
+Because the time and the POW is valid, no matter if it's a key or a msg the other nodes will transport this object, but with a false type. Nobody will be able to decode this "msg" because its a key.
+
+Where is the danger?
+All nodes which receive the object with the wrong type will never receive it correct. Even if they get the object offered correct, they will not download it, because they possess it already and the type is not part of the offer.
+
+How to defeat:
+Only a protocol change can solve this problem!
+
+
 Spam node       {#attack_spam}
 ==============================
 
