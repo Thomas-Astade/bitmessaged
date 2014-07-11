@@ -205,7 +205,7 @@ static void objects(struct mg_connection *conn, protocol::message::command_t c) 
     {
         protocol::object anObject = database->getObject(*it);
         if ((c == protocol::message::unknown) || (c == anObject.getType()))
-        mg_printf_data(conn,"<tr><td>%d</td><td><a href=\"/object/%s\">%s</a></td><td>%s</td><td>%d</td><td>%lld</td></tr>\n",
+        mg_printf_data(conn,"<tr><td>%d</td><td><a href=\"/bitmessaged/object/%s\">%s</a></td><td>%s</td><td>%d</td><td>%lld</td></tr>\n",
             ++number,
             anObject.getVectorStr().c_str(),
             anObject.getVectorStr().c_str(),
