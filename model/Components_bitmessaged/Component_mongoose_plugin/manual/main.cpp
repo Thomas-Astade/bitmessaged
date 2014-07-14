@@ -83,68 +83,34 @@ static void upload(struct mg_connection *conn, protocol::message::command_t c, c
     mg_printf_data(conn,"</html>\n");
 }
 
-static void overview(struct mg_connection *conn) {
+static void historic(struct mg_connection *conn) {
     mg_send_header(conn, "Content-Type", "text/html");
     mg_printf_data(conn,"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n");
     mg_printf_data(conn,"<html>\n");
     mg_printf_data(conn,"<head>\n");
-    mg_printf_data(conn,"<title>overview</title>\n");
+    mg_printf_data(conn,"<title>historic</title>\n");
     mg_printf_data(conn,"</head>\n");
     mg_printf_data(conn,"<body>\n");
-    
-    mg_printf_data(conn,"<table border=\"1\">\n");
-    unsigned int t = database->getHeartbeat();
-    mg_printf_data(conn,"<tr><td>uptime</td><td>%d days %d:%02d:%02d hours</td></tr>\n",
-        t/(24*60*60),t % (24*60*60) / (60*60) ,t % (60*60) / (60),t % 60);
 
-    mg_printf_data(conn,"<tr><td>known nodes</td><td>%d</td></tr>\n",database->getNodeCount());
-    std::vector<data::node_info> nodes = database->getNodesToProvideToOthers();
-    mg_printf_data(conn,"<tr><td>really responding nodes</td><td>%d</td></tr>\n",nodes.size());
-    
-    mg_printf_data(conn,"<tr><td>outgoing connections</td><td>%d</td></tr>\n",database->getOutgoingCount());
-    mg_printf_data(conn,"<tr><td>incomming connections</td><td>%d</td></tr>\n",database->getIncommingCount());
-    mg_printf_data(conn,"<tr><td>successful connections</td><td>%d</td></tr>\n",database->getSuccessfulCount());
-    mg_printf_data(conn,"<tr><td>unsuccessful connections</td><td>%d</td></tr>\n",database->getUnsuccessfulCount());
-    mg_printf_data(conn,"<tr><td>received objects</td><td>%d</td></tr>\n",database->getObjectCount());
-    
-    
+
+    std::map<int,int> ret;
+
     std::set<protocol::inventory_vector> objects = database->getObjects();
-    
-    unsigned int messagecount = 0;
-    unsigned int broadcastcount = 0;
-    unsigned int pubkeycount = 0;
-    unsigned int getpubkeycount = 0;
-    
-    unsigned int memsize = 0;
-    unsigned int msgmemsize = 0;
-    
+
     for (std::set<protocol::inventory_vector>::iterator it = objects.begin(); it != objects.end(); it++)
     {
         protocol::object anObject = database->getObject(*it);
-        memsize += anObject.getPayload().size();
-        switch (anObject.getType()) {
-            case protocol::message::getpubkey: getpubkeycount++;break;
-            case protocol::message::pubkey: pubkeycount++;break;
-            case protocol::message::msg: messagecount++;
-                msgmemsize += anObject.getPayload().size();
-            break;
-            case protocol::message::broadcast: broadcastcount++;break;
-            default:break;
-        }
+        uint64_t t = anObject.getTime();
+        int c = ret[(t / 3600)*3600];
+        ret[(t / 3600)*3600] = c + 1;
     }
 
-    mg_printf_data(conn,"<tr><td>objects to advertise</td><td>%d</td></tr>\n",objects.size());
-    mg_printf_data(conn,"<tr><td>received messages</td><td>%d (%d/h)</td></tr>\n",messagecount, messagecount/60);
-    mg_printf_data(conn,"<tr><td>received broadcasts</td><td>%d (%d/h)</td></tr>\n",broadcastcount, broadcastcount/60);
-    mg_printf_data(conn,"<tr><td>active addresses (pubkeys)</td><td>%d</td></tr>\n",pubkeycount);
-    mg_printf_data(conn,"<tr><td>used memory</td><td>%d MByte</td></tr>\n",memsize/(1024*1024));
-    if (messagecount)
+    mg_printf_data(conn,"<table border=\"1\">\n");
+
+    for (std::map<int,int>::iterator it = ret.begin(); it != ret.end(); it++)
     {
-        int average = msgmemsize/messagecount;
-        mg_printf_data(conn,"<tr><td>memory for messages</td><td>%d MByte - %d Bytes average</td></tr>\n",
-            msgmemsize/(1024*1024),average);
+        mg_printf_data(conn,"<tr><td>%d</td><td>%d</td></tr>\n",(*it).first, (*it).second);
     }
-    mg_printf_data(conn,"<tr><td>sent objects</td><td>%d</td></tr>\n",database->getSentObjectCount());
 
     mg_printf_data(conn,"</table>\n");
 
@@ -248,6 +214,75 @@ static void object(struct mg_connection *conn) {
     }
 }
 
+static void overview(struct mg_connection *conn) {
+    mg_send_header(conn, "Content-Type", "text/html");
+    mg_printf_data(conn,"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n");
+    mg_printf_data(conn,"<html>\n");
+    mg_printf_data(conn,"<head>\n");
+    mg_printf_data(conn,"<title>overview</title>\n");
+    mg_printf_data(conn,"</head>\n");
+    mg_printf_data(conn,"<body>\n");
+    
+    mg_printf_data(conn,"<table border=\"1\">\n");
+    unsigned int t = database->getHeartbeat();
+    mg_printf_data(conn,"<tr><td>uptime</td><td>%d days %d:%02d:%02d hours</td></tr>\n",
+        t/(24*60*60),t % (24*60*60) / (60*60) ,t % (60*60) / (60),t % 60);
+
+    mg_printf_data(conn,"<tr><td>known nodes</td><td>%d</td></tr>\n",database->getNodeCount());
+    std::vector<data::node_info> nodes = database->getNodesToProvideToOthers();
+    mg_printf_data(conn,"<tr><td>really responding nodes</td><td>%d</td></tr>\n",nodes.size());
+    
+    mg_printf_data(conn,"<tr><td>outgoing connections</td><td>%d</td></tr>\n",database->getOutgoingCount());
+    mg_printf_data(conn,"<tr><td>incomming connections</td><td>%d</td></tr>\n",database->getIncommingCount());
+    mg_printf_data(conn,"<tr><td>successful connections</td><td>%d</td></tr>\n",database->getSuccessfulCount());
+    mg_printf_data(conn,"<tr><td>unsuccessful connections</td><td>%d</td></tr>\n",database->getUnsuccessfulCount());
+    mg_printf_data(conn,"<tr><td>received objects</td><td>%d</td></tr>\n",database->getObjectCount());
+    
+    
+    std::set<protocol::inventory_vector> objects = database->getObjects();
+    
+    unsigned int messagecount = 0;
+    unsigned int broadcastcount = 0;
+    unsigned int pubkeycount = 0;
+    unsigned int getpubkeycount = 0;
+    
+    unsigned int memsize = 0;
+    unsigned int msgmemsize = 0;
+    
+    for (std::set<protocol::inventory_vector>::iterator it = objects.begin(); it != objects.end(); it++)
+    {
+        protocol::object anObject = database->getObject(*it);
+        memsize += anObject.getPayload().size();
+        switch (anObject.getType()) {
+            case protocol::message::getpubkey: getpubkeycount++;break;
+            case protocol::message::pubkey: pubkeycount++;break;
+            case protocol::message::msg: messagecount++;
+                msgmemsize += anObject.getPayload().size();
+            break;
+            case protocol::message::broadcast: broadcastcount++;break;
+            default:break;
+        }
+    }
+
+    mg_printf_data(conn,"<tr><td>objects to advertise</td><td>%d</td></tr>\n",objects.size());
+    mg_printf_data(conn,"<tr><td>received messages</td><td>%d (%d/h)</td></tr>\n",messagecount, messagecount/60);
+    mg_printf_data(conn,"<tr><td>received broadcasts</td><td>%d (%d/h)</td></tr>\n",broadcastcount, broadcastcount/60);
+    mg_printf_data(conn,"<tr><td>active addresses (pubkeys)</td><td>%d</td></tr>\n",pubkeycount);
+    mg_printf_data(conn,"<tr><td>used memory</td><td>%d MByte</td></tr>\n",memsize/(1024*1024));
+    if (messagecount)
+    {
+        int average = msgmemsize/messagecount;
+        mg_printf_data(conn,"<tr><td>memory for messages</td><td>%d MByte - %d Bytes average</td></tr>\n",
+            msgmemsize/(1024*1024),average);
+    }
+    mg_printf_data(conn,"<tr><td>sent objects</td><td>%d</td></tr>\n",database->getSentObjectCount());
+
+    mg_printf_data(conn,"</table>\n");
+
+    mg_printf_data(conn,"</body>\n");
+    mg_printf_data(conn,"</html>\n");
+}
+
 static int ev_handler(struct mg_connection *conn, enum mg_event ev) {
     int result = MG_FALSE;
 
@@ -286,6 +321,9 @@ static int ev_handler(struct mg_connection *conn, enum mg_event ev) {
         result = MG_TRUE;
     } else if ((ev == MG_REQUEST) && (memcmp("/object/", conn->uri, 8) == 0)) {
         object(conn);
+        result = MG_TRUE;
+    } else if ((ev == MG_REQUEST) && (memcmp("/historic/", conn->uri, 8) == 0)) {
+        historic(conn);
         result = MG_TRUE;
     } else if (ev == MG_REQUEST) {
         unknown(conn);
