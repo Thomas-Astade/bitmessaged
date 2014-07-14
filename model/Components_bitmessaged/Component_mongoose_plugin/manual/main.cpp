@@ -96,13 +96,18 @@ static void historic(struct mg_connection *conn) {
     std::map<int,int> ret;
 
     std::set<protocol::inventory_vector> objects = database->getObjects();
+    
+    uint64_t limit = database->getTime() - (3600 * 48);
 
     for (std::set<protocol::inventory_vector>::iterator it = objects.begin(); it != objects.end(); it++)
     {
         protocol::object anObject = database->getObject(*it);
         uint64_t t = anObject.getTime();
-        int c = ret[(t / 3600)*3600];
-        ret[(t / 3600)*3600] = c + 1;
+        if (t > limit)
+        {
+            int c = ret[(t / 3600)*3600];
+            ret[(t / 3600)*3600] = c + 1;
+        }
     }
 
     mg_printf_data(conn,"<table border=\"1\">\n");
