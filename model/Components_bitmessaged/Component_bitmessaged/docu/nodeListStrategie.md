@@ -72,17 +72,16 @@ Spoofing nodes are not so easy to detect, because in the first glance the behave
 Connection strategy
 ===================
 
-- Try to connect to up to 8 nodes
-- Try to connect to 2 [reliable nodes](@ref reliable_node) (if you have that much). Always try "oldest first" so you keep your list up to date.
-- If a reliable node refuses to accept the connection block its use for 30 minutes (if you have alternatives. Otherwise you may retry after 1 minute). If it gets older than 2 days, throw it away. We store up to 1000 reliable nodes, but we will certainly never reach that number, because we normally can only connect (and therfore keep updated) to 8x24x2=384 nodes in 2 days.
-- Fill the other 6 connections up with [unchecked nodes](@ref unchecked_node) (random choice) to get them checked. If you have a connection to an unchecked node for 30 Minutes without having detected any spoofing or protocol error, move it to the [reliable nodes](@ref reliable_node). It's reliable now. Unchecked nodes which grow older than 2 days are thrown away.
-- If an unchecked node refuses to connect, ether throw it away or block its use for 30 minutes. This depends on the number of unchecked nodes we have. If our stock on unchecked nodes is 15000 or bigger it's save to throw away.
-- Accept another 32 incoming connections (if our bandwidth allows that much)
-- Accept another 8 incoming connections, but only advertise node addresses and close thereafter.
-- If we detect a protocol error, we drop the connection and move this node to the [faulty nodes](@ref faulty_node).This will block the whole Ip address (all ports) for one hour. After that time it is removed and may be added to the unreliable nodes again (if someone advertises it)
-- If we detect a spoofing, we drop the connection and move this node to the [spoofing nodes](@ref spoofing_node).This will block the whole Ip address (all ports) for 24 hours. After that time it is removed and may be added to the unreliable nodes again (if someone advertises it)
-- We advertise only reliable nodes (and ourself because we consider to be reliable).
-- Outgoing connections are closed after they exist for 60 minutes to keep things in flow and to increase the database of reliable nodes.
+bitmessaged handles nodes by this strategy rules:
+
+- Maintain a list of nodes with 2000 entries (no need to store more, you won't find the time to test them anyway)
+- Try to connect to the nodes on a random base. Prefer nodes, you did not connect within the last 3 hours, to find new ones.
+- If a node does not respond, don't try it again for another 15 minutes.
+- Don't stay connected to the same node for more than 1 hour, because we want to find other nodes.
+- Only accept up to 30 new node addresses from one single node. So a (@ref attack_false_node_provider) cannot fool you.
+- Maintain a "value" of a node (@ref data::node_info::getValue)
+- If your node list gets too big, throw away node information. Throw away nodes with a low "value" first.
+- Only advertise nodes which you personally did talk to and which did respond at your last try.
 
 
 
