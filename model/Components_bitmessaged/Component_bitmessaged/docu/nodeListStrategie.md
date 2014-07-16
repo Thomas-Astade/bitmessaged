@@ -78,8 +78,8 @@ bitmessaged handles nodes by this strategy rules:
 - Try to connect to the nodes on a random base. Prefer nodes, you did not connect within the last 3 hours, to find new ones.
 - If a node does not respond, don't try it again for another 15 minutes.
 - Don't stay connected to the same node for more than 1 hour, because we want to find other nodes.
-- Only accept up to 30 new node addresses from one single node. So a (@ref attack_false_node_provider) cannot fool you.
-- Maintain a "value" of a node (@ref data::node_info::getValue)
+- Only accept up to 30 new node addresses from one single node. So a @ref attack_false_node_provider cannot fool you.
+- Maintain a "value" of a node. Add points for talking correct and answering. subtract points for protocol errors and not answering.
 - If your node list gets too big, throw away node information. Throw away nodes with a low "value" first.
 - Only advertise nodes which you personally did talk to and which did respond at your last try.
 
