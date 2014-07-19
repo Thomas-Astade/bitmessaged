@@ -3,5 +3,6 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdio.h>
 #include "var_int.h"
 #include "var_str.h"
