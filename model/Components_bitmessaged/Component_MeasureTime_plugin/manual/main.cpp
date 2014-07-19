@@ -77,7 +77,7 @@ void *aThread( void *ptr )
         printf("Searching %d objects and found %d msgs for the last four hours\n",(int)objects.size(),(int)testObjects.size());
         printf("This took %d uSec\n",middle-start);
         printf("%d keys could be extracted, generating %d bytes of key_M data. It took %d uSec\n",eCount, (int)keyData.size(), middle2 - middle);
-        printf("checking the key_m of %d keys took %d uSec\n\n",eCount, stop - middle2);
+        printf("checking the key_m of %d messages took %d uSec\n\n",eCount, stop - middle2);
 
         sleep(10);
     }
