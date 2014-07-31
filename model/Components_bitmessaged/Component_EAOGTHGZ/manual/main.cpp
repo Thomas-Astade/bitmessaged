@@ -49,7 +49,7 @@ void doPow(uint64_t target)
 
  }
 
-unsigned int repeats = 1;
+unsigned int repeats = 10;
 
 int main(int argc, char** argv)
 {
@@ -66,8 +66,7 @@ int main(int argc, char** argv)
                                 ((uint64_t)160 * (140000 + (uint64_t)messagesize+((uint64_t)3600*ttl*messagesize/65535)));
                 doPow(target);
                 unsigned int stop = getTimeTick();
-                seconds += (stop-start)/1000;
-                //seconds = target/100000000;
+                seconds += (stop-start)/1000000;
             }
             printf("%u, ",seconds/repeats);
         }
