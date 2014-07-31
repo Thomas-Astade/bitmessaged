@@ -63,14 +63,15 @@ int main(int argc, char** argv)
             {
                 unsigned int start = getTimeTick();
                 uint64_t target = (uint64_t)(0x8000000000000000) /
-                                (160 * (messagesize+140000+(3600*ttl*messagesize/65535)));
+                                ((uint64_t)160 * (140000 + (uint64_t)messagesize+((uint64_t)3600*ttl*messagesize/65535)));
                 doPow(target);
                 unsigned int stop = getTimeTick();
                 seconds += (stop-start)/1000;
+                //seconds = target/100000000;
             }
-            printf("%u, ",seconds);
+            printf("%u, ",seconds/repeats);
         }
         printf("\n");
     }
-	return 0;
+    return 0;
 }
