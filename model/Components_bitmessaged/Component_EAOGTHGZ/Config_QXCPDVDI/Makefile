@@ -24,8 +24,8 @@ INCLUDE	:= -I../manual
 $(if $(TARGET),,$(error Variable TARGET not defined))
 
 # compiler settings
-CXXFLAGS:= $(INCLUDE) $(shell wx-config --cxxflags) -Wall
-LDFLAGS	:= $(shell wx-config --libs)
+CXXFLAGS:= $(INCLUDE) -Wall
+LDFLAGS	:= -lssl -lcrypto -Wl
 
 TRACE_LIST :=$(addsuffix .o,$(TRACECLASSES))
 
