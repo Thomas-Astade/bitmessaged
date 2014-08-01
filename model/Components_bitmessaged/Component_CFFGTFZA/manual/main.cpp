@@ -44,6 +44,6 @@ int main(int argc, char** argv)
     doMHash();
     unsigned int stop = getTimeTick();
     unsigned int t = stop - start;
-    printf("need %d uSec for 1 million Hashes, which is %d hashes per second\n",t,1000000000000/t);
+    printf("need %d uSec for 1 million Hashes, which is %lld (double)hashes per second\n",t,1000000000000/t);
     return 0;
 }
