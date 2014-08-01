@@ -49,28 +49,23 @@ void doPow(uint64_t target)
 
  }
 
-unsigned int repeats = 10;
-
 int main(int argc, char** argv)
 {
-    for (unsigned int messagesize = 256; messagesize < 300000; messagesize *= 2)
+    unsigned int messagesize = 1024 * 5;
+    unsigned int ttl = 60;
+    unsigned int repeats = 10;
+
+    unsigned int seconds = 0;
+    for (unsigned int i = 0; i < repeats; i++)
     {
-        printf("%u Bytes,", messagesize);
-        for (unsigned int ttl = 1; ttl <= 24*28; ttl *= 2)
-        {
-            unsigned int seconds = 0;
-            for (unsigned int i = 0; i < repeats; i++)
-            {
-                unsigned int start = getTimeTick();
-                uint64_t target = (uint64_t)(0x8000000000000000) /
-                                ((uint64_t)160 * ((uint64_t)140000 + messagesize+((uint64_t)3600*ttl*messagesize/65535)));
-                doPow(target);
-                unsigned int stop = getTimeTick();
-                seconds += (stop-start)/1000000;
-            }
-            printf("%u, ",seconds/repeats);
-        }
-        printf("\n");
+        unsigned int start = getTimeTick();
+        uint64_t target = (uint64_t)(0x8000000000000000) /
+                        ((uint64_t)160 * ((uint64_t)140000 + messagesize+((uint64_t)3600*ttl*messagesize/65535)));
+        doPow(target);
+        unsigned int stop = getTimeTick();
+        seconds += (stop-start)/1000000;
     }
+    printf("Doing POW for %u messages at size %u takes %u seconds (average %u) with 1 CPU\n",
+        repeats,messagesize,seconds,seconds/repeats);
     return 0;
 }
