@@ -9,6 +9,7 @@ switch (myType) {
     case message::pubkey: return "pubkey";
     case message::msg: return "msg";
     case message::broadcast: return "broadcast";
+    case message::object: return "object";
     case message::unknown: return "unknown";
 };
 
