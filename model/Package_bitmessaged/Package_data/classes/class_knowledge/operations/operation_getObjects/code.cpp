@@ -9,22 +9,12 @@ std::set<protocol::inventory_vector> toDelete;
 for (std::map<protocol::inventory_vector,protocol::object>::iterator it = collectedObjects.begin();
      it != collectedObjects.end(); it++)
 {
-    uint64_t oTime = (*it).second.getTime();
-    uint64_t now = getTime();
-    bool oldObject = (((*it).second.getType() == protocol::message::pubkey) && ((oTime + maximumKeyAdvertiseAge) < now)) ||
-                       (((*it).second.getType() != protocol::message::pubkey) && ((oTime + maximumAdvertiseAge) < now))
-                      ;
-                      
-    if (!oldObject)
+
+    if ((*it).second.isActuell())
     {
         ret.insert((*it).first);
-    }
-
-    oldObject = (((*it).second.getType() == protocol::message::pubkey) && ((oTime + maximumKeyAcceptAge) < now)) ||
-                 (((*it).second.getType() != protocol::message::pubkey) && ((oTime + maximumAcceptAge) < now))
-                ;
-
-    if (oldObject)
+    } 
+    else if ((*it).second.isOld())
     {
         toDelete.insert((*it).first);
     }
@@ -35,7 +25,6 @@ for (std::set<protocol::inventory_vector>::iterator it = toDelete.begin();
 {
     collectedObjects.erase(*it);
 }
-
 
 sem_post(&mySemaphore);
 
