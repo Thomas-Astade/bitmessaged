@@ -5,7 +5,8 @@ try{
     {
         theKnowledge.setNodeAgent(nodeID,aVersion.getUserAgent());
         theKnowledge.setNodeServices(nodeID,aVersion.getServices());
-        theKnowledge.setNodeVersion(nodeID,aVersion.getVersion());
+        m_Protocol_Version = aVersion.getVersion();
+        theKnowledge.setNodeVersion(nodeID,m_Protocol_Version);
     }
 }
 catch (...) //we received a malformated message
