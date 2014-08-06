@@ -4,10 +4,15 @@ protocol::object ret;
 while (sem_wait(&mySemaphore))
     ;
     
-std::map<protocol::inventory_vector,protocol::object>::const_iterator it = collectedObjects.find(aVector);
+std::map<protocol::inventory_vector,protocol::object>::const_iterator it = collectedObjectsV3.find(aVector);
 
-if (it != collectedObjects.end())
+if (it != collectedObjectsV3.end()) {
     ret = (*it).second;
+} else {
+    it = collectedObjectsV2.find(aVector);
+    if (it != collectedObjectsV2.end())
+        ret = (*it).second;
+}
 
 sem_post(&mySemaphore);
 

@@ -12,7 +12,7 @@ try {
         theKnowledge.addNode(*it);
     }
 
-    VectorsWeCouldOffer = theKnowledge.getObjects();
+    VectorsWeCouldOffer = theKnowledge.getObjects(m_Protocol_Version);
 }
 catch (...) //we received a malformated message
 {

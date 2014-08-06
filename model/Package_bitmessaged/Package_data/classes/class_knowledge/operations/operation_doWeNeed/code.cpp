@@ -1,10 +1,11 @@
-//~~ bool doWeNeed(const protocol::inventory_vector& parameter) [knowledge] ~~
+//~~ bool doWeNeed(const protocol::inventory_vector& aVector) [knowledge] ~~
 bool ret;
 
 while (sem_wait(&mySemaphore))
     ;
 
-ret = (collectedObjects.find(parameter) == collectedObjects.end());
+ret = ((collectedObjectsV2.find(aVector) == collectedObjectsV2.end()) &&
+       (collectedObjectsV3.find(aVector) == collectedObjectsV3.end()));
 
 sem_post(&mySemaphore);
 
