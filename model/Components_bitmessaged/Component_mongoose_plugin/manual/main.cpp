@@ -83,46 +83,6 @@ static void upload(struct mg_connection *conn, protocol::message::command_t c, c
     mg_printf_data(conn,"</html>\n");
 }
 
-static void historic(struct mg_connection *conn) {
-    mg_send_header(conn, "Content-Type", "text/html");
-    mg_printf_data(conn,"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n");
-    mg_printf_data(conn,"<html>\n");
-    mg_printf_data(conn,"<head>\n");
-    mg_printf_data(conn,"<title>historic</title>\n");
-    mg_printf_data(conn,"</head>\n");
-    mg_printf_data(conn,"<body>\n");
-
-
-    std::map<int,int> ret;
-
-    std::set<protocol::inventory_vector> objects = database->getObjects();
-    
-    uint64_t limit = database->getTime() - (3600 * 48);
-
-    for (std::set<protocol::inventory_vector>::iterator it = objects.begin(); it != objects.end(); it++)
-    {
-        protocol::object anObject = database->getObject(*it);
-        uint64_t t = anObject.getTime();
-        if (t > limit)
-        {
-            int c = ret[(t / 3600)*3600];
-            ret[(t / 3600)*3600] = c + 1;
-        }
-    }
-
-    mg_printf_data(conn,"<table border=\"1\">\n");
-
-    for (std::map<int,int>::iterator it = ret.begin(); it != ret.end(); it++)
-    {
-        mg_printf_data(conn,"<tr><td>%d</td><td>%d</td></tr>\n",(*it).first, (*it).second);
-    }
-
-    mg_printf_data(conn,"</table>\n");
-
-    mg_printf_data(conn,"</body>\n");
-    mg_printf_data(conn,"</html>\n");
-}
-
 static void nodes(struct mg_connection *conn) {
     mg_send_header(conn, "Content-Type", "text/html");
     mg_printf_data(conn,"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n");
@@ -133,7 +93,7 @@ static void nodes(struct mg_connection *conn) {
     mg_printf_data(conn,"<body>\n");
     
     mg_printf_data(conn,"<table border=\"1\">\n");
-    mg_printf_data(conn,"<tr><th></th><th>IP</th><th>port</th><th>stream</th><th>agent name</th></tr>\n",database->getHeartbeat());
+    mg_printf_data(conn,"<tr><th></th><th>IP</th><th>port</th><th>stream</th><th>version</th><th>agent name</th></tr>\n",database->getHeartbeat());
 
     std::vector<data::node_info> nodes = database->getNodesToProvideToOthers();
     
@@ -141,11 +101,12 @@ static void nodes(struct mg_connection *conn) {
     
     for (std::vector<data::node_info>::iterator it = nodes.begin(); it != nodes.end(); it++)
     {
-        mg_printf_data(conn,"<tr><td>%d</td><td>%s</td><td>%d</td><td>%d</td><td>%s</td></tr>\n",
+        mg_printf_data(conn,"<tr><td>%d</td><td>%s</td><td>%d</td><td>%d</td><td>%d</td><td>%s</td></tr>\n",
             ++number,
             (*it).getIPasString().c_str(),
             (*it).getPort(),
             (*it).getStreamNo(),
+            (*it).getVersion(),
             (*it).getAgent().c_str()
         );
     }
@@ -326,9 +287,6 @@ static int ev_handler(struct mg_connection *conn, enum mg_event ev) {
         result = MG_TRUE;
     } else if ((ev == MG_REQUEST) && (memcmp("/object/", conn->uri, 8) == 0)) {
         object(conn);
-        result = MG_TRUE;
-    } else if ((ev == MG_REQUEST) && (memcmp("/historic/", conn->uri, 8) == 0)) {
-        historic(conn);
         result = MG_TRUE;
     } else if (ev == MG_REQUEST) {
         unknown(conn);

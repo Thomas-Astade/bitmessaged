@@ -17,6 +17,9 @@ if (m_offerCount)
 if (m_oldObjectCount)
     obj["old_objects"] = (uint64_t)m_oldObjectCount;
     
+if (m_Version)
+    obj["protocol_version"] = (uint64_t)m_Version;
+    
 if (m_futureObjectCount)
     obj["future_objects"] = (uint64_t)m_futureObjectCount;
     

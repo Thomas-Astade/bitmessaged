@@ -16,6 +16,11 @@ if (data["offered_objects"].type() == json_spirit::int_type)
     m_offerCount = data["offered_objects"].get_int();
 }
 
+if (data["protocol_version"].type() == json_spirit::int_type)
+{
+    m_Version = data["protocol_version"].get_int();
+}
+
 if (data["old_objects"].type() == json_spirit::int_type)
 {
     m_oldObjectCount = data["old_objects"].get_int();
