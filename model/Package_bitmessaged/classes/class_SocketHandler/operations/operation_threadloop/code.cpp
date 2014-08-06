@@ -100,18 +100,11 @@ while (1)
             case protocol::message::version:
                 {
                     protocol::version aVersion(aPayload,0);
-                    if (aVersion.getVersion() != 2) // at the moment we support only version 2
+                    if ((aVersion.getVersion() != 2) && (aVersion.getVersion() != 3)) // at the moment we support only version 2 and 3
                     {
                         ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_disconnected,0);
                         return;
                     }
-                    /* We allow connections to ourself
-                    if (aVersion.itsMe()) // we are talking to ourself
-                    {
-                        ACF_sendMessage(MessageReceiver(),MessageReceiver(),ev_disconnected,0);
-                        return;
-                    }
-                    */
                     ACF_sendMessage(MessageReceiver(),toLogic,ev_version,new protocol::Payload(aPayload));
                 }
                 break;
