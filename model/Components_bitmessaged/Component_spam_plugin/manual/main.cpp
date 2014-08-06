@@ -30,7 +30,7 @@ void *aThread( void *ptr )
         uint8_t initialHash[SHA512_DIGEST_LENGTH];
         uint8_t buffer[8+SHA512_DIGEST_LENGTH];
         
-        uint64_t target = p.pow_target();
+        uint64_t target = p.pow_target_V2();
         SHA512(*p, p.size(), initialHash);
         memcpy(&buffer[8], initialHash, SHA512_DIGEST_LENGTH);
         

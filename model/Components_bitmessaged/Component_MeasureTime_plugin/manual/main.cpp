@@ -32,7 +32,7 @@ void *aThread( void *ptr )
         int start = getTimeTick();
         unsigned int eCount = 0;
         
-        std::set<protocol::inventory_vector> objects = database->getObjects();
+        std::set<protocol::inventory_vector> objects = database->getObjects(2);
         std::vector<protocol::inventory_vector> testObjects;
     
         uint64_t limit = database->getTime() - (3600 * 4); //the last four hours
