@@ -61,15 +61,8 @@ static void upload(struct mg_connection *conn, protocol::message::command_t c, c
             mg_printf_data(conn, "It is not accepted, because the POW is not correct!<br>");
         } else {
             mg_printf_data(conn, "The POW is correct!<br>");
-            uint64_t aTime = o.getTime();
-            if (aTime > database->getTime())
-                mg_printf_data(conn, "It is not accepted, because the time is in the future!<br>");
-            else if (aTime < (database->getTime()-data::knowledge::maximumAcceptAge))
-                mg_printf_data(conn, "It is not accepted, because its too old!<br>");
-            else {
-                mg_printf_data(conn, "It is accepted!<br>");
-                database->addObject(0,o);
-            }
+            mg_printf_data(conn, "It is accepted!<br>");
+            database->addObject(0,o);
         }
         
     } else {
@@ -129,7 +122,7 @@ static void objects(struct mg_connection *conn, protocol::message::command_t c) 
     mg_printf_data(conn,"<table border=\"1\">\n");
     mg_printf_data(conn,"<tr><th></th><th>vector</th><th>type</th><th>size</th><th>time</th></tr>\n",database->getHeartbeat());
 
-    std::set<protocol::inventory_vector> objects = database->getObjects();
+    std::set<protocol::inventory_vector> objects = database->getObjects(2);
     
     unsigned int number = 0;
     
@@ -202,10 +195,11 @@ static void overview(struct mg_connection *conn) {
     mg_printf_data(conn,"<tr><td>incomming connections</td><td>%d</td></tr>\n",database->getIncommingCount());
     mg_printf_data(conn,"<tr><td>successful connections</td><td>%d</td></tr>\n",database->getSuccessfulCount());
     mg_printf_data(conn,"<tr><td>unsuccessful connections</td><td>%d</td></tr>\n",database->getUnsuccessfulCount());
-    mg_printf_data(conn,"<tr><td>received objects</td><td>%d</td></tr>\n",database->getObjectCount());
+    mg_printf_data(conn,"<tr><td>received V2 objects</td><td>%d</td></tr>\n",database->getObjectCount(2));
+    mg_printf_data(conn,"<tr><td>received V3 objects</td><td>%d</td></tr>\n",database->getObjectCount(3));
     
     
-    std::set<protocol::inventory_vector> objects = database->getObjects();
+    std::set<protocol::inventory_vector> objects = database->getObjects(2);
     
     unsigned int messagecount = 0;
     unsigned int broadcastcount = 0;
