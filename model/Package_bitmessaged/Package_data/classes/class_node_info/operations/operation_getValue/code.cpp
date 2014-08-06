@@ -21,9 +21,6 @@ if (successfulBonus > 5)
 if (m_oldObjectCount != 0) // a small malus for nodes that have an incorrect clock
     ret -= 2;
     
-if (m_futureObjectCount != 0) // a small malus for nodes that have an incorrect clock
-    ret -= 2;
-
 ret += successfulBonus; // this is for nodes which have proven to be reliable
 
 ret -= unsucessfulcount; // unsuccessful tries lower the value

@@ -20,9 +20,6 @@ if (m_oldObjectCount)
 if (m_Version)
     obj["protocol_version"] = (uint64_t)m_Version;
     
-if (m_futureObjectCount)
-    obj["future_objects"] = (uint64_t)m_futureObjectCount;
-    
 if (m_duplicateOfferCount)
     obj["duplicate_offered_objects"] = (uint64_t)m_duplicateOfferCount;
     
