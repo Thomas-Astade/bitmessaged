@@ -81,7 +81,7 @@ void *aThread( void *ptr )
             uint64_t s = p.size();
             
             uint64_t target = (uint64_t)(0x8000000000000000) /
-                            ((uint64_t)500 * (s+((uint64_t)3600*nonceTime*(s)/65536)));
+                            ((uint64_t)500 * (s+((uint64_t)nonceTime*(s)/65536)));
             
             SHA512(*p, p.size(), initialHash);
             memcpy(&buffer[8], initialHash, SHA512_DIGEST_LENGTH);
@@ -106,8 +106,10 @@ void *aThread( void *ptr )
             p2.push_back(protocol::Payload::htonll(nonce));
             p2.push_back(p);
             protocol::object o2(protocol::message::object,p2);
-            if (!o.PowOk())
+            if (!o2.PowOk())
                 printf("POW failed\n");
+            else
+                printf("POW ok\n");
             database->addObject(0,o2);
         }
         else
