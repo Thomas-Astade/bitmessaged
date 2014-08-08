@@ -51,21 +51,25 @@ void doPow(uint64_t target)
 
 int main(int argc, char** argv)
 {
-    unsigned int messagesize = 1024 * 5;
+    unsigned int messagesize = 256;
     unsigned int ttl = 60;
-    unsigned int repeats = 10;
+    unsigned int repeats = 50;
 
     unsigned int seconds = 0;
+
+    printf("Doing POW for %u messages (TTL %u hours) at size %u\n",
+        repeats,ttl,messagesize);
+
     for (unsigned int i = 0; i < repeats; i++)
     {
         unsigned int start = getTimeTick();
         uint64_t target = (uint64_t)(0x8000000000000000) /
-                        ((uint64_t)160 * ((uint64_t)140000 + messagesize+((uint64_t)3600*ttl*messagesize/65535)));
+                        ((uint64_t)160 * ((uint64_t)14000 + messagesize+((uint64_t)3600*ttl*messagesize/65535)));
         doPow(target);
         unsigned int stop = getTimeTick();
         seconds += (stop-start)/1000000;
     }
-    printf("Doing POW for %u messages at size %u takes %u seconds (average %u) with 1 CPU\n",
-        repeats,messagesize,seconds,seconds/repeats);
+    printf("Doing POW for %u messages (TTL %u hours) at size %u takes %u seconds (average %u) with 1 CPU\n",
+        repeats,ttl,messagesize,seconds,seconds/repeats);
     return 0;
 }
