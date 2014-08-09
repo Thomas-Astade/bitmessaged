@@ -14,12 +14,4 @@ else
 
 uint64_t pow_value = myPayload.pow_value();
 
-if (myType == message::object)
-{
-    if (pow_value <= target)
-        printf("POW check ok\n");
-    else
-        printf("POW check fail. Target: %lld value: %lld\n",target,pow_value);
-}
-
 RETURN(pow_value <= target);

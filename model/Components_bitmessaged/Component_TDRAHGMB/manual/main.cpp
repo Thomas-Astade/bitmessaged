@@ -17,6 +17,7 @@ data::knowledge* database;
 
 void *aThread( void *ptr )
 {
+    long num = (long)ptr;
     isRunning++;
     while (keepRunning)
     {
@@ -37,10 +38,21 @@ void *aThread( void *ptr )
             protocol::object o = database->getObject(*it);
             
             if ((o.getPayload().size() < (256*1024)) && 
+                    (o.getPayload().size() > 16) &&
                     (hashes.find(o.getContentHash()) == hashes.end()))
                 bridgeObjects.insert(*it);
         }
     
+        if ((!bridgeObjects.empty()) && (num > 0))
+            bridgeObjects.erase(*bridgeObjects.begin());
+        
+        if ((!bridgeObjects.empty()) && (num > 1))
+            bridgeObjects.erase(*bridgeObjects.begin());
+        
+        if ((!bridgeObjects.empty()) && (num > 2))
+            bridgeObjects.erase(*bridgeObjects.begin());
+        
+        
         if (!bridgeObjects.empty())
         {
             protocol::object o = database->getObject(*bridgeObjects.begin());
@@ -75,7 +87,11 @@ void *aThread( void *ptr )
                 break;
             }
             
-            p.push_back(o.getPayload());
+            const uint8_t* pp = *o.getPayload();
+            pp += 16;
+            
+            for (int i=0; i < (o.getPayload().size()-16); i++)
+                p.push_back(*(pp + i));
             
             uint8_t initialHash[SHA512_DIGEST_LENGTH];
             uint8_t buffer[8+SHA512_DIGEST_LENGTH];
@@ -108,9 +124,15 @@ void *aThread( void *ptr )
             p2.push_back(p);
             protocol::object o2(protocol::message::object,p2);
             if (!o2.PowOk())
-                printf("target: %lld  trialValue  %lld POW failed\n", target, trialValue);
+                printf("POW failed\n");
             else
                 printf("POW ok\n");
+                
+            if (o.getContentHash() == o2.getContentHash())
+                printf("content hash ok\n");
+            else
+                printf("content hash fali\n");
+                
             database->addObject(0,o2);
         }
         else
@@ -126,7 +148,10 @@ extern "C" {
 void init_plugin(data::knowledge& data)
 {
     database = &data;
-    pthread_create( &thread[0], NULL, aThread, 0);
+    pthread_create( &thread[0], NULL, aThread, (void*)0);
+    pthread_create( &thread[0], NULL, aThread, (void*)1);
+    pthread_create( &thread[0], NULL, aThread, (void*)2);
+    pthread_create( &thread[0], NULL, aThread, (void*)3);
     printf("V1toV3 plugin initialized\n");
 }
 
