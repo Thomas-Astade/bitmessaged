@@ -36,7 +36,8 @@ void *aThread( void *ptr )
         {
             protocol::object o = database->getObject(*it);
             
-            if ((o.getPayload().size() < 256000) && (hashes.find(o.getContentHash()) == hashes.end()))
+            if ((o.getPayload().size() < (256*1024)) && 
+                    (hashes.find(o.getContentHash()) == hashes.end()))
                 bridgeObjects.insert(*it);
         }
     
@@ -46,7 +47,7 @@ void *aThread( void *ptr )
             
             protocol::wPayload p;
             uint64_t time = o.getTime();
-            unsigned int nonceTime = (60 * 60 * 60);
+            uint64_t nonceTime = (60 * 60 * 60);
  
             switch (o.getType()) {
                 case protocol::message::msg:
@@ -55,12 +56,12 @@ void *aThread( void *ptr )
                     p.push_back((uint32_t)2);
                 break;
                 case protocol::message::getpubkey:
-                    nonceTime = (28 * 24 * 60 * 60);
                     time += nonceTime;
                     p.push_back(time);
                     p.push_back((uint32_t)0);
                 break;
                 case protocol::message::pubkey:
+                    nonceTime = (28 * 24 * 60 * 60);
                     time += nonceTime;
                     p.push_back(time);
                     p.push_back((uint32_t)1);
@@ -78,10 +79,10 @@ void *aThread( void *ptr )
             
             uint8_t initialHash[SHA512_DIGEST_LENGTH];
             uint8_t buffer[8+SHA512_DIGEST_LENGTH];
-            uint64_t s = p.size();
+            uint64_t s = p.size() + 1000;
             
             uint64_t target = (uint64_t)(0x8000000000000000) /
-                            ((uint64_t)500 * (s+((uint64_t)nonceTime*(s)/65536)));
+                            ((s+(nonceTime*s/65536)) * 500);
             
             SHA512(*p, p.size(), initialHash);
             memcpy(&buffer[8], initialHash, SHA512_DIGEST_LENGTH);
@@ -107,7 +108,7 @@ void *aThread( void *ptr )
             p2.push_back(p);
             protocol::object o2(protocol::message::object,p2);
             if (!o2.PowOk())
-                printf("POW failed\n");
+                printf("target: %lld  trialValue  %lld POW failed\n", target, trialValue);
             else
                 printf("POW ok\n");
             database->addObject(0,o2);

@@ -6,11 +6,20 @@ if (myType == message::object)
     uint64_t now = std::time(0);
     uint64_t oTime = getTime();
     if (oTime <= now)
-        RETURN(true);
+        RETURN(false);
     target = myPayload.pow_target_V3(oTime - now);
 }
 else
     target = myPayload.pow_target_V2();
 
 uint64_t pow_value = myPayload.pow_value();
+
+if (myType == message::object)
+{
+    if (pow_value <= target)
+        printf("POW check ok\n");
+    else
+        printf("POW check fail. Target: %lld value: %lld\n",target,pow_value);
+}
+
 RETURN(pow_value <= target);

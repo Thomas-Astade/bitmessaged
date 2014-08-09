@@ -1,4 +1,7 @@
 //~~ bool addNode(const std::string& addr) [knowledge] ~~
+if (m_fixed_mode)
+    RETURN(true);
+
 while (sem_wait(&mySemaphore))
     ;
 

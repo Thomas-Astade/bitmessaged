@@ -35,6 +35,7 @@ void print_usage()
     printf("-i, --initial       ip:port of the initial client connection.\n");
     printf("-n, --portnum       the port number for accepting connections (default 8444).\n");
     printf("                    (you may have multiple addresses).\n");
+    printf("-f, --fixed         fixed to node addresses in database. Don't add nodes.\n");
 
     printf("\nTuning parapeters:\n");
     printf("-o, --outgoing      number of outgoing connections (default 8).\n");
@@ -91,6 +92,7 @@ int main(int argc, char *argv[]) {
         {"accept"     ,  optional_argument,  0,  'a' },
         {"initial"    ,  required_argument,  0,  'i' },
         {"portnum"    ,  required_argument,  0,  'n' },
+        {"fixed"      ,  no_argument,        0,  'f' },
         {0,          0,                      0,   0  }
     };
 
@@ -98,7 +100,7 @@ int main(int argc, char *argv[]) {
     int opt;
     unsigned int portnum = 8444;
     
-    while ((opt = getopt_long(argc, argv, "n:o:a:p:i:hd", long_options, &long_index )) != -1) {
+    while ((opt = getopt_long(argc, argv, "n:o:a:p:i:hdf", long_options, &long_index )) != -1) {
         switch (opt) {
         case 'n':
                 portnum = atoi(optarg);
@@ -111,6 +113,9 @@ int main(int argc, char *argv[]) {
             break;
         case 'd':
                 database.setDebug();
+            break;
+        case 'f':
+                database.setFixedMode();
             break;
         case 'p':
                 plugins.insert(optarg);
