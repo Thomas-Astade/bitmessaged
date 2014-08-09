@@ -43,15 +43,11 @@ void *aThread( void *ptr )
                 bridgeObjects.insert(*it);
         }
     
-        if ((!bridgeObjects.empty()) && (num > 0))
-            bridgeObjects.erase(*bridgeObjects.begin());
-        
-        if ((!bridgeObjects.empty()) && (num > 1))
-            bridgeObjects.erase(*bridgeObjects.begin());
-        
-        if ((!bridgeObjects.empty()) && (num > 2))
-            bridgeObjects.erase(*bridgeObjects.begin());
-        
+        for (int i = 0; i < num; i++)
+        {
+            if (!bridgeObjects.empty())
+                bridgeObjects.erase(*bridgeObjects.begin());
+        }
         
         if (!bridgeObjects.empty())
         {
@@ -137,7 +133,7 @@ void *aThread( void *ptr )
         }
         else
         {
-            sleep(1);
+            sleep(5);
         }
     }
     isRunning--;
@@ -149,9 +145,9 @@ void init_plugin(data::knowledge& data)
 {
     database = &data;
     pthread_create( &thread[0], NULL, aThread, (void*)0);
-    pthread_create( &thread[0], NULL, aThread, (void*)1);
-    pthread_create( &thread[0], NULL, aThread, (void*)2);
-    pthread_create( &thread[0], NULL, aThread, (void*)3);
+    pthread_create( &thread[0], NULL, aThread, (void*)10);
+    pthread_create( &thread[0], NULL, aThread, (void*)20);
+    pthread_create( &thread[0], NULL, aThread, (void*)30);
     printf("V1toV3 plugin initialized\n");
 }
 
