@@ -2,8 +2,16 @@
 while (sem_wait(&mySemaphore))
     ;
 
-if ((collectedObjectsV2.find(object.getVector()) == collectedObjectsV2.end()) &&
-     (collectedObjectsV3.find(object.getVector()) == collectedObjectsV3.end()))
+if (
+        (
+            (object.getType() != protocol::message::object) && 
+            (collectedObjectsV2.find(object.getVector()) == collectedObjectsV2.end())
+        ) ||
+        (
+            (object.getType() == protocol::message::object) && 
+            (collectedObjectsV3.find(object.getVector()) == collectedObjectsV3.end())
+        )
+    )
 {
     if (object.isActuell())
     {
