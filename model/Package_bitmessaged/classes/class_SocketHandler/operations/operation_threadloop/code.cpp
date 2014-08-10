@@ -121,6 +121,7 @@ while (1)
             case protocol::message::pubkey:
             case protocol::message::broadcast:
             case protocol::message::msg:
+            case protocol::message::object:
                 if (aPayload.size() > 16)
                 {
                     protocol::object* anObject = new protocol::object(messageType,aPayload);

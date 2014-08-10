@@ -1,4 +1,4 @@
-//~~ void requestObjects(ACF_Message* event) [OutBitmessageLogic] ~~
+//~~ void requestObjects(ACF_Message* event) [BitmessageLogic] ~~
 while (!VectorsToRequest.empty() && !theKnowledge.doWeNeed(*VectorsToRequest.begin()))
     VectorsToRequest.erase(VectorsToRequest.begin());
 
