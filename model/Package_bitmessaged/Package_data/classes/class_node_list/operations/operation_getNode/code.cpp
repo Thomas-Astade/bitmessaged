@@ -24,6 +24,17 @@ if (nodelist.empty())
     }
 }
 
+// if we cannot find one we might try a recently failed one
+if (nodelist.empty())
+{
+    for (std::map<int64_t, node_info>::iterator it = known_nodes.begin(); it != known_nodes.end(); it++)
+    {
+        data::node_info res = (*it).second;
+        if (!res.isInUse())
+            nodelist.push_back(res.getID());
+    }
+}
+
 if (nodelist.empty())
     RETURN(false);
 

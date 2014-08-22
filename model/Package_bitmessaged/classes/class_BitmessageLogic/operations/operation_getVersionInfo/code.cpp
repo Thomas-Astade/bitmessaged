@@ -7,8 +7,6 @@ try{
         theKnowledge.setNodeServices(nodeID,aVersion.getServices());
         m_Protocol_Version = aVersion.getVersion();
         theKnowledge.setNodeVersion(nodeID,m_Protocol_Version);
-        
-        printf("We connected to a node Version %d (node id %lld)\n",m_Protocol_Version,nodeID);
     }
 }
 catch (...) //we received a malformated message

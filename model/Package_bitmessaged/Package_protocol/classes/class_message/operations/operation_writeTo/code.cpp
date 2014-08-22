@@ -7,7 +7,8 @@ if (bytesWritten == 0)
 
     if (ret < (int)sizeof(comand_defines[myType]))
     {
-        close(socketfd);
+        shutdown(socketfd, SHUT_RDWR);
+        socketfd = -1;
         RETURN(0);
     }
 
@@ -16,7 +17,8 @@ if (bytesWritten == 0)
 
     if (ret < (int)sizeof(len))
     {
-        close(socketfd);
+        shutdown(socketfd, SHUT_RDWR);
+        socketfd = -1;
         RETURN(0);
     }
 
@@ -25,7 +27,8 @@ if (bytesWritten == 0)
 
     if (ret < (int)sizeof(checksum))
     {
-        close(socketfd);
+        shutdown(socketfd, SHUT_RDWR);
+        socketfd = -1;
         RETURN(0);
     }
 }
@@ -39,7 +42,8 @@ ret = write(socketfd,&(*myPayload)[bytesWritten],bytesToSend);
 
 if (ret < (int)bytesToSend)
 {
-    close(socketfd);
+    shutdown(socketfd, SHUT_RDWR);
+    socketfd = -1;
     RETURN(0);
 }
 

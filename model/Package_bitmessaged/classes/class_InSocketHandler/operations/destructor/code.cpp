@@ -2,6 +2,6 @@
 theKnowledge.decIncommingCount();
 if (socketfd != -1)
 {
-    close(socketfd);
+    shutdown(socketfd, SHUT_RDWR);
     socketfd = -1;
 }
