@@ -56,24 +56,29 @@ void *aThread( void *ptr )
             protocol::wPayload p;
             uint64_t time = o.getTime();
             uint64_t nonceTime = (60 * 60 * 60);
+            protocol::message::command_t theType = protocol::message::unknown;
 
-            switch (o.getType()) {
-                case protocol::message::msg:
+            switch (o.getObjectType()) {
+                case 2:
                     time -= nonceTime;
                     p.push_back(time);
+                    theType = protocol::message::msg;
                 break;
-                case protocol::message::getpubkey:
+                case 0:
                     time -= nonceTime;
                     p.push_back(time);
+                    theType = protocol::message::getpubkey;
                 break;
-                case protocol::message::pubkey:
+                case 1:
                     nonceTime = (28 * 24 * 60 * 60);
                     time -= nonceTime;
                     p.push_back(time);
+                    theType = protocol::message::pubkey;
                 break;
-                case protocol::message::broadcast:
+                case 3:
                     time -= nonceTime;
                     p.push_back(time);
+                    theType = protocol::message::broadcast;
                 break;
                 default:
                 break;
@@ -112,7 +117,7 @@ void *aThread( void *ptr )
             protocol::wPayload p2;
             p2.push_back(protocol::Payload::htonll(nonce));
             p2.push_back(p);
-            protocol::object o2(protocol::message::object,p2);
+            protocol::object o2(theType,p2);
             if (o2.PowOk())
                 printf("generated a V2 object\n");
                 
@@ -135,7 +140,7 @@ void init_plugin(data::knowledge& data)
     pthread_create( &thread[0], NULL, aThread, (void*)10);
     pthread_create( &thread[0], NULL, aThread, (void*)20);
     pthread_create( &thread[0], NULL, aThread, (void*)30);
-    printf("V1toV3 plugin initialized\n");
+    printf("V3toV2 plugin initialized\n");
 }
 
 void shutdown_plugin()
@@ -143,6 +148,6 @@ void shutdown_plugin()
     keepRunning = false;
     while (isRunning)
         ;
-    printf("V1toV3 plugin shut down\n");
+    printf("V3toV2 plugin shut down\n");
 }
 }

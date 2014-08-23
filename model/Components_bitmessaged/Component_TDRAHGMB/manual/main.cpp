@@ -141,7 +141,7 @@ void init_plugin(data::knowledge& data)
     pthread_create( &thread[0], NULL, aThread, (void*)10);
     pthread_create( &thread[0], NULL, aThread, (void*)20);
     pthread_create( &thread[0], NULL, aThread, (void*)30);
-    printf("V1toV3 plugin initialized\n");
+    printf("V2toV3 plugin initialized\n");
 }
 
 void shutdown_plugin()
@@ -149,6 +149,6 @@ void shutdown_plugin()
     keepRunning = false;
     while (isRunning)
         ;
-    printf("V1toV3 plugin shut down\n");
+    printf("V2toV3 plugin shut down\n");
 }
 }
