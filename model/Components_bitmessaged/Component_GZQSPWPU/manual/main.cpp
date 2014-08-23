@@ -113,15 +113,8 @@ void *aThread( void *ptr )
             p2.push_back(protocol::Payload::htonll(nonce));
             p2.push_back(p);
             protocol::object o2(protocol::message::object,p2);
-            if (!o2.PowOk())
-                printf("POW failed\n");
-            else
-                printf("POW ok\n");
-                
-            if (o.getContentHash() == o2.getContentHash())
-                printf("content hash ok\n");
-            else
-                printf("content hash fali\n");
+            if (o2.PowOk())
+                printf("generated a V2 object\n");
                 
             database->addObject(0,o2);
         }
