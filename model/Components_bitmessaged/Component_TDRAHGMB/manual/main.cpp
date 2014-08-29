@@ -17,7 +17,6 @@ data::knowledge* database;
 
 void *aThread( void *ptr )
 {
-    long num = (long)ptr;
     isRunning++;
     while (keepRunning)
     {
@@ -43,86 +42,94 @@ void *aThread( void *ptr )
                 bridgeObjects.insert(*it);
         }
     
-        for (int i = 0; i < num; i++)
-        {
-            if (!bridgeObjects.empty())
-                bridgeObjects.erase(*bridgeObjects.begin());
-        }
-        
         if (!bridgeObjects.empty())
         {
-            protocol::object o = database->getObject(*bridgeObjects.begin());
-            
-            protocol::wPayload p;
-            uint64_t time = o.getTime();
-            uint64_t nonceTime = (60 * 60 * 60);
- 
-            switch (o.getType()) {
-                case protocol::message::msg:
-                    time += nonceTime;
-                    p.push_back(time);
-                    p.push_back((uint32_t)2);
-                break;
-                case protocol::message::getpubkey:
-                    time += nonceTime;
-                    p.push_back(time);
-                    p.push_back((uint32_t)0);
-                break;
-                case protocol::message::pubkey:
-                    nonceTime = (28 * 24 * 60 * 60);
-                    time += nonceTime;
-                    p.push_back(time);
-                    p.push_back((uint32_t)1);
-                break;
-                case protocol::message::broadcast:
-                    time += nonceTime;
-                    p.push_back(time);
-                    p.push_back((uint32_t)3);
-                break;
-                default:
-                break;
-            }
-            
-            const uint8_t* pp = *o.getPayload();
-            pp += 16;
-            
-            for (int i=0; i < (o.getPayload().size()-16); i++)
-                p.push_back(*(pp + i));
-            
-            uint8_t initialHash[SHA512_DIGEST_LENGTH];
-            uint8_t buffer[8+SHA512_DIGEST_LENGTH];
-            uint64_t s = p.size() + 1000;
-            
-            uint64_t target = (uint64_t)(0x8000000000000000) /
-                            ((s+(nonceTime*s/65536)) * 500);
-            
-            SHA512(*p, p.size(), initialHash);
-            memcpy(&buffer[8], initialHash, SHA512_DIGEST_LENGTH);
-            
-            uint64_t trialValue = (uint64_t)0xffffffffffffffff;
-            uint64_t nonce = 0;
-            
-            uint8_t resultHash1[SHA512_DIGEST_LENGTH];
-            uint8_t resultHash2[SHA512_DIGEST_LENGTH];
-            
-            while (trialValue > target)
+            long num = rand() % bridgeObjects.size();
+            for (int i = 0; i < num; i++)
             {
-                nonce++;
-                memcpy(buffer, &nonce, 8);
-                SHA512(buffer, SHA512_DIGEST_LENGTH + 8, resultHash1);
-                SHA512(resultHash1, SHA512_DIGEST_LENGTH, resultHash2);
-                memcpy(&trialValue, resultHash2, sizeof(trialValue));
-                trialValue = protocol::Payload::htonll(trialValue);
+                if (!bridgeObjects.empty())
+                    bridgeObjects.erase(*bridgeObjects.begin());
             }
             
-            protocol::wPayload p2;
-            p2.push_back(protocol::Payload::htonll(nonce));
-            p2.push_back(p);
-            protocol::object o2(protocol::message::object,p2);
-            if (o2.PowOk())
-                printf("generated a V3 object\n");
+            if (!bridgeObjects.empty())
+            {
+                protocol::object o = database->getObject(*bridgeObjects.begin());
                 
-            database->addObject(0,o2);
+                protocol::wPayload p;
+                uint64_t time = o.getTime();
+                uint64_t nonceTime = (60 * 60 * 60);
+     
+                switch (o.getType()) {
+                    case protocol::message::msg:
+                        time += nonceTime;
+                        p.push_back(time);
+                        p.push_back((uint32_t)2);
+                    break;
+                    case protocol::message::getpubkey:
+                        time += nonceTime;
+                        p.push_back(time);
+                        p.push_back((uint32_t)0);
+                    break;
+                    case protocol::message::pubkey:
+                        nonceTime = (28 * 24 * 60 * 60);
+                        time += nonceTime;
+                        p.push_back(time);
+                        p.push_back((uint32_t)1);
+                    break;
+                    case protocol::message::broadcast:
+                        time += nonceTime;
+                        p.push_back(time);
+                        p.push_back((uint32_t)3);
+                    break;
+                    default:
+                    break;
+                }
+                
+                const uint8_t* pp = *o.getPayload();
+                pp += 16;
+                
+                for (int i=0; i < (o.getPayload().size()-16); i++)
+                    p.push_back(*(pp + i));
+                
+                uint8_t initialHash[SHA512_DIGEST_LENGTH];
+                uint8_t buffer[8+SHA512_DIGEST_LENGTH];
+                uint64_t s = p.size() + 1000;
+                
+                uint64_t target = (uint64_t)(0x8000000000000000) /
+                                ((s+(nonceTime*s/65536)) * 500);
+                
+                SHA512(*p, p.size(), initialHash);
+                memcpy(&buffer[8], initialHash, SHA512_DIGEST_LENGTH);
+                
+                uint64_t trialValue = (uint64_t)0xffffffffffffffff;
+                uint64_t nonce = 0;
+                
+                uint8_t resultHash1[SHA512_DIGEST_LENGTH];
+                uint8_t resultHash2[SHA512_DIGEST_LENGTH];
+                
+                while (trialValue > target)
+                {
+                    nonce++;
+                    memcpy(buffer, &nonce, 8);
+                    SHA512(buffer, SHA512_DIGEST_LENGTH + 8, resultHash1);
+                    SHA512(resultHash1, SHA512_DIGEST_LENGTH, resultHash2);
+                    memcpy(&trialValue, resultHash2, sizeof(trialValue));
+                    trialValue = protocol::Payload::htonll(trialValue);
+                }
+                
+                protocol::wPayload p2;
+                p2.push_back(protocol::Payload::htonll(nonce));
+                p2.push_back(p);
+                protocol::object o2(protocol::message::object,p2);
+                if (o2.PowOk())
+                    printf("generated a V3 object\n");
+                    
+                database->addObject(0,o2);
+            }
+            else
+            {
+                sleep(5);
+            }
         }
         else
         {
@@ -137,10 +144,10 @@ extern "C" {
 void init_plugin(data::knowledge& data)
 {
     database = &data;
-    pthread_create( &thread[0], NULL, aThread, (void*)0);
-    pthread_create( &thread[0], NULL, aThread, (void*)10);
-    pthread_create( &thread[0], NULL, aThread, (void*)20);
-    pthread_create( &thread[0], NULL, aThread, (void*)30);
+    pthread_create( &thread[0], NULL, aThread, 0);
+    pthread_create( &thread[0], NULL, aThread, 0);
+    pthread_create( &thread[0], NULL, aThread, 0);
+    pthread_create( &thread[0], NULL, aThread, 0);
     printf("V2toV3 plugin initialized\n");
 }
 
