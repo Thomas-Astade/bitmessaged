@@ -10,4 +10,12 @@ else
     oldObject = ((getType() == protocol::message::pubkey) && ((oTime + maximumKeyAdvertiseAge) < now)) ||
                    ((getType() != protocol::message::pubkey) && ((oTime + maximumAdvertiseAge) < now))
                   ;
-RETURN(!oldObject);
+
+bool futureObject;
+
+if (getType() == protocol::message::object)
+    futureObject = (oTime > (now + (60 * 60 * 24 * 28)));
+else 
+    futureObject = (oTime > now);
+
+RETURN(!oldObject && !futureObject);
