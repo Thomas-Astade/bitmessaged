@@ -122,7 +122,12 @@ static void objects(struct mg_connection *conn, protocol::message::command_t c) 
     mg_printf_data(conn,"<table border=\"1\">\n");
     mg_printf_data(conn,"<tr><th></th><th>vector</th><th>type</th><th>size</th><th>time</th></tr>\n",database->getHeartbeat());
 
-    std::set<protocol::inventory_vector> objects = database->getObjects(2);
+    std::set<protocol::inventory_vector> objects;
+    
+    if (c == protocol::message::object) 
+        objects = database->getObjects(3);
+    else
+        objects = database->getObjects(2);
     
     unsigned int number = 0;
     
@@ -224,17 +229,21 @@ static void overview(struct mg_connection *conn) {
         }
     }
 
-    mg_printf_data(conn,"<tr><td>objects to advertise</td><td>%d</td></tr>\n",objects.size());
-    mg_printf_data(conn,"<tr><td>received messages</td><td>%d (%d/h)</td></tr>\n",messagecount, messagecount/60);
-    mg_printf_data(conn,"<tr><td>received broadcasts</td><td>%d (%d/h)</td></tr>\n",broadcastcount, broadcastcount/60);
-    mg_printf_data(conn,"<tr><td>active addresses (pubkeys)</td><td>%d</td></tr>\n",pubkeycount);
-    mg_printf_data(conn,"<tr><td>used memory</td><td>%d MByte</td></tr>\n",memsize/(1024*1024));
+    mg_printf_data(conn,"<tr><td>objects to advertise V2 side</td><td>%d</td></tr>\n",objects.size());
+    mg_printf_data(conn,"<tr><td>received messages V2 side</td><td>%d (%d/h)</td></tr>\n",messagecount, messagecount/60);
+    mg_printf_data(conn,"<tr><td>received broadcasts V2 side</td><td>%d (%d/h)</td></tr>\n",broadcastcount, broadcastcount/60);
+    mg_printf_data(conn,"<tr><td>active addresses V2 side (pubkeys)</td><td>%d</td></tr>\n",pubkeycount);
+    mg_printf_data(conn,"<tr><td>used memory V2 side</td><td>%d MByte</td></tr>\n",memsize/(1024*1024));
     if (messagecount)
     {
         int average = msgmemsize/messagecount;
-        mg_printf_data(conn,"<tr><td>memory for messages</td><td>%d MByte - %d Bytes average</td></tr>\n",
+        mg_printf_data(conn,"<tr><td>memory for messages V2 side</td><td>%d MByte - %d Bytes average</td></tr>\n",
             msgmemsize/(1024*1024),average);
     }
+    
+    objects = database->getObjects(3);
+    mg_printf_data(conn,"<tr><td>objects to advertise 3 side</td><td>%d</td></tr>\n",objects.size());
+    
     mg_printf_data(conn,"<tr><td>sent objects</td><td>%d</td></tr>\n",database->getSentObjectCount());
 
     mg_printf_data(conn,"</table>\n");
@@ -263,6 +272,9 @@ static int ev_handler(struct mg_connection *conn, enum mg_event ev) {
         result = MG_TRUE;
     } else if ((ev == MG_REQUEST) && (strcmp("/nodes", conn->uri) == 0)) {
         nodes(conn);
+        result = MG_TRUE;
+    } else if ((ev == MG_REQUEST) && (strcmp("/objectsv3", conn->uri) == 0)) {
+        objects(conn, protocol::message::object);
         result = MG_TRUE;
     } else if ((ev == MG_REQUEST) && (strcmp("/objects", conn->uri) == 0)) {
         objects(conn, protocol::message::unknown);
