@@ -242,7 +242,7 @@ static void overview(struct mg_connection *conn) {
     }
     
     objects = database->getObjects(3);
-    mg_printf_data(conn,"<tr><td>objects to advertise 3 side</td><td>%d</td></tr>\n",objects.size());
+    mg_printf_data(conn,"<tr><td>objects to advertise V3 side</td><td>%d</td></tr>\n",objects.size());
     
     mg_printf_data(conn,"<tr><td>sent objects</td><td>%d</td></tr>\n",database->getSentObjectCount());
 
