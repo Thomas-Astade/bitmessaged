@@ -1,5 +1,5 @@
 //~~ bool isActuell() [object] ~~
-uint64_t oTime = getTime();
+uint64_t oTime = getTime() - wiggle_room;
 uint64_t now = std::time(0);
 
 bool oldObject;
@@ -12,6 +12,7 @@ else
                   ;
 
 bool futureObject;
+oTime += (2*wiggle_room);
 
 if (getType() == protocol::message::object)
     futureObject = (oTime > (now + (60 * 60 * 24 * 28)));
