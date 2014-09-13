@@ -21,16 +21,22 @@ if (
         else
             collectedObjectsV2[object.getVector()] = object;
             
+        printf("Accepted a new object\n");
         ACF_sendMessage(0,toOutConnectionHandler,ev_newObject,new protocol::inventory_vector(object.getVector()));
         ACF_sendMessage(0,toInConnectionHandler,ev_newObject,new protocol::inventory_vector(object.getVector()));
     }
     else
     {
+        printf("Skipped an old object\n");
         if (NodeID)
         {
             known_node_list.incOldOfferCount(NodeID,1);
         }
     }
+}
+else
+{
+    printf("Skipped a duplicate object\n");
 }
 
 sem_post(&mySemaphore);
