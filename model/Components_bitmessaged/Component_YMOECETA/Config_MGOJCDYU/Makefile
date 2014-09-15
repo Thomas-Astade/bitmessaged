@@ -32,7 +32,7 @@ TRACE_LIST :=$(addsuffix .o,$(TRACECLASSES))
 ifdef DEBUG
 CXXFLAGS+= -g
 else
-CXXFLAGS+= -O2
+CXXFLAGS+= -O3 -std=c++0x
 LDFLAGS	+= -Wl,-s
 endif
 

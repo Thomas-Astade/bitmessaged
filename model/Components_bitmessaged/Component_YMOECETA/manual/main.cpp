@@ -1,3 +1,4 @@
+#include <cinttypes>
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>
@@ -5,10 +6,8 @@
 #include <openssl/sha.h>
 #include <stdlib.h>
 #include <string.h>
-#include <netinet/in.h>
 #include <getopt.h>
 #include <string>
-
 
 void print_usage()
 {
@@ -22,9 +21,20 @@ void print_usage()
 
 uint64_t htonll(uint64_t value)
 {
-    uint32_t high_part = htonl((uint32_t)(value >> 32));
-    uint32_t low_part = htonl((uint32_t)(value & 0xFFFFFFFFLL));
-    return (((uint64_t)low_part) << 32) | high_part;
+    uint64_t h;
+    char* i = (char*)&value;
+    char* o = (char*)&h;
+    
+    o[0] = i[7];
+    o[1] = i[6];
+    o[2] = i[5];
+    o[3] = i[4];
+    o[4] = i[3];
+    o[5] = i[2];
+    o[6] = i[1];
+    o[7] = i[0];
+    
+    return h;
 }
 
 uint64_t doMHash(uint64_t target, char* initialHash)
@@ -116,7 +126,8 @@ int main(int argc, char** argv)
         ++pos;
     }
     
-    printf("%lld\n",doMHash(target_val, initial_hash));
+
+    printf("%" PRIu64 "\n",doMHash(target_val, initial_hash));
     
     return EXIT_SUCCESS;
 }
