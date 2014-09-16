@@ -18,21 +18,21 @@
 #
 
 # include path
-INCLUDE	:= -I../manual
+INCLUDE	:= -I../manual -I../auto
 
 # check make target
-$(if $(TARGET),,$(error Variable TARGET not defined))
+TARGET ?= genPOW
 
 # compiler settings
 CXXFLAGS:= $(INCLUDE) -Wall
-LDFLAGS	:= -lssl -lcrypto -Wl
+LDFLAGS	:= -lssl -lcrypto -Wl -lpthread
 
 TRACE_LIST :=$(addsuffix .o,$(TRACECLASSES))
 
 ifdef DEBUG
 CXXFLAGS+= -g
 else
-CXXFLAGS+= -O3 -std=c++0x
+CXXFLAGS+= -Ofast -std=c++0x
 LDFLAGS	+= -Wl,-s
 endif
 

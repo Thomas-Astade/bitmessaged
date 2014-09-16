@@ -10,7 +10,7 @@ TARGET ?= genPOW
 CXX = i586-mingw32msvc-g++
 
 # compiler settings
-CXXFLAGS:= $(INCLUDE) -Wall -O3 -std=c++0x 
+CXXFLAGS:= $(INCLUDE) -Wall -Ofast -std=c++0x 
 LDFLAGS	:= -Lopenssl-1.0.1c_static_w32_mingw -lssl -lcrypto
 
 ifdef DEBUG
