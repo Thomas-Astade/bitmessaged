@@ -36,7 +36,7 @@ void *aThread( void *ptr )
         {
             protocol::object o = database->getObject(*it);
             
-            if (    (o.getType() != protocol::message::broadcast) && //we dont bridge broadcasts
+            if (    /*(o.getType() != protocol::message::broadcast) && //we dont bridge broadcasts*/
                     (o.getPayload().size() < (256*1024)) && 
                     (o.getPayload().size() > 16) &&
                     (hashes.find(o.getContentHash()) == hashes.end()))

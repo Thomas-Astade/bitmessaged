@@ -2,7 +2,7 @@
 const uint64_t* val = (const uint64_t*)((*myPayload)+8);
 uint64_t t = myPayload.htonll(*val);
 
-if (t > (uint64_t)0x1ffffff)
+if (t > (uint64_t)0x1ffffffff)
     t = t >> 32;
 
 return t;
