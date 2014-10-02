@@ -39,11 +39,7 @@ data::knowledge* database;
 class sampleAddMethod : public xmlrpc_c::method {
     public:
     sampleAddMethod() {
-        // signature and help strings are documentation -- the client
-        // can query this information with a system.methodSignature and
-        // system.methodHelp RPC.
         this->_signature = "i:ii";
-        // method's result and two arguments are integers
         this->_help = "This method adds two integers together";
         }
         void
@@ -53,10 +49,19 @@ class sampleAddMethod : public xmlrpc_c::method {
         int const adder(paramList.getInt(1));
         paramList.verifyEnd(2);
         *retvalP = xmlrpc_c::value_int(addend + adder);
-        // Sometimes, make it look hard (so client can see what it's like
-        // to do an RPC that takes a while).
-        if (adder == 1)
-        SLEEP(2);
+    }
+};
+
+class getV2ObjectsMethod : public xmlrpc_c::method {
+    public:
+    getV2ObjectsMethod() {
+        this->_signature = "A:";
+        this->_help = "This method returns all current version2 objects";
+        }
+        void
+        execute(xmlrpc_c::paramList const& paramList,
+        xmlrpc_c::value * const retvalP) {
+        *retvalP = xmlrpc_c::value_int(5);
     }
 };
 
@@ -67,8 +72,8 @@ void *aThread( void *ptr )
     {
         try {
             xmlrpc_c::registry myRegistry;
-            xmlrpc_c::methodPtr const sampleAddMethodP(new sampleAddMethod);
-            myRegistry.addMethod("sample.add", sampleAddMethodP);
+            myRegistry.addMethod("sample.add", new sampleAddMethod);
+            myRegistry.addMethod("v2.getObjects", new getV2ObjectsMethod);
             xmlrpc_c::serverAbyss myAbyssServer(
             xmlrpc_c::serverAbyss::constrOpt()
             .registryP(&myRegistry)
