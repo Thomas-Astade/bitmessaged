@@ -56,9 +56,10 @@ void start_plugin(std::string filename)
 {
     printf("Loading plugin %s\n",filename.c_str());
     void* handle = dlopen (filename.c_str(), RTLD_LAZY);
-    if (dlerror())
+    char* anError = dlerror();
+    if (anError)
     {
-        printf("ERROR: cannot find %s\n",filename.c_str());
+        printf("%s\n",anError);
     }
     else
     {

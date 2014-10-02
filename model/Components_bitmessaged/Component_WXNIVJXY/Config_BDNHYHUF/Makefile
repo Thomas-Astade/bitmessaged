@@ -3,16 +3,13 @@
 prefix	?= ~
 
 # include path
-INCLUDE	:= -I../manual -I../auto -I../pthread -Iopenssl-1.0.1c_static_w32_mingw/include
+INCLUDE	:= -I../manual -I../auto -I../../Component_bitmessaged/auto
 
-TARGET ?= genPOW
-
-CXX = i586-mingw32msvc-g++
+TARGET ?= spam_plugin
 
 # compiler settings
-CXXFLAGS:= $(INCLUDE) -Wall -Ofast -std=c++0x 
-LDFLAGS	:= -Lopenssl-1.0.1c_static_w32_mingw -lssl -lcrypto 
-LDFLAGS += -L../../../../pthread-win32/pthreads.2/ -lpthreadGC2
+CXXFLAGS:= $(INCLUDE) -Wall -fPIC -Ofast
+LDFLAGS	:= $(shell xmlrpc-c-config c++2 abyss-server --libs) -Wl,--export-dynamic
 
 ifdef DEBUG
 CXXFLAGS+= -g
@@ -33,10 +30,7 @@ OBJS	:= $(notdir $(SOURCES:.cpp=.o))
 %.o:	../manual/%.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
 
-%.o:	../pthread/%.c
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
-
-build:	$(TARGET).exe
+build:	$(TARGET)
 
 install:	build
 	install -s $(TARGET) $(prefix)/bin
@@ -46,11 +40,8 @@ clean:
 
 rebuild:	clean build
 
-run:	build
-	wine ./$(TARGET).exe -r MAIN_12 -m qwertz
-
-$(TARGET).exe:	.depend $(OBJS)
-	$(CXX) -o $@ $(OBJS) $(LDFLAGS)
+$(TARGET):	.depend $(OBJS)
+	$(CXX) -shared -o $@ $(OBJS) $(LDFLAGS)
 
 .depend:	Makefile $(SOURCES) $(HEADERS)
 	$(CXX) -MM $(CPPFLAGS) $(CXXFLAGS) $(SOURCES) >$@
