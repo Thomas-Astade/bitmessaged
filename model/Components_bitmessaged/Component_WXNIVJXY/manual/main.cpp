@@ -36,15 +36,17 @@ static volatile bool keepRunning = true;
 static volatile int isRunning = 0;
 data::knowledge* database;
 
-class sampleAddMethod : public xmlrpc_c::method {
+class sampleAddMethod : public xmlrpc_c::method
+{
     public:
-    sampleAddMethod() {
+    sampleAddMethod() 
+    {
         this->_signature = "i:ii";
         this->_help = "This method adds two integers together";
-        }
-        void
-        execute(xmlrpc_c::paramList const& paramList,
-        xmlrpc_c::value * const retvalP) {
+    }
+
+    void execute(xmlrpc_c::paramList const& paramList, xmlrpc_c::value * const retvalP) 
+    {
         int const addend(paramList.getInt(0));
         int const adder(paramList.getInt(1));
         paramList.verifyEnd(2);
@@ -52,16 +54,29 @@ class sampleAddMethod : public xmlrpc_c::method {
     }
 };
 
-class getV2ObjectsMethod : public xmlrpc_c::method {
+class getV2ObjectsMethod : public xmlrpc_c::method 
+{
     public:
-    getV2ObjectsMethod() {
-        this->_signature = "A:";
-        this->_help = "This method returns all current version2 objects";
+    getV2ObjectsMethod() 
+    {
+            this->_signature = "A:";
+            this->_help = "This method returns the inventory vectors of all current version2 objects";
+    }
+
+    void execute(xmlrpc_c::paramList const& paramList, xmlrpc_c::value * const retvalP) 
+    {
+        vector<xmlrpc_c::value> arrayData;
+
+        std::set<protocol::inventory_vector> objects = database->getObjects(2);
+
+        for (std::set<protocol::inventory_vector>::iterator it = objects.begin(); it != objects.end(); it++)
+        {
+            vector<unsigned char> myBytes(32);
+            memcpy(&myBytes[0],(*it).getData(),32);
+            arrayData.push_back(xmlrpc_c::value_bytestring(myBytes));
         }
-        void
-        execute(xmlrpc_c::paramList const& paramList,
-        xmlrpc_c::value * const retvalP) {
-        *retvalP = xmlrpc_c::value_int(5);
+
+        *retvalP = xmlrpc_c::value_array(arrayData);
     }
 };
 

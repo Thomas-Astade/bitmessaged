@@ -2,6 +2,12 @@
 if (m_fixed_mode)
     RETURN(true);
 
+if (addr.find("127.") == 0)
+    RETURN(true);
+
+if (addr.find("0.0.0.0") == 0)
+    RETURN(true);
+
 while (sem_wait(&mySemaphore))
     ;
 
