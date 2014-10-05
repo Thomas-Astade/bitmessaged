@@ -132,7 +132,7 @@ void *aThread( void *ptr )
         }
         else
         {
-            sleep(5);
+            sleep(3+(rand() % 10));
         }
     }
     isRunning--;
