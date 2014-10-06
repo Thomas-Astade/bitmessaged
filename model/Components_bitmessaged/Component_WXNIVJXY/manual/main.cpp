@@ -33,45 +33,13 @@ using namespace std;
 
 #include "sampleAdd.h"
 #include "getV2Objects.h"
+#include "getV2Object.h"
 
 
 static pthread_t thread[4];
 static volatile bool keepRunning = true;
 static volatile int isRunning = 0;
 data::knowledge* database;
-
-class getV2ObjectMethod : public xmlrpc_c::method 
-{
-    public:
-    getV2ObjectMethod() 
-    {
-            this->_signature = "A:6";
-            this->_help = "This method returns an object, identified by an inventory vector";
-    }
-
-    void execute(xmlrpc_c::paramList const& paramList, xmlrpc_c::value * const retvalP) 
-    {
-    
-        std::vector<unsigned char> ivector = paramList.getBytestring(0);
-        paramList.verifyEnd(1);
-        
-        if (ivector.size() != 32)
-            throw(girerr::error("a vector has to contain 32 bytes"));
-        
-        protocol::inventory_vector v(&ivector[0]);
-        protocol::object o = database->getObject(v);
-
-        if (!o.isValid())
-            throw(girerr::error("ther is no such object"));
-
-        protocol::Payload p(o.getPayload());
-      
-        vector<unsigned char> myBytes(p.size());
-        memcpy(&myBytes[0],*p,p.size());
-        
-        *retvalP = xmlrpc_c::value_bytestring(myBytes);
-    }
-};
 
 class addV2ObjectMethod : public xmlrpc_c::method 
 {
@@ -122,7 +90,7 @@ void *aThread( void *ptr )
             myRegistry.addMethod("v2.addMessage", new addV2ObjectMethod(protocol::message::msg));
             myRegistry.addMethod("v2.addBroadcast", new addV2ObjectMethod(protocol::message::broadcast));
             myRegistry.addMethod("v2.addPubkey", new addV2ObjectMethod(protocol::message::pubkey));
-            myRegistry.addMethod("v2.getObject", new getV2ObjectMethod);
+            myRegistry.addMethod("v2.getObject", new method::getV2Object(database));
             xmlrpc_c::serverAbyss myAbyssServer(
             xmlrpc_c::serverAbyss::constrOpt()
             .registryP(&myRegistry)
