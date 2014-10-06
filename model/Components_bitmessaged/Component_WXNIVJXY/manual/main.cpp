@@ -29,6 +29,7 @@
 #include "getV2Objects.h"
 #include "getV2Object.h"
 #include "addV2Object.h"
+#include "getV3Objects.h"
 
 
 static pthread_t thread[4];
@@ -51,6 +52,9 @@ void *aThread( void *ptr )
             myRegistry.addMethod("v2.addBroadcast", new method::addV2Object(database, protocol::message::broadcast));
             myRegistry.addMethod("v2.addPubkey", new method::addV2Object(database, protocol::message::pubkey));
             myRegistry.addMethod("v2.getObject", new method::getV2Object(database));
+            myRegistry.addMethod("v3.getMessages", new method::getV3Objects(database, 2));
+            myRegistry.addMethod("v3.getBroadcasts", new method::getV3Objects(database, 3));
+            myRegistry.addMethod("v3.getPubkeys", new method::getV3Objects(database, 1));
             xmlrpc_c::serverAbyss myAbyssServer(
             xmlrpc_c::serverAbyss::constrOpt()
             .registryP(&myRegistry)
