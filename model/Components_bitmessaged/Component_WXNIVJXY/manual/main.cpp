@@ -32,43 +32,13 @@ using namespace std;
 #endif
 
 #include "sampleAdd.h"
+#include "getV2Objects.h"
 
 
 static pthread_t thread[4];
 static volatile bool keepRunning = true;
 static volatile int isRunning = 0;
 data::knowledge* database;
-
-class getV2ObjectsMethod : public xmlrpc_c::method 
-{
-    protocol::message::command_t m_Type;
-    public:
-    getV2ObjectsMethod(protocol::message::command_t aType) : m_Type(aType)
-    {
-            this->_signature = "A:";
-            this->_help = "This method returns the inventory vectors of all current version2 objects";
-    }
-
-    void execute(xmlrpc_c::paramList const& paramList, xmlrpc_c::value * const retvalP) 
-    {
-        vector<xmlrpc_c::value> arrayData;
-
-        std::set<protocol::inventory_vector> objects = database->getObjects(2);
-
-        for (std::set<protocol::inventory_vector>::iterator it = objects.begin(); it != objects.end(); it++)
-        {
-            protocol::object anObject = database->getObject(*it);
-            if (m_Type == anObject.getType())
-            {
-                vector<unsigned char> myBytes(32);
-                memcpy(&myBytes[0],(*it).getData(),32);
-                arrayData.push_back(xmlrpc_c::value_bytestring(myBytes));
-            }
-        }
-
-        *retvalP = xmlrpc_c::value_array(arrayData);
-    }
-};
 
 class getV2ObjectMethod : public xmlrpc_c::method 
 {
@@ -145,10 +115,10 @@ void *aThread( void *ptr )
     {
         try {
             xmlrpc_c::registry myRegistry;
-            myRegistry.addMethod("sample.add", new methods::sampleAdd);
-            myRegistry.addMethod("v2.getMessages", new getV2ObjectsMethod(protocol::message::msg));
-            myRegistry.addMethod("v2.getBroadcasts", new getV2ObjectsMethod(protocol::message::broadcast));
-            myRegistry.addMethod("v2.getPubkeys", new getV2ObjectsMethod(protocol::message::pubkey));
+            myRegistry.addMethod("sample.add", new method::sampleAdd);
+            myRegistry.addMethod("v2.getMessages", new method::getV2Objects(database, protocol::message::msg));
+            myRegistry.addMethod("v2.getBroadcasts", new method::getV2Objects(database, protocol::message::broadcast));
+            myRegistry.addMethod("v2.getPubkeys", new method::getV2Objects(database, protocol::message::pubkey));
             myRegistry.addMethod("v2.addMessage", new addV2ObjectMethod(protocol::message::msg));
             myRegistry.addMethod("v2.addBroadcast", new addV2ObjectMethod(protocol::message::broadcast));
             myRegistry.addMethod("v2.addPubkey", new addV2ObjectMethod(protocol::message::pubkey));
