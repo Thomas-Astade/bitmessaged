@@ -31,29 +31,13 @@ using namespace std;
 #define SLEEP(seconds) sleep(seconds);
 #endif
 
+#include "sampleAdd.h"
+
 
 static pthread_t thread[4];
 static volatile bool keepRunning = true;
 static volatile int isRunning = 0;
 data::knowledge* database;
-
-class sampleAddMethod : public xmlrpc_c::method
-{
-    public:
-    sampleAddMethod() 
-    {
-        this->_signature = "i:ii";
-        this->_help = "This method adds two integers together";
-    }
-
-    void execute(xmlrpc_c::paramList const& paramList, xmlrpc_c::value * const retvalP) 
-    {
-        int const addend(paramList.getInt(0));
-        int const adder(paramList.getInt(1));
-        paramList.verifyEnd(2);
-        *retvalP = xmlrpc_c::value_int(addend + adder);
-    }
-};
 
 class getV2ObjectsMethod : public xmlrpc_c::method 
 {
@@ -161,7 +145,7 @@ void *aThread( void *ptr )
     {
         try {
             xmlrpc_c::registry myRegistry;
-            myRegistry.addMethod("sample.add", new sampleAddMethod);
+            myRegistry.addMethod("sample.add", new methods::sampleAdd);
             myRegistry.addMethod("v2.getMessages", new getV2ObjectsMethod(protocol::message::msg));
             myRegistry.addMethod("v2.getBroadcasts", new getV2ObjectsMethod(protocol::message::broadcast));
             myRegistry.addMethod("v2.getPubkeys", new getV2ObjectsMethod(protocol::message::pubkey));
