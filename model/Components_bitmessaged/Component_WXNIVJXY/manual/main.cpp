@@ -27,8 +27,8 @@
 
 #include "sampleAdd.h"
 #include "getV2Objects.h"
-#include "getV2Object.h"
-#include "addV2Object.h"
+#include "getObject.h"
+#include "addObject.h"
 #include "getV3Objects.h"
 
 
@@ -48,13 +48,15 @@ void *aThread( void *ptr )
             myRegistry.addMethod("v2.getMessages", new method::getV2Objects(database, protocol::message::msg));
             myRegistry.addMethod("v2.getBroadcasts", new method::getV2Objects(database, protocol::message::broadcast));
             myRegistry.addMethod("v2.getPubkeys", new method::getV2Objects(database, protocol::message::pubkey));
-            myRegistry.addMethod("v2.addMessage", new method::addV2Object(database, protocol::message::msg));
-            myRegistry.addMethod("v2.addBroadcast", new method::addV2Object(database, protocol::message::broadcast));
-            myRegistry.addMethod("v2.addPubkey", new method::addV2Object(database, protocol::message::pubkey));
-            myRegistry.addMethod("v2.getObject", new method::getV2Object(database));
+            myRegistry.addMethod("v2.addMessage", new method::addObject(database, protocol::message::msg));
+            myRegistry.addMethod("v2.addBroadcast", new method::addObject(database, protocol::message::broadcast));
+            myRegistry.addMethod("v2.addPubkey", new method::addObject(database, protocol::message::pubkey));
+            myRegistry.addMethod("v2.getObject", new method::getObject(database));
+            myRegistry.addMethod("v3.getObject", new method::getObject(database));
             myRegistry.addMethod("v3.getMessages", new method::getV3Objects(database, 2));
             myRegistry.addMethod("v3.getBroadcasts", new method::getV3Objects(database, 3));
             myRegistry.addMethod("v3.getPubkeys", new method::getV3Objects(database, 1));
+            myRegistry.addMethod("v3.addObject", new method::addObject(database, protocol::message::object));
             xmlrpc_c::serverAbyss myAbyssServer(
             xmlrpc_c::serverAbyss::constrOpt()
             .registryP(&myRegistry)
