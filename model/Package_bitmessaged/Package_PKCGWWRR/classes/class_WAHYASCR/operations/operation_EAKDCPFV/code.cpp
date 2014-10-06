@@ -3,13 +3,13 @@ std::vector<unsigned char> ivector = paramList.getBytestring(0);
 paramList.verifyEnd(1);
 
 if (ivector.size() != 32)
-    throw(girerr::error("a vector has to contain 32 bytes"));
+    throw(girerr::error("a inventory vector has to contain 32 bytes"));
 
 protocol::inventory_vector v(&ivector[0]);
 protocol::object o = database->getObject(v);
 
 if (!o.isValid())
-    throw(girerr::error("ther is no such object"));
+    throw(girerr::error("there is no such object"));
 
 protocol::Payload p(o.getPayload());
 
