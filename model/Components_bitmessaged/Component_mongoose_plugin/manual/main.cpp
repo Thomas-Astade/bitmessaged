@@ -241,9 +241,56 @@ static void overview(struct mg_connection *conn) {
             msgmemsize/(1024*1024),average);
     }
     
+
     objects = database->getObjects(3);
-    mg_printf_data(conn,"<tr><td>objects to advertise V3 side</td><td>%d</td></tr>\n",objects.size());
     
+    messagecount = 0;
+    broadcastcount = 0;
+    pubkeycount = 0;
+    getpubkeycount = 0;
+    unsigned int unknown = 0;
+    
+    memsize = 0;
+    msgmemsize = 0;
+    
+    for (std::set<protocol::inventory_vector>::iterator it = objects.begin(); it != objects.end(); it++)
+    {
+        protocol::object anObject = database->getObject(*it);
+        memsize += anObject.getPayload().size();
+        switch (anObject.getObjectType()) {
+
+            case 2:
+                messagecount++;
+                msgmemsize += anObject.getPayload().size();
+            break;
+            case 0:
+                getpubkeycount++;
+            break;
+            case 1:
+                pubkeycount++;
+            break;
+            case 3:
+                broadcastcount++;
+            break;
+            default:
+                unknown++;
+            break;
+        }
+    }
+
+    mg_printf_data(conn,"<tr><td>objects to advertise V3 side</td><td>%d</td></tr>\n",objects.size());
+    mg_printf_data(conn,"<tr><td>received messages V3 side</td><td>%d (%d/h)</td></tr>\n",messagecount, messagecount/60);
+    mg_printf_data(conn,"<tr><td>received broadcasts V3 side</td><td>%d (%d/h)</td></tr>\n",broadcastcount, broadcastcount/60);
+    mg_printf_data(conn,"<tr><td>active addresses V3 side (pubkeys)</td><td>%d</td></tr>\n",pubkeycount);
+    mg_printf_data(conn,"<tr><td>unknown objects V3 side </td><td>%d</td></tr>\n",unknown);
+    mg_printf_data(conn,"<tr><td>used memory V3 side</td><td>%d MByte</td></tr>\n",memsize/(1024*1024));
+    if (messagecount)
+    {
+        int average = msgmemsize/messagecount;
+        mg_printf_data(conn,"<tr><td>memory for messages V3 side</td><td>%d MByte - %d Bytes average</td></tr>\n",
+            msgmemsize/(1024*1024),average);
+    }
+
     mg_printf_data(conn,"<tr><td>sent objects</td><td>%d</td></tr>\n",database->getSentObjectCount());
 
     mg_printf_data(conn,"</table>\n");
